@@ -1,0 +1,43 @@
+<h3>{{ title }}</h3>
+
+<b>{% plotTitles[0] %}</b>
+
+{% for table_header, plot_table_list, cols in plot_tables_g1 %} 
+   <table class="plot">
+   <th colspan="{{ cols }}">{{ table_header }}</th>
+   {% for plot_table in plot_table_list %}
+      <tr>	     
+      {% for label, t in plot_table %}
+	  {% if 'Error' in t %}
+              <td>{{ label }}</td>
+          {% elif t == '' %}
+	      <td></td>
+          {% else %}
+              <td><a href="{{ t }}.{{ imgFormat }}">{{ label }}</a></td>
+          {% endif %}
+      {% endfor %}	
+      </tr>
+   {% endfor %}	
+   </table>
+   <br/>
+{% endfor %}
+
+<b>{% plotTitles[1] %}</b>
+
+<table class="plot">
+{% for i in range(num_rows_g2) %}
+    <tr>
+    {% for order, label, plot in plot_tables_g2[i] %}
+       {% if order == 0 %}
+          <td><b>{{ plot }}</b></td>	
+       {% elif 'Error' in plot %}
+          <td>{{ plot }}</td>	
+       {% else %}
+       	  <td><a href="{{ plot }}">{{ label }}</a></td>
+       {% endif %}
+    {% endfor %}
+    </tr>
+{% endfor %}
+</table>
+
+<hr>

@@ -1,0 +1,41 @@
+# Ignore python bytecode files
+*.pyc
+*.egg-info
+
+# Ignore emacs backup files
+*~
+
+# Ignore python egg-info files
+*.egg-info/
+
+# Ignore externals brought in with manage_externals
+averager/pyAverager
+ilamb/ilamb
+reshaper/pyReshaper
+conformer/conformer
+mpi_utils/pyTools
+ocean_remap/ocean_remap
+
+# Ignore python build and dist dirs
+cesm_utils/dist/
+conform/dist/
+diag_utils/dist/
+diagnostics/dist/
+timeseries/dist/
+ocean_remap/dist/
+
+# Ignore cesm-env2
+cesm-env2/
+
+# Ignore za binary, fortran object and mod files
+*.o
+*.mod
+*.so
+
+# Ignore zonal average binary, makefile and link
+ocn_diag/tool_lib/za
+ocn_diag/tool_lib/zon_avg/za
+ocn_diag/tool_lib/zon_avg/makefile
+
+# ignore any .svn files
+.svn*

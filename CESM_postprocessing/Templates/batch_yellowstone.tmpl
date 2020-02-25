@@ -1,0 +1,21 @@
+##########
+##
+## See https://github.com/NCAR/CESM_postprocessing/wiki for details
+## regarding settings for optimal performance for CESM postprocessing tools.
+##
+##########
+
+#BSUB -n {{ pes }}
+#BSUB -R "span[ptile={{ ppn }}]"
+#BSUB -q {{ queue }}
+#BSUB -N
+#BSUB -a poe
+#BSUB -J {{ processName }}
+#BSUB -W {{ wallclock }}
+#BSUB -P {{ project }} 
+
+. /glade/apps/opt/lmod/lmod/init/bash
+
+export MP_TIMEOUT=14400
+export MP_PULSE=1800
+export MP_DEBUG_NOTIMEOUT=yes

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<config_definition>
+
+<!-- ======================================================================= -->
+<!-- env_postprocess.xml                                                     -->
+<!-- ======================================================================= -->
+
+{% if standalone %}
+<!-- standalone postprocessing directory (True or False) -->
+<entry id="STANDALONE" value="TRUE" />
+{% else %}
+<!-- standalone postprocessing directory (True or False) -->
+<entry id="STANDALONE" value="FALSE" />
+{% endif %}
+{% for group in group_list %}
+  {% for k,v in group.iteritems() %}
+    {% if k == 'comment' %}
+       {% set comment = v %}
+    {% elif k == 'xml_list' %}
+<!-- ======================================================================= -->
+<!-- {{ comment }} -->
+<!-- ======================================================================= -->
+       {% for xml in v %}
+<!-- Description: {{ xml._desc }} --> 
+<entry id="{{ xml._id }}" value="{{ xml._value }}" />
+       {% endfor %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+<!-- ====================================== -->
+</config_definition>

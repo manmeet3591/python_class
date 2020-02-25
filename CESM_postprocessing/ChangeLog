@@ -1,0 +1,1900 @@
+================================================================================
+This file describes what tags were created and why
+================================================================================
+Originator: bertinia
+Date: 27 November 2016
+Model: CESM_postprocessing
+Version: CESM_postprocessing_v0.1.5
+One-line: Fix chunking for timeseries
+
+	modified:   Config/config_timeseries.xml
+	modified:   Config/config_timeseries.xsd
+	modified:   cesm_utils/cesm_utils/create_postprocess
+        modified:   timeseries/timeseries/cesm_tseries_generator.py
+	modified:   ocn_diag/ncl_lib/sfcflx_za.ncl
+	
+=================================================================================
+	
+Originator: mickelso
+Date: 14 October 2016
+Model: CESM_postprocessing
+Version: CESM_postprocessing_v0.1.4
+One-line: add chunking for timeseries
+
+	modified:   Config/config_timeseries.xml
+	modified:   Config/config_timeseries.xsd
+	modified:   cesm_utils/cesm_utils/create_postprocess
+	modified:   timeseries/setup.py
+        modified:   timeseries/timeseries/cesm_tseries_generator.py
+	add:   timeseries/timeseries/chunking.py
+
+================================================================================
+
+Originator: aliceb
+Date: 12 October 2016
+Model: CESM_postprocessing
+Version: CESM_postprocessing_v0.1.3
+One-line: add additional WACCM datasets. Closes github issue #37. 
+
+	modified:   copy_html
+	modified:   ../atm_diag/functions_waccm.ncl
+	modified:   ../atm_diag/html/model-obs/wset2/wset2_2.htm
+	modified:   ../atm_diag/html/model-obs/wset3/wset3_2.htm
+	modified:   ../atm_diag/html/model-obs/wset4/wset4_2.htm
+	modified:   ../atm_diag/html/model-obs/wset5/wset5_2.htm
+	modified:   ../atm_diag/html/model1-model2/wset3/wset3_2.htm
+	modified:   ../atm_diag/html/model1-model2/wset4/wset4_2.htm
+	modified:   ../atm_diag/html/model1-model2/wset5/wset5_2.htm
+	modified:   ../atm_diag/plot_waccm_cycle.ncl
+	modified:   ../atm_diag/plot_waccm_map.ncl
+	modified:   ../atm_diag/plot_waccm_vcycle.ncl
+	modified:   ../atm_diag/plot_waccm_vzonal.ncl
+	modified:   ../atm_diag/tables_waccm.ncl
+	modified:   ../diagnostics/diagnostics/atm/atm_avg_generator.py
+
+	add:  ../averager/pp_tests/control_ocn_series.py
+	add:  ../averager/pp_tests/runAvg_ocn_mpi.sh
+
+================================================================================
+
+Originator: aliceb
+Date: 11 October 2016
+Model: CESM_postprocessing
+Version: CESM_postprocessing_v0.1.2
+One-line: bug-fixes and code clean-up
+
+	modified:   Config/config_timeseries.xml
+	modified:   Tools/copy_html
+	modified:   atm_diag/plot_surfaces_cons.ncl
+	modified:   averager/Makefile
+	modified:   cesm_utils/cesm_utils/create_postprocess
+	modified:   diagnostics/diagnostics/atm/Config/config_diags_atm.xml
+	modified:   diagnostics/diagnostics/atm/atm_avg_generator.py
+	modified:   diagnostics/diagnostics/lnd/lnd_avg_generator.py
+	modified:   diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+	modified:   diagnostics/diagnostics/ocn/Plots/cpllog_timeseries.py
+	modified:   diagnostics/diagnostics/ocn/Plots/moc_annual_timeseries.py
+	modified:   diagnostics/diagnostics/ocn/Plots/moc_monthly_timeseries.py
+	modified:   diagnostics/diagnostics/ocn/Plots/poplog_timeseries.py
+	modified:   diagnostics/diagnostics/ocn/Plots/regional_mean_timeseries.py
+	modified:   diagnostics/diagnostics/ocn/ocn_avg_generator.py
+	modified:   mpi_utils/Makefile
+	modified:   reshaper/Makefile
+	modified:   timeseries/timeseries/cesm_tseries_generator.py
+
+================================================================================
+
+Originator: aliceb
+Date: 22 September 2016
+Model: postprocessing
+Version: postprocessing_20160922
+One-line: moved large netcdf files in the various component subdirs and SVN 
+parallel branches to the default machine_postprocess.xml <obs_root> element for
+each component. This is because of the github restriction on large files sizes. 
+Added more examples for CESM2.0 PI Control run.
+
+A       docs/README
+D       docs/create_postprocess.notes
+M       Tools/copy_html
+M       SVN_EXTERNAL_DIRECTORIES
+M       diagnostics/diagnostics/ocn/model_vs_control.py
+M       diagnostics/diagnostics/ocn/model_vs_obs.py
+M       diagnostics/diagnostics/ocn/ocn_avg_generator.py
+M       diagnostics/diagnostics/lnd/model_vs_model.py
+M       diagnostics/diagnostics/lnd/model_vs_obs.py
+M       diagnostics/diagnostics/lnd/lnd_avg_generator.py
+A       examples/CESM2.0-PI-Control/env_diags_atm.xml
+A       examples/CESM2.0-PI-Control/env_timeseries.xml
+A       examples/CESM2.0-PI-Control/env_diags_lnd.xml
+A       examples/CESM2.0-PI-Control/env_postprocess.xml
+A       examples/CESM2.0-PI-Control/env_diags_ocn.xml
+A       examples/CESM2.0-PI-Control/README
+A       examples/CESM2.0-PI-Control/env_diags_ice.xml
+
+================================================================================
+
+Originator: aliceb
+Date: 20 September 2016
+Model: postprocessing
+Version: postprocessing_20160920
+One-line: minor bug fix
+
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+
+================================================================================
+
+Originator: aliceb
+Date: 09 September 2016
+Model: postprocessing
+Version: postprocessing_20160909
+One-line: update atm_diag external to latest branch tag
+
+M       SVN_EXTERNAL_DIRECTORIES
+
+================================================================================
+
+Originator: aliceb
+Date: 08 September 2016
+Model: postprocessing
+Version: postprocessing_20160908
+One-line: Fix to copy_html. Added branch tags to SVN to all comp_diags in
+preparation for moving to github. The manageSymLinks.py is not yet fully 
+functional.      
+
+A       diag_utils/diag_utils/manageSymLinks.py
+M       ChangeLog
+M       Tools/copy_html
+M       SVN_EXTERNAL_DIRECTORIES
+
+================================================================================
+
+Originator: aliceb
+Date: 1 September 2016
+Model: postprocessing
+Version: not yet tagged
+One-line: Tested with new pyAverager v0.9.10 and WACCM zonalavg plots.
+Updated the web_dirs output file names with a date suffix instead of
+mpi comm rank and size which isn't always unique. 
+
+A       averager/pp_tests
+A       averager/pp_tests/runAvg_mpi.sh
+A       averager/pp_tests/control_atm_slice_zonAvg.py
+M       diagnostics/diagnostics/ocn/model_vs_control.py
+M       diagnostics/diagnostics/ocn/model_timeseries.py
+M       diagnostics/diagnostics/ocn/model_vs_obs.py
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+M       diagnostics/diagnostics/ocn/model_vs_obs_ecosys.py
+M       diagnostics/diagnostics/ice/model_vs_model.py
+M       diagnostics/diagnostics/ice/model_vs_obs.py
+M       diagnostics/diagnostics/atm/model_vs_model.py
+M       diagnostics/diagnostics/atm/model_vs_obs.py
+M       diagnostics/diagnostics/lnd/model_vs_model.py
+M       diagnostics/diagnostics/lnd/model_vs_obs.py
+M       timeseries/timeseries/cesm_tseries_generator.py
+
+================================================================================
+
+Originator: aliceb
+Date: 24 August 2016
+Model: postprocessing
+Version: not yet tagged
+One-line: Update to config_timeseries in preparation of adding "chunking" to 
+timeseries. Update pyAverager version to v0.9.10. Update atm_avg_generate.py 
+to initialize a main_comm and look for the netcdf format in the XML. 
+THIS CHECKIN NEEDS TO BE TESTED!!
+	
+M       Config/config_timeseries.xml
+M       Config/config_timeseries.xsd
+M       SVN_EXTERNAL_DIRECTORIES
+M       diagnostics/diagnostics/atm/Config/config_diags_atm.xml
+M       diagnostics/diagnostics/atm/atm_avg_generator.py
+M       diagnostics/diagnostics/lnd/lnd_avg_generator.py
+	
+================================================================================
+	
+Originator: aliceb
+Date: 18 August 2016
+Model: postprocessing
+Version: postprocessing_20160818
+One-line: Move stand-alone tools to cesm_utils so they are installed into virtualenv.
+Update to no longer require CIME for any scripts. Update to atm_avg_generator.py to
+add the zonalavg to the average list if test_compute_zonalAvg or cntl_compute_zonalAvg
+is set to True. atm Zonal averages used for WACCM plot sets. There is a bug in the
+pyAverager that won't allow zonal averages to be computed along with all the other 
+averages so pyAverager v0.9.9 is not quite ready.
+
+M       diag_utils/diag_utils/diagUtilsLib.py
+D       create_f2py_remap
+D       create_ocn_za
+D       get_machine
+M       Config/config_postprocess.xml
+M       diagnostics/diagnostics/atm/model_vs_model.py
+M       diagnostics/diagnostics/atm/model_vs_obs.py
+M       diagnostics/diagnostics/atm/Config/config_diags_atm.xml
+M       diagnostics/diagnostics/atm/atm_avg_generator.py
+M       diagnostics/diagnostics/lnd/model_vs_model.py
+M       diagnostics/diagnostics/lnd/model_vs_obs.py
+M       diagnostics/diagnostics/lnd/Config/config_diags_lnd.xml
+M       cesm_utils/VERSION
+A  +    cesm_utils/cesm_utils/module_check
+A  +    cesm_utils/cesm_utils/get_machine
+A  +    cesm_utils/cesm_utils/create_f2py_remap
+A  +    cesm_utils/cesm_utils/create_postprocess
+D       cesm_utils/cesm_utils/module_check.py
+A  +    cesm_utils/cesm_utils/create_ocn_za
+M       cesm_utils/setup.py
+D       create_postprocess
+M       create_python_env
+
+================================================================================
+
+Originator: aliceb
+Date: 9 August 2016
+Model: postprocessing
+Version: postprocessing_20160809
+One-line: update SVN external for pyAverager to point to new version that
+supports WACCM zonal averages.
+
+M       SVN_EXTERNAL_DIRECTORIES
+
+================================================================================
+
+Originator: aliceb
+Date: 5 August 2016
+Model: postprocessing
+Version: not tagged yet
+One-line: removed clean_archive.pl because need to replace with python script
+
+D       clean_archive.pl
+
+================================================================================
+
+Originator: aliceb
+Date: 4 August 2016
+Model: postprocessing
+Version: postprocessing_20160804
+One-line: add support for ice diags to run in parallel; model_vs_obs and model_vs_model
+
+M       diagnostics/diagnostics/ice/model_vs_model.py
+M       diagnostics/diagnostics/ice/Plots/ice_diags_plot_factory.py
+A       diagnostics/diagnostics/ice/Plots/web_hem_avgDiff.py
+M       diagnostics/diagnostics/ice/Plots/__init__.py
+A       diagnostics/diagnostics/ice/Plots/web_reg_avgDiff.py
+M       diagnostics/diagnostics/ice/Plots/web_hem_avg.py
+A       diagnostics/diagnostics/ice/Plots/web_hem_climDiff.py
+A       diagnostics/diagnostics/ice/Plots/web_reg_climDiff.py
+M       diagnostics/diagnostics/ice/Plots/web_reg_avg.py
+M       diagnostics/diagnostics/ice/Plots/web_hem_clim.py
+M       diagnostics/diagnostics/ice/Plots/web_reg_clim.py
+M       diagnostics/diagnostics/ice/Config/config_diags_ice.xml
+
+================================================================================
+
+Originator: aliceb
+Date: 1 August 2016
+Model: postprocessing
+Version: trunk - not yet tagged 
+One-line: removed cimeroot dependency to create_python_env. 
+
+A       create_ocn_za
+M       Machines/machine_postprocess.xsd
+M       Machines/machine_postprocess.xml
+M       Machines/yellowstone_modules
+M       Templates/za_makefile.tmpl
+M       Tools/create_env_script
+M       Tools/copy_html
+M       create_postprocess
+M       create_python_env
+
+================================================================================
+
+Originator: bardeenc
+Date: 31 July 2016
+Model: postprocessing
+Version: trunk
+
+Added support for 5 new sets of plots for the WAWG including:
+  wset1 - table
+  wset2 - seasonal line plots
+  wset3 - vertical seasonal contour plots
+  wset4 - vertical zonal average contour plots
+  wset5 - horizontal contour plots
+The tables for wset1 replace its previous definition as vertical zonal
+average contour plots. That capability has been moved to wset4. All sets
+plots are implemented for model to model and model to observations
+(currently ERAI, MERRA, and MLS) with corresponding html.
+
+M       ChangeLog
+M       diagnostics/diagnostics/atm/model_vs_model.py
+M       diagnostics/diagnostics/atm/Plots/__init__.py
+A       diagnostics/diagnostics/atm/Plots/wset2.py
+A       diagnostics/diagnostics/atm/Plots/wset4.py
+M       diagnostics/diagnostics/atm/Plots/atm_diags_plot_factory.py
+M       diagnostics/diagnostics/atm/Plots/wset1.py
+A       diagnostics/diagnostics/atm/Plots/wset3.py
+A       diagnostics/diagnostics/atm/Plots/wset5.py
+M       diagnostics/diagnostics/atm/model_vs_obs.py
+M       diagnostics/diagnostics/atm/html/model-obs/sets_2.htm
+M       diagnostics/diagnostics/atm/html/model-obs/wset1/wset1_1.htm
+M       diagnostics/diagnostics/atm/html/model-obs/wset1/wset1_2.htm
+D       diagnostics/diagnostics/atm/html/model-obs/wset1/wset1_3.htm
+A       diagnostics/diagnostics/atm/html/model-obs/wset2
+A       diagnostics/diagnostics/atm/html/model-obs/wset2/wset2_1.htm
+A       diagnostics/diagnostics/atm/html/model-obs/wset2/wset2_2.htm
+A       diagnostics/diagnostics/atm/html/model-obs/wset3
+A       diagnostics/diagnostics/atm/html/model-obs/wset3/wset3_1.htm
+A       diagnostics/diagnostics/atm/html/model-obs/wset3/wset3_2.htm
+A       diagnostics/diagnostics/atm/html/model-obs/wset4
+A       diagnostics/diagnostics/atm/html/model-obs/wset4/wset4_1.htm
+A       diagnostics/diagnostics/atm/html/model-obs/wset4/wset4_2.htm
+A       diagnostics/diagnostics/atm/html/model-obs/wset5
+A       diagnostics/diagnostics/atm/html/model-obs/wset5/wset5_2.htm
+A       diagnostics/diagnostics/atm/html/model-obs/wset5/wset5_1.htm
+M       diagnostics/diagnostics/atm/html/model1-model2/sets_2.htm
+M       diagnostics/diagnostics/atm/html/model1-model2/wset1/wset1_1.htm
+M       diagnostics/diagnostics/atm/html/model1-model2/wset1/wset1_2.htm
+A       diagnostics/diagnostics/atm/html/model1-model2/wset2
+A       diagnostics/diagnostics/atm/html/model1-model2/wset2/wset2_1.htm
+A       diagnostics/diagnostics/atm/html/model1-model2/wset2/wset2_2.htm
+A       diagnostics/diagnostics/atm/html/model1-model2/wset3
+A       diagnostics/diagnostics/atm/html/model1-model2/wset3/wset3_1.htm
+A       diagnostics/diagnostics/atm/html/model1-model2/wset3/wset3_2.htm
+A       diagnostics/diagnostics/atm/html/model1-model2/wset4
+A       diagnostics/diagnostics/atm/html/model1-model2/wset4/wset4_1.htm
+A       diagnostics/diagnostics/atm/html/model1-model2/wset4/wset4_2.htm
+A       diagnostics/diagnostics/atm/html/model1-model2/wset5
+A       diagnostics/diagnostics/atm/html/model1-model2/wset5/wset5_2.htm
+A       diagnostics/diagnostics/atm/html/model1-model2/wset5/wset5_1.htm
+M       diagnostics/diagnostics/atm/html/mvgifs2www
+M       diagnostics/diagnostics/atm/html/setup_obs
+D       diagnostics/diagnostics/atm/html/images/WSET1.png
+A       diagnostics/diagnostics/atm/html/images/WSET2.png
+A       diagnostics/diagnostics/atm/html/images/WSET3.png
+A       diagnostics/diagnostics/atm/html/images/WSET4.png
+A       diagnostics/diagnostics/atm/html/images/WSET5.png
+A       diagnostics/diagnostics/atm/html/images/WSET1.gif
+M       diagnostics/diagnostics/atm/html/setup_2models
+M       diagnostics/diagnostics/atm/Config/config_diags_atm.xml
+
+================================================================================
+
+Originator: aliceb
+Date: 28 July 2016
+Model: postprocessing
+Version: postprocessing_20160728
+One-line: Fix to race condition when setting the XML WEBDIR variables for copy_html. Update
+copy_html to use $PP_CASE_PATH/web_dirs files instead of XML.
+
+M       diag_utils/diag_utils/diagUtilsLib.py
+M       Machines/machine_postprocess.xml
+M       Tools/copy_html
+A       Config/README.web_dirs
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       diagnostics/diagnostics/ice/model_vs_model.py
+M       diagnostics/diagnostics/ice/model_vs_obs.py
+M       diagnostics/diagnostics/ice/ice_diags_generator.py
+M       diagnostics/diagnostics/ice/Config/config_diags_ice.xml
+M       diagnostics/diagnostics/atm/model_vs_model.py
+M       diagnostics/diagnostics/atm/model_vs_obs.py
+M       diagnostics/diagnostics/atm/Config/config_diags_atm.xml
+M       diagnostics/diagnostics/lnd/model_vs_model.py
+M       diagnostics/diagnostics/lnd/model_vs_obs.py
+M       diagnostics/diagnostics/lnd/Config/config_diags_lnd.xml
+M       create_postprocess
+M       examples/CESM1.1LE/files_to_get_model.txt
+M       examples/CESM1.1LE/files_to_get_control.txt
+M       examples/CESM1.1LE/get_LE_ocn_files.py
+
+================================================================================
+
+Originator: aliceb
+Date: 25 July 2016
+Model: postprocessing
+Version: not tagged yet
+One-line: minor fix for reset_modules XML 
+
+M       create_postprocess
+
+================================================================================
+
+Originator: aliceb
+Date: 22 July 2016
+Model: postprocessing
+Version: not tagged yet
+One-line: updates that are still in test
+
+M       Machines/machine_postprocess.xsd
+M       Machines/machine_postprocess.xml
+M       Templates/postprocess.tmpl
+A       Templates/diagnostics.tmpl
+M       create_postprocess
+M       examples/CESM1.1LE/env_diags_atm.xml
+M       examples/CESM1.1LE/files_to_get_model.txt
+M       examples/CESM1.1LE/files_to_get_control.txt
+M       examples/CESM1.1LE/get_LE_ocn_files.py
+M       examples/CESM1.1LE/env_diags_lnd.xml
+M       examples/CESM1.1LE/env_diags_ice.xml
+
+================================================================================
+
+Originator: aliceb
+Date: 19 July 2016
+Model: postprocessing
+Version: postprocessing_20160719
+One-line: updates to copy_html to include a landing index page. 
+Also moved logos and diag_style.css out of ocn diag into Templates.
+
+A       Templates/logos
+A       Templates/logos/nsf1sm.gif
+A       Templates/logos/ncar-logo-sm.jpg
+A       Templates/diag_style.css
+M       Tools/copy_html
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+D       diagnostics/diagnostics/ocn/Templates/logos
+D       diagnostics/diagnostics/ocn/Templates/logos/nsf1sm.gif
+D       diagnostics/diagnostics/ocn/Templates/logos/ncar-logo-sm.jpg
+D       diagnostics/diagnostics/ocn/Templates/diag_style.css
+
+================================================================================
+
+Originator: aliceb
+Date: 18 July 2016
+Model: postprocessing
+Version: not yet tagged
+One-line: working version of copy_html but without a landing index page. 
+Update to ice WEBDIR paths.
+
+M       Tools/copy_html
+M       Config/config_postprocess.xml
+M       diagnostics/diagnostics/ice/model_vs_model.py
+M       diagnostics/diagnostics/ice/model_vs_obs.py
+
+================================================================================
+
+Originator: aliceb
+Date: 15 July 2016
+Model: postprocessing
+Version: postprocessing_20160715a
+One-line: minor update in create_postprocess for ICE_NX and ICE_NY for stand-alone cases
+
+M       create_postprocess
+
+================================================================================
+
+Originator: aliceb
+Date: 15 July 2016
+Model: postprocessing
+Version: postprocessing_20160715
+One-line: Bug fix to pyAverager for land trend years. Updates to land and atm
+to include years in final diag paths. Added ICE_NX and ICE_NY to create_postprocess
+so they are inherited from and existing caseroot.
+
+M       Tools/copy_html
+M       SVN_EXTERNAL_DIRECTORIES
+M       Config/config_postprocess.xml
+M       diagnostics/diagnostics/atm/model_vs_model.py
+M       diagnostics/diagnostics/atm/model_vs_obs.py
+M       diagnostics/diagnostics/atm/Config/config_diags_atm.xml
+M       diagnostics/diagnostics/lnd/Config/config_diags_lnd.xml
+M       create_postprocess
+
+================================================================================
+
+Originator: aliceb
+Date: 14 July 2016
+Model: postprocessing
+Version: postprocessing_20160714
+One-line: bug fixes, add lnd diags WEBDIR settings with years, add XML examples
+from LE 002 run. Separate WACCM and Chem sets into their own group in 
+config_diags_atm.xml.
+
+M       Templates/batch_yellowstone.tmpl
+M       Tools/copy_html
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       diagnostics/diagnostics/ocn/ocn_avg_generator.py
+M       diagnostics/diagnostics/atm/Config/config_diags_atm.xml
+M       diagnostics/diagnostics/lnd/model_vs_model.py
+M       diagnostics/diagnostics/lnd/model_vs_obs.py
+M       diagnostics/diagnostics/lnd/Config/config_diags_lnd.xml
+A       examples/CESM1.1LE/env_diags_atm.xml
+M       examples/CESM1.1LE/files_to_get_model.txt
+M       examples/CESM1.1LE/files_to_get_control.txt
+A       examples/CESM1.1LE/env_diags_lnd.xml
+A       examples/CESM1.1LE/env_postprocess.xml
+M       examples/CESM1.1LE/README
+A       examples/CESM1.1LE/env_diags_ocn.xml
+A       examples/CESM1.1LE/env_diags_ice.xml
+
+================================================================================
+
+Originator: aliceb
+Date: 08 July 2016
+Model: postprocessing
+Version: not tagged yet
+One-line: Lots of bugfixes and enhancements for LENS post-processing, added
+examples, updates to lnd diags, and polar T&S projection plots model vs. model.
+
+M       diag_utils/diag_utils/diagUtilsLib.py
+A       Tools/env_file.xsd
+A       Tools/gather_var_files.py
+D       Config/env_file.xsd
+M       diagnostics/diagnostics/ocn/Plots/polar_temp_salt.py
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       diagnostics/diagnostics/ocn/ocn_avg_generator.py
+M       diagnostics/diagnostics/ice/Config/config_diags_ice.xml
+M       diagnostics/diagnostics/ice/ice_avg_generator.py
+M       diagnostics/diagnostics/atm/create_atm_html.py
+M       diagnostics/diagnostics/atm/model_vs_model.py
+M       diagnostics/diagnostics/atm/model_vs_obs.py
+M       diagnostics/diagnostics/atm/Config/config_diags_atm.xml
+M       diagnostics/diagnostics/lnd/model_vs_model.py
+M       diagnostics/diagnostics/lnd/model_vs_obs.py
+M       diagnostics/diagnostics/lnd/lnd_avg_generator.py
+M       create_postprocess
+A       examples
+A       examples/CESM1.1LE
+A       examples/CESM1.1LE/files_to_get_model.txt
+A       examples/CESM1.1LE/files_to_get_control.txt
+A       examples/CESM1.1LE/var_list.txt
+A       examples/CESM1.1LE/get_LE_ocn_files.py
+A       examples/CESM1.1LE/README
+A       examples/CESM2.0-PI-Control
+
+================================================================================
+
+Originator: aliceb
+Date: 20 June 2016
+Model: postprocessing
+Version: postprocessing_20160620
+One-line: add ICEDIAG_CLEANUP_FILES option. Fix  github issues #20
+and #3.
+
+M       Tools/pp_config
+M       cesm_utils/cesm_utils/processXmlLib.py
+M       diagnostics/diagnostics/ocn/model_vs_control.py
+M       diagnostics/diagnostics/ocn/model_timeseries.py
+M       diagnostics/diagnostics/ocn/ocn_diags_bc.py
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+M       diagnostics/diagnostics/ocn/ocn_diags_factory.py
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       diagnostics/diagnostics/ocn/ocn_avg_generator.py
+M       diagnostics/diagnostics/ice/model_vs_model.py
+M       diagnostics/diagnostics/ice/ice_diags_bc.py
+M       diagnostics/diagnostics/ice/model_vs_obs.py
+
+================================================================================
+
+Originator: aliceb
+Date: 15 June 2016
+Model: postprocessing
+Version: postprocessing_20160615
+One-line: add env_file.xsd for validation of env_*.xml files in caseroot. Fix
+to --cesmtag argument option to create_postprocess.
+
+A       Config/env_file.xsd
+M       create_postprocess
+
+================================================================================
+
+Originator: aliceb
+Date: 9 June 2016
+Model: postprocessing
+Version: postprocessing_20160609
+One-line: successful testing of the processXmlLib class calls in the diag wrappers
+complete.
+
+M       Machines/machine_postprocess.xml
+M       diagnostics/diagnostics/ice/model_vs_model.py
+M       diagnostics/diagnostics/ice/model_vs_obs.py
+M       diagnostics/diagnostics/ice/ice_diags_generator.py
+M       diagnostics/diagnostics/ice/Config/config_diags_ice.xml
+M       diagnostics/diagnostics/ice/ice_avg_generator.py
+M       diagnostics/diagnostics/atm/model_vs_model.py
+M       diagnostics/diagnostics/atm/model_vs_obs.py
+M       diagnostics/diagnostics/lnd/model_vs_model.py
+M       diagnostics/diagnostics/lnd/lnd_diags_generator.py
+M       diagnostics/diagnostics/lnd/model_vs_obs.py
+M       diagnostics/diagnostics/lnd/Config/config_diags_lnd.xml
+
+================================================================================
+
+Originator: aliceb
+Date: 6 June 2016
+Model: postprocessing
+Version: not tagged 
+One-line: reworked the processXmlLib classes so that they can be called
+from the generator scripts to update the env_*.xml files. Minor mods
+to the config_diags_*.xml for default settings. 
+
+M       Machines/machine_postprocess.xml
+M       Tools/create_env_script
+M       Tools/pp_config
+D       Tools/pp_var_get
+D       Tools/PostProcessingXML.py
+M       Tools/copy_html
+M       Config/config_postprocess.xml
+M       diagnostics/diagnostics/ocn/model_vs_control.py
+M       diagnostics/diagnostics/ocn/model_timeseries.py
+M       diagnostics/diagnostics/ocn/model_vs_obs.py
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       diagnostics/diagnostics/ocn/model_vs_obs_ecosys.py
+M       diagnostics/diagnostics/ice/model_vs_model.py
+M       diagnostics/diagnostics/ice/model_vs_obs.py
+M       diagnostics/diagnostics/ice/Config/config_diags_ice.xml
+M       diagnostics/diagnostics/ice/ice_avg_generator.py
+M       diagnostics/diagnostics/atm/model_vs_model.py
+M       diagnostics/diagnostics/atm/model_vs_obs.py
+M       diagnostics/diagnostics/atm/Config/config_diags_atm.xml
+M       diagnostics/diagnostics/lnd/model_vs_model.py
+M       diagnostics/diagnostics/lnd/model_vs_obs.py
+M       diagnostics/diagnostics/lnd/Config/config_diags_lnd.xml
+M       cesm_utils/VERSION
+M       cesm_utils/cesm_utils/__init__.py
+A       cesm_utils/cesm_utils/processXmlLib.py
+M       cesm_utils/cesm_utils/cesmEnvLib.py
+M       cesm_utils/setup.py
+M       create_postprocess
+
+================================================================================
+
+Originator: aliceb
+Date: 23 May 2016
+Model: postprocessing
+Version: not tagged
+One-line: mods to create_postprocess to handle inherited XML variables from an
+existing caseroot better. Added pp_config tool to set and get XML variables.
+Also updated wrapper scripts to handle standalone
+xml parsing better in anticipation of ESMCI/CIME (python). Not fully
+tested yet so not tagging this commit.
+
+M       Templates/env_postprocess.tmpl
+A       Tools/pp_config
+M       Tools/copy_html
+M       Config/config_postprocess.xml
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+M       diagnostics/diagnostics/ocn/ocn_avg_generator.py
+M       diagnostics/diagnostics/ice/model_vs_model.py
+M       diagnostics/diagnostics/ice/model_vs_obs.py
+M       diagnostics/diagnostics/ice/ice_diags_generator.py
+M       diagnostics/diagnostics/ice/ice_avg_generator.py
+M       diagnostics/diagnostics/atm/atm_diags_generator.py
+M       diagnostics/diagnostics/atm/atm_avg_generator.py
+M       diagnostics/diagnostics/lnd/model_vs_model.py
+M       diagnostics/diagnostics/lnd/lnd_diags_generator.py
+M       diagnostics/diagnostics/lnd/model_vs_obs.py
+M       diagnostics/diagnostics/lnd/lnd_regrid_generator.py
+M       diagnostics/diagnostics/lnd/lnd_avg_generator.py
+M       create_postprocess
+
+================================================================================
+
+Originator: aliceb
+Date: 23 May 2016
+Model: postprocessing
+Version: postprocessing_20160517
+One-line: Finish testing and debugging lnd_regrid_generator.py. 
+
+M       diag_utils/diag_utils/diagUtilsLib.py
+M       diag_utils/setup.py
+M       Templates/batch_yellowstone.tmpl
+M       diagnostics/diagnostics/lnd/lnd_diags_generator.py
+M       diagnostics/diagnostics/lnd/lnd_regrid_generator.py
+M       cesm_utils/VERSION
+M       cesm_utils/setup.py
+M       create_python_env
+M       Makefile
+
+================================================================================
+
+Originator: aliceb
+Date: 17 May 2016
+Model: postprocessing
+Version: postprocessing_20160517
+One-line: Separate out lnd regridding to new script called lnd_regrid_generator.
+Various bug fixes. Start adding support for XML classes. Update to newer version
+of ASAPPyTools.
+
+M	SVN_EXTERNAL_DIRECTORIES
+M       diag_utils/diag_utils/diagUtilsLib.py
+M       Machines/machine_postprocess.xsd
+M       Machines/machine_postprocess.xml
+M       Templates/batch_yellowstone.tmpl
+A       Tools/ration_script
+A       Tools/PostProcessingXML.py
+A       Tools/ration_example.py
+M       Tools/pp_var_get
+M       Config/config_timeseries.xsd
+M       Config/config_timeseries.xml
+M       create_postprocess
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+A       diagnostics/diagnostics/lnd/lnd_regrid_generator.py
+M       diagnostics/diagnostics/lnd/lnd_diags_generator.py
+M       diagnostics/diagnostics/lnd/model_vs_obs.py
+M       diagnostics/diagnostics/lnd/Config/config_diags_lnd.xml
+M       diagnostics/setup.py
+
+================================================================================
+
+Originator: aliceb
+Date: 2 May 2016
+Model: postprocessing
+Version: postprocessing_20160502
+One-line: Fixes for ice diags set 4 problem in NCL. Update PyAverager to fix
+problem using variable timeseries input files and a subset of years. Add first
+pass and creating lnd regrid files in parallel in separate directories.
+
+M       diag_utils/diag_utils/diagUtilsLib.py
+M       diag_utils/VERSION
+M       Machines/machine_postprocess.xml
+M       Templates/env_postprocess.tmpl
+M       SVN_EXTERNAL_DIRECTORIES
+M       cesm_utils/VERSION
+M       diagnostics/VERSION
+M       diagnostics/diagnostics/ocn/model_timeseries.py
+M       diagnostics/diagnostics/lnd/lnd_diags_generator.py
+M       timeseries/VERSION
+
+================================================================================
+
+Originator: aliceb
+Date: 26 April 2016
+Model: postprocessing
+Version: postprocessing_20160426a
+One-line: Update to defaults for obs_data settings in machine_postprocess.xml. 
+Update to path settings for lnd diags as start of changes needed for regridding
+in parallel. Update to cesm_tseries_generator.py to check that history file 
+streams all end with .nc and print a warning if they do not.
+
+M       diag_utils/diag_utils/diagUtilsLib.py
+M       Machines/machine_postprocess.xml
+M       diagnostics/diagnostics/lnd/lnd_diags_generator.py
+M       diagnostics/diagnostics/lnd/Config/config_diags_lnd.xml
+M       timeseries/timeseries/cesm_tseries_generator.py
+
+================================================================================
+
+Originator: aliceb
+Date: 26 April 2016
+Model: postprocessing
+Version: postprocessing_20160426
+One-line: Fix to cesm_tseries_generate.py to handle both stand-alone postprocessing
+caseroot and existing caseroot. 
+
+M       create_postprocess
+M       timeseries/timeseries/cesm_tseries_generator.py
+
+================================================================================
+
+Originator: aliceb
+Date: 25 April 2016
+Model: postprocessing
+Version: postprocessing_20160425
+One-line: Update create_postprocess and supporting files to include pes_per_node and wallclock
+attributes in the submission scripts. Update config_ocn_diags to set TAVGDIR and CTNRLTAVGDIR
+to include start and stop years. Update timeseries generation to handle standalone postprocessing case.
+
+
+M       Machines/machine_postprocess.xsd
+M       Machines/machine_postprocess.xml
+M       Templates/batch_yellowstone.tmpl
+M       Templates/batch_edison.tmpl
+M       diagnostics/diagnostics/ocn/Plots/mixed_layer_depth.py
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       diagnostics/diagnostics/ice/model_vs_model.py
+M       diagnostics/diagnostics/ice/model_vs_obs.py
+M       diagnostics/diagnostics/ice/ice_diags_generator.py
+M       diagnostics/diagnostics/ice/Config/config_diags_ice.xml
+M       diagnostics/diagnostics/ice/ice_avg_generator.py
+M       diagnostics/diagnostics/atm/atm_diags_generator.py
+M       diagnostics/diagnostics/atm/atm_avg_generator.py
+M       diagnostics/diagnostics/lnd/Config/config_diags_lnd.xml
+M       create_postprocess
+M       timeseries/timeseries/cesm_tseries_generator.py
+
+================================================================================
+
+Originator: aliceb
+Date: 20 April 2016
+Model: postprocessing
+Version: postprocessing_20160420
+One-line: Update lnd diag web dir paths. Add pp_var_get to emulate xmlquery for pp vars.
+
+M       Machines/machine_postprocess.xsd
+M       Machines/machine_postprocess.xml
+M       Machines/yellowstone_modules
+M       Templates/batch_yellowstone.tmpl
+A  +    Tools/create_env_script
+D       Tools/set_env
+A       Tools/pp_var_get
+D       Config/config_postprocess.xsd
+M       Config/config_postprocess.xml
+A       Config/config_definition.xsd
+M       cesm_utils/cesm_utils/cesmEnvLib.py
+M       diagnostics/diagnostics/ocn/model_vs_control.py
+M       diagnostics/diagnostics/ocn/model_timeseries.py
+M       diagnostics/diagnostics/ocn/model_vs_obs.py
+M       diagnostics/diagnostics/ocn/model_vs_obs_ecosys.py
+M       diagnostics/diagnostics/ice/model_vs_model.py
+M       diagnostics/diagnostics/ice/model_vs_obs.py
+M       diagnostics/diagnostics/lnd/lnd_diags_bc.py
+M       diagnostics/diagnostics/lnd/model_vs_model.py
+M       diagnostics/diagnostics/lnd/lnd_diags_generator.py
+M       diagnostics/diagnostics/lnd/model_vs_obs.py
+M       diagnostics/diagnostics/lnd/Config/config_diags_lnd.xml
+M       create_postprocess
+M       create_python_env
+
+================================================================================
+
+Originator: aliceb
+Date: 14 April 2016
+Model: postprocessing
+Version: postprocessing_20160414
+One-line: update ocn diag to place html plots in a user specified order on the
+index.html page. Add timers into the *_diags_generator.py code for all components.
+Update the config_definition.xsd for all components.
+
+
+M       diag_utils/diag_utils/diagUtilsLib.py
+M       diagnostics/diagnostics/ocn/model_vs_control.py
+M       diagnostics/diagnostics/ocn/model_timeseries.py
+M       diagnostics/diagnostics/ocn/Plots/ocn_diags_plot_bc.py
+M       diagnostics/diagnostics/ocn/Plots/regional_area.py
+M       diagnostics/diagnostics/ocn/Plots/zonal_average_3d_fields.py
+M       diagnostics/diagnostics/ocn/Plots/western_boundary.py
+M       diagnostics/diagnostics/ocn/Plots/horizontal_vector_fields.py
+M       diagnostics/diagnostics/ocn/Plots/bolus_velocity.py
+M       diagnostics/diagnostics/ocn/Plots/moc_fields.py
+M       diagnostics/diagnostics/ocn/Plots/basin_averages.py
+M       diagnostics/diagnostics/ocn/Plots/diffusion_depth.py
+M       diagnostics/diagnostics/ocn/Plots/temp_salt_depth.py
+M       diagnostics/diagnostics/ocn/Plots/surface_flux_fields.py
+M       diagnostics/diagnostics/ocn/Plots/surface_fields.py
+M       diagnostics/diagnostics/ocn/Plots/passive_tracers_depth.py
+M       diagnostics/diagnostics/ocn/Plots/eulerian_velocity.py
+M       diagnostics/diagnostics/ocn/Plots/seasonal_cycle.py
+M       diagnostics/diagnostics/ocn/Plots/polar_temp_salt.py
+M       diagnostics/diagnostics/ocn/Plots/mixed_layer_depth.py
+M       diagnostics/diagnostics/ocn/Plots/equatorial_upperocean.py
+M       diagnostics/diagnostics/ocn/model_vs_obs.py
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+M       diagnostics/diagnostics/ocn/Config/config_definition.xsd
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       diagnostics/diagnostics/ocn/model_vs_obs_ecosys.py
+M       diagnostics/diagnostics/ice/model_vs_model.py
+M       diagnostics/diagnostics/ice/model_vs_obs.py
+M       diagnostics/diagnostics/ice/ice_diags_generator.py
+M       diagnostics/diagnostics/ice/Config/config_definition.xsd
+M       diagnostics/diagnostics/ice/Config/config_diags_ice.xml
+M       diagnostics/diagnostics/atm/Config/config_definition.xsd
+M       diagnostics/diagnostics/atm/atm_diags_generator.py
+M       diagnostics/diagnostics/lnd/model_vs_model.py
+M       diagnostics/diagnostics/lnd/lnd_diags_generator.py
+M       diagnostics/diagnostics/lnd/model_vs_obs.py
+M       diagnostics/diagnostics/lnd/Config/config_diags_lnd.xml
+M       diagnostics/diagnostics/lnd/Config/config_definition.xsd
+
+================================================================================
+
+Originator: aliceb
+Date: 12 April 2016
+Model: postprocessing
+Version: postprocessing_20160412
+One-line: update lnd diags to run in parallel. Also updated the parallel_lnd_diag
+trunk and tagged it with changes to the NCL and Perl.
+
+M       diagnostics/diagnostics/lnd/lnd_diags_bc.py
+M       diagnostics/diagnostics/lnd/model_vs_model.py
+M       diagnostics/diagnostics/lnd/model_vs_obs.py
+
+================================================================================
+
+Originator: aliceb
+Date: 04 April 2016
+Model: postprocessing
+Version: postprocessing_20160404
+One-line: fix bug in ice_diags_bc.py pattern matching. Update ice_diag web references
+for Bering.png and Husdon.png. Update cpllog_timeseries.log to link to .txt file instead
+of .asc file. 
+
+M       diagnostics/diagnostics/ocn/Plots/cpllog_timeseries.py
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       diagnostics/diagnostics/ice/ice_diags_bc.py
+M       diagnostics/diagnostics/ice/ice_diags_generator.py
+
+================================================================================
+
+Originator: aliceb
+Date: 30 March 2016
+Model: postprocessing
+Version: postprocessing_20160330
+One-line: updates to get ice and lnd diags working - still testing
+
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       diagnostics/diagnostics/ice/model_vs_model.py
+M       diagnostics/diagnostics/ice/model_vs_obs.py
+M       diagnostics/diagnostics/ice/ice_diags_generator.py
+M       diagnostics/diagnostics/ice/ice_avg_generator.py
+M       diagnostics/diagnostics/lnd/model_vs_model.py
+M       diagnostics/diagnostics/lnd/model_vs_obs.py
+M       cesm_utils/cesm_utils/cesmEnvLib.py
+
+================================================================================
+
+Originator: aliceb
+Date: 18 March 2016
+Model: postprocessing
+Version: postprocessing_20160318
+One-line: integrated ice_diag changes, testing is on-going. Update to create
+postprocess subdir in existing CASEROOT and created a logs subdir in the postprocess
+dir to keep it clean. 
+
+M       Templates/postprocess.tmpl
+M       Templates/batch_yellowstone.tmpl
+M       Templates/env_postprocess.tmpl
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+M       diagnostics/diagnostics/ocn/ocn_avg_generator.py
+M       diagnostics/diagnostics/ice/ice_diags_generator.py
+M       diagnostics/diagnostics/ice/Config/config_diags_ice.xml
+M       diagnostics/diagnostics/ice/ice_avg_generator.py
+M       diagnostics/diagnostics/atm/atm_diags_generator.py
+M       diagnostics/diagnostics/atm/atm_avg_generator.py
+M       diagnostics/diagnostics/lnd/lnd_diags_generator.py
+M       diagnostics/diagnostics/lnd/lnd_avg_generator.py
+M       create_postprocess
+
+================================================================================
+
+Originator: aliceb
+Date: 16 March 2016
+Model: postprocessing
+Version: postprocessing_20160316
+One-line: removed pip install support for mpi4py/2.0.0 now that YS has a 
+mpi4py/2.0.0 module available (still in test by CISL). Updates to lnd_avg_generato.py
+to correctly work with mosart or rtm data.
+
+M       Machines/yellowstone_modules
+M       Config/config_postprocess.xml
+M       diagnostics/requirements.txt
+M       diagnostics/diagnostics/ocn/model_vs_obs.py
+M       diagnostics/diagnostics/lnd/Config/config_diags_lnd.xml
+M       diagnostics/diagnostics/lnd/lnd_avg_generator.py
+
+================================================================================
+
+Originator: aliceb
+Date: 14 March 2016
+Model: postprocessing
+Version: postprocessing_20160314
+One-line: added pip install support for mpi4py/2.0.0 which can be removed
+once YS has a module setup. Updated ocn model_timeseries to use a sorted list
+for the log files to compute transports. Updated lnd diags to get mosart and rtm 
+working correctly.
+
+
+M       Machines/machine_postprocess.xml
+M       SVN_EXTERNAL_DIRECTORIES
+M       diagnostics/requirements.txt
+M       diagnostics/diagnostics/ocn/model_timeseries.py
+M       diagnostics/diagnostics/ocn/Plots/poplog_timeseries.py
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       diagnostics/diagnostics/lnd/Config/config_diags_lnd.xml
+M       diagnostics/diagnostics/lnd/lnd_avg_generator.py
+
+================================================================================
+
+Originator: aliceb
+Date: 11 March 2016
+Model: postprocessing
+Version: not tagged
+One-line: add tool set_env to read XML files and set the environment for debugging.
+Update to pyAverager and ASAPpyTools and lnd_diag externals.
+
+
+A       Tools
+A       Tools/set_env
+A       Tools/copy_html
+M       SVN_EXTERNAL_DIRECTORIES
+
+================================================================================
+
+Originator: aliceb
+Date: 20 January 2016
+Model: postprocessing
+Version: not tagged
+One-line: add tool set_env to read XML files and set the environment for debugging.
+Update to pyAverager to apply scale factor to variables.
+
+M       SVN_EXTERNAL_DIRECTORIES
+M       diag_utils/diag_utils/diagUtilsLib.py
+M       copy_html
+A       set_env
+M       get_machine
+M       diagnostics/diagnostics/ocn/Plots/poplog_timeseries.py
+M       diagnostics/diagnostics/ocn/Plots/ecosystem_maps.py
+M       diagnostics/diagnostics/ocn/ocn_avg_generator.py
+M       diagnostics/diagnostics/ocn/Templates/moc_fields.tmpl
+M       diagnostics/diagnostics/ocn/Templates/basin_averages.tmpl
+M       diagnostics/diagnostics/ocn/Templates/surface_fields.tmpl
+M       diagnostics/diagnostics/ocn/Templates/moc_monthly_timeseries.tmpl
+M       diagnostics/diagnostics/ocn/Templates/enso_wavelet_timeseries.tmpl
+M       diagnostics/diagnostics/ocn/Templates/seasonal_cycle.tmpl
+M       diagnostics/diagnostics/ocn/Templates/zonal_average_3d_fields.tmpl
+M       diagnostics/diagnostics/ocn/Templates/western_boundary.tmpl
+M       diagnostics/diagnostics/ocn/Templates/moc_annual_timeseries.tmpl
+M       diagnostics/diagnostics/ocn/Templates/surface_flux_fields.tmpl
+M       diagnostics/diagnostics/ocn/Templates/mixed_layer_depth.tmpl
+M       diagnostics/diagnostics/ocn/Templates/poplog_timeseries.tmpl
+M       diagnostics/diagnostics/ocn/Templates/ecosystem_maps.tmpl
+M       ocn_diag/ncl_lib/regionalSbias500m.ncl
+M       ocn_diag/ncl_lib/TS_profiles_diff_plot.ncl
+M       ocn_diag/eco_lib/maps_surface_diff.py
+
+
+================================================================================
+
+Originator: aliceb
+Date: 09 December 2015
+Model: postprocessing
+Version: not tagged
+One-line: development updates not yet fully tested. Separating out the XML into 
+groups and adding a copy_html program to scp the html generated diags to a 
+web server with or without ssh keys present. 
+
+A       copy_html
+M       diag_utils/diag_utils/diagUtilsLib.py
+M       Templates/env_postprocess.tmpl
+M       SVN_EXTERNAL_DIRECTORIES
+M       Config/config_postprocess.xml
+M       create_postprocess
+M       diagnostics/diagnostics/ocn/model_vs_control.py
+M       diagnostics/diagnostics/ocn/model_timeseries.py
+M       diagnostics/diagnostics/ocn/Plots/ocn_diags_plot_bc.py
+M       diagnostics/diagnostics/ocn/Plots/regional_mean_timeseries.py
+M       diagnostics/diagnostics/ocn/Plots/moc_annual_timeseries.py
+M       diagnostics/diagnostics/ocn/Plots/moc_monthly_timeseries.py
+M       diagnostics/diagnostics/ocn/model_vs_obs.py
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       diagnostics/diagnostics/ocn/model_vs_obs_ecosys.py
+M       diagnostics/diagnostics/ocn/ocn_avg_generator.py
+M       diagnostics/diagnostics/ocn/Templates/ocean_diagnostics.tmpl
+M       diagnostics/diagnostics/atm/Config/config_diags_atm.xml
+
+================================================================================
+
+Originator: aliceb
+Date: 02 November 2015
+Model: postprocessing
+Version: postprocessing_20151102
+One-line: bug fixes for ocn diagnostics
+
+M       diag_utils/diag_utils/diagUtilsLib.py
+M       diagnostics/diagnostics/ocn/model_vs_control.py
+M       diagnostics/diagnostics/ocn/ocn_diags_bc.py
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       diagnostics/diagnostics/ocn/ocn_avg_generator.py
+
+================================================================================
+
+Originator: aliceb
+Date: 30 October 2015
+Model: postprocessing
+Version: postprocessing_20151030a
+One-line: update create_postprocess to handle new xml schemas, check for ssh keys
+in diagUtilsLib.copy_html_files, and updates to ocn diag to handle slice vs. series
+files correctly.
+
+
+A       diag_utils/diag_utils/tests/ssh_test.py
+M       diag_utils/diag_utils/diagUtilsLib.py
+M       Templates/env_diags.tmpl
+M       Config/config_postprocess.xml
+M       create_postprocess
+D       diagnostics/diagnostics/ocn/Config/config_plots_ocn.xml
+M       diagnostics/diagnostics/ocn/Config/config_definition.xsd
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       diagnostics/diagnostics/ocn/ocn_avg_generator.py
+
+================================================================================
+
+Originator: mickelso
+Date: 30 October 2015
+Model: postprocessing
+Version: postprocessing_20151030
+One-line: Updated xml and schemas for atm, land, and ice diags
+
+M       diagnostics/diagnostics/ice/Config/config_definition.xsd
+M       diagnostics/diagnostics/ice/Config/config_diags_ice.xml
+M       diagnostics/diagnostics/atm/Config/config_definition.xsd
+M       diagnostics/diagnostics/atm/Config/config_diags_atm.xml
+M       diagnostics/diagnostics/lnd/Config/config_diags_lnd.xml
+M       diagnostics/diagnostics/lnd/Config/config_definition.xsd
+
+================================================================================ 
+	
+Originator: aliceb
+Date: 21 September 2015
+Model: postprocessing
+Version: postprocessing_20151021
+One-line: add zfill(4) to pad out year strings in ocn diag plot classes.
+
+M       ChangeLog
+M       diagnostics/diagnostics/ocn/Plots/regional_mean_timeseries.py
+M       diagnostics/diagnostics/ocn/Plots/moc_monthly_timeseries.py
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+D       diagnostics/diagnostics/ocn/Templates/logos/doe_logo.jpg
+M       diagnostics/diagnostics/ocn/Templates/ocean_diagnostics.tmpl
+R       diagnostics/diagnostics/__init__.py
+D       diagnostics/diagnostics/__init__.pyc
+M       create_python_env
+
+================================================================================
+
+Originator: mickelso
+Date: 20 October 2015
+Model: postprocessing
+Version: postprocessing_20151020
+One-line: Update PyAverager repo, made mods for mult time series in a directory,
+minor updates to land diags. 
+
+M       diag_utils/diag_utils/diagUtilsLib.py
+M       SVN_EXTERNAL_DIRECTORIES
+M       diagnostics/diagnostics/lnd/Config/config_diags_lnd.xml
+M       diagnostics/diagnostics/lnd/lnd_avg_generator.py
+
+================================================================================
+
+	
+Originator: aliceb
+Date: 14 September 2015
+Model: postprocessing
+Version: postprocessing_20151014
+One-line: updates for create_postprocess and ocn diags
+
+M       diag_utils/diag_utils/diagUtilsLib.py
+M       Templates/env_postprocess.tmpl
+M       create_postprocess
+M       diagnostics/diagnostics/ocn/model_timeseries.py
+M       diagnostics/diagnostics/ocn/Plots/poplog_timeseries.py
+M       diagnostics/diagnostics/ocn/Plots/moc_annual_timeseries.py
+M       diagnostics/diagnostics/ocn/tests/test_runAvg_mpi.csh
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       diagnostics/diagnostics/ocn/ocn_avg_generator.py
+
+================================================================================
+
+Originator: mickelso
+Date: 16 October 2015
+Model: postprocessing
+Version: postprocessing_20151016
+One-line: Land diagnostic updates.
+
+================================================================================
+	
+Originator: aliceb
+Date: 14 September 2015
+Model: postprocessing
+Version: postprocessing_20151014
+One-line: bug fix for POSTPROCESS_PATH and non-standalone
+
+M       create_postprocess
+M       diagnostics/diagnostics/ocn/ocn_avg_generator.py
+
+================================================================================
+	
+Originator: aliceb
+Date: 14 September 2015
+Model: postprocessing
+Version: postprocessing_20151014
+One-line: minor cleanups and more debugging of ocn ecosys plots
+
+M       diagnostics/diagnostics/ocn/Plots/ecosystem_maps.py
+M       diagnostics/diagnostics/ocn/model_vs_obs_ecosys.py
+M       diagnostics/diagnostics/ocn/Templates/ecosystem_maps.tmpl
+A       diagnostics/diagnostics/__init__.py
+M       cesm_utils/cesm_utils/cesmEnvLib.py
+
+================================================================================
+	
+Originator: aliceb
+Date: 12 September 2015
+Model: postprocessing
+Version: postprocessing_20151012
+One-line: adding methods to find machine name from hostname so create_postprocess
+no longer requires machine as an optional arg for standalone
+
+M       Machines/machine_postprocess.xsd
+M       Machines/machine_postprocess.xml
+A       get_machine
+M       create_postprocess
+M       cesm_utils/cesm_utils/cesmEnvLib.py
+M       diagnostics/diagnostics/ocn/Plots/ecosystem_maps.py
+
+================================================================================
+
+Originator: mickelso
+Date: 9 October 2015
+Model: postprocessing
+Version: postprocessing_20151009
+One-line: Debugged model-obs lnd diags, updated externals, modified how ice and
+atm toggle time series, added plumbing for land diags.
+
+================================================================================
+	
+Originator: aliceb
+Date: 30 September 2015
+Model: postprocessing
+Version: postprocessing_20150930a
+One-line: redefined POSTPROCESS_PATH instead of POSTPROCESS_DIR
+	
+M       Templates/env_postprocess.tmpl
+M       create_postprocess
+
+================================================================================
+	
+Originator: aliceb
+Date: 30 September 2015
+Model: postprocessing
+Version: postprocessing_20150930
+One-line: update for edison and redefined POSTPROCESS_PATH instead of 
+POSTPROCESS_DIR
+	
+M       Config/config_postprocess.xml
+M       Config/config_timeseries.xml
+M       Machines/machine_postprocess.xml
+M       create_f2py_remap
+M       create_postprocess
+M       timeseries/timeseries/cesm_tseries_generator.py
+
+================================================================================	
+	
+Originator: aliceb
+Date: 23 September 2015
+Model: postprocessing
+Version: postprocessing_20150923a
+One-line: update for edison
+
+M       Machines/edison_modules
+M       create_python_env
+
+================================================================================
+	
+Originator: aliceb
+Date: 23 September 2015
+Model: postprocessing
+Version: postprocessing_20150923
+One-line: update for edison and adding create_f2py_remap script to create the
+ocn_diag/eco_lib/remap.so shared library
+
+	
+M       Machines/edison_modules
+M       Machines/machine_postprocess.xml
+M       SVN_IGNORE
+M       Templates/batch_edison.tmpl
+M       Templates/postprocess.tmpl
+A       create_f2py_remap
+M       create_postprocess
+M       create_python_env
+
+================================================================================
+	
+Originator: mickelso
+Date: 21 September 2015
+Model: postprocessing
+Version: postprocessing_20150921
+One-line: Debugged the ice model-model comparison and added html functionality
+for the ice diags. 
+
+================================================================================
+
+	
+Originator: aliceb
+Date: 17 September 2015
+Model: postprocessing
+Version: postprocessing_20150917
+One-line: tagging this version with ecosystem_maps plotting module even though
+html is not gen'ed correctly because next version will reformat.
+
+M       diagnostics/diagnostics/ocn/Plots/ecosystem_maps.py
+
+================================================================================
+	
+Originator: aliceb
+Date: 16 September 2015
+Model: postprocessing
+Version: postprocessing_20150910
+One-line: updates for edison and change to cime/cime_config/cesm/machines in 
+za makefile call in create_python_env
+
+	
+M       Machines/edison_modules
+M       Machines/machine_postprocess.xml
+M       Templates/batch_edison.tmpl
+M       create_python_env
+	
+================================================================================
+	
+Originator: aliceb
+Date: 10 September 2015
+Model: postprocessing
+Version: postprocessing_20150910
+One-line: update to ocn_diags_generator.py and ocn_avg_generator.py to get
+standalone case root working. Note - needed to remove ice from __init__.py 
+to get standalone working for this set of changes. 
+
+M       Templates/env_postprocess.tmpl
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       diagnostics/diagnostics/ocn/ocn_avg_generator.py
+M       diagnostics/diagnostics/__init__.py
+
+================================================================================
+
+Originator: aliceb
+Date: 09 September 2015
+Model: postprocessing
+Version: postprocessing_20150909
+One-line: update to create_postprocess and cesm_tseries_generator.py to get 
+standalone case root working.
+
+M       Templates/env_postprocess.tmpl
+M       Config/config_postprocess.xml
+M       create_postprocess
+M       timeseries/timeseries/cesm_tseries_generator.py
+
+================================================================================
+
+Originator: aliceb
+Date: 08 September 2015
+Model: postprocessing
+Version: postprocessing_20150908
+One-line: started adding ecosys plots to ocean diagnostics. Still need to integrate
+all of Ernesto and Keith's ocn_diag changes. Update create_python_env.sh and 
+create_postprocess to allow for a standalone, new caseroot for postprocessing. 
+Still need to add the --standalone option to the wrapper scripts so the try
+to parse the correct XML files.
+
+D       machines
+A  +    Machines
+A  +    Templates
+D  +    Templates/batch_goldbach.tmpl
+M  +    Templates/postprocess.tmpl
+D  +    Templates/template.ocn_diagnostics
+D  +    Templates/template.timeseries
+M  +    Templates/env_postprocess.tmpl
+D       templates
+M       SVN_EXTERNAL_DIRECTORIES
+D       Config/cime_config_definition.xml
+A       Config/config_timeseries.xsd
+D       Config/config_definition.xml
+A       Config/config_timeseries.xml
+M       create_postprocess
+M       diagnostics/diagnostics/ocn/model_vs_control.py
+A       diagnostics/diagnostics/ocn/Plots/ecosystem_maps.py
+A       diagnostics/diagnostics/ocn/Plots/moc_annual_timeseries.py
+A       diagnostics/diagnostics/ocn/Plots/moc_monthly_timeseries.py
+M       diagnostics/diagnostics/ocn/ocn_diags_bc.py
+A       diagnostics/diagnostics/ocn/tests/test_ocn_series2.py
+M       diagnostics/diagnostics/ocn/ocn_diags_factory.py
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+A       diagnostics/diagnostics/ocn/model_vs_obs_ecosys.py
+A       diagnostics/diagnostics/ocn/Templates/model_vs_obs_ecosys.tmpl
+A       diagnostics/diagnostics/ocn/Templates/ecosystem_maps.py
+M       timeseries/timeseries/cesm_tseries_generator.py
+M       create_python_env
+
+================================================================================
+
+Originator: aliceb
+Date: 28 August 2015
+Model: postprocessing
+Version: postprocessing_20150828a
+One-line: added the last non-ecosys diagnostics and plotting classes for the ocean.
+
+M        diag_utils/diag_utils/diagUtilsLib.py
+M        diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M        diagnostics/diagnostics/ocn/Plots/__init__.py
+M        diagnostics/diagnostics/ocn/Plots/ocn_diags_plot_factory.py
+A        diagnostics/diagnostics/ocn/Templates/moc_annual_timeseries.tmpl
+A        diagnostics/diagnostics/ocn/Templates/moc_monthly_timeseries.tmpl
+M        diagnostics/diagnostics/ocn/model_vs_obs.py
+M        diagnostics/diagnostics/ocn/ocn_avg_generator.py
+M        diagnostics/diagnostics/ocn/ocn_diags_bc.py
+M        diagnostics/diagnostics/ocn/ocn_diags_generator.py
+M        diagnostics/diagnostics/ocn/tests/test_ocn_series.py
+M        diagnostics/diagnostics/ocn/tests/test_ocn_slice.py
+M        machines/machine_postprocess.xml
+M        machines/yellowstone_modules
+
+
+================================================================================
+
+Originator: mickelso
+Date: 28 August 2015
+Model: postprocessing
+Version: postprocessing_20150818
+One-line: Added in the Ice Diagnstics into the diagnostic directory.   
+
+================================================================================
+
+Originator: mickelso
+Date: 18 August 2015
+Model: postprocessing
+Version: postprocessing_20150818
+One-line: Moved SE regridding to atm_diags_generator.py, new diag directory
+structure, fixed bugs when creating both comparisons at once for amwg.
+digUtils.py: Does not contain a reference to 'self.name'.  Commented out for
+now. Added 'check_series_years' to check # of slices in series files and match
+to date in file name.  Added a way to use CESM resolution in the regrid
+filenames.
+
+M       diag_utils/diag_utils/diagUtilsLib.py
+M       diagnostics/diagnostics/atm/model_vs_model.py
+M       diagnostics/diagnostics/atm/model_vs_obs.py
+M       diagnostics/diagnostics/atm/Config/config_diags_atm.xml
+M       diagnostics/diagnostics/atm/atm_diags_generator.py
+M       diagnostics/diagnostics/atm/create_html.py
+
+================================================================================
+
+Originator: aliceb
+Date: 11 August 2015
+Model: postprocessing
+Version: postprocessing_20150811b
+One-line: merge of amwg-mickelso branch
+
+================================================================================
+
+Originator: aliceb
+Date: 11 August 2015
+Model: postprocessing
+Version: postprocessing_20150811
+One-line: trunk tag prior to merge of amwg-mickelso branch
+
+================================================================================
+
+Originator: aliceb
+Date: 20 July 2015
+Model: postprocessing
+Version: postprocessing_20150720
+One-line: working with 2 diag types (MVO and MVM), 2 plotting classes for each diag 
+type, and 2 tasks. The communicator is being split. 
+
+M       diag_utils/diag_utils/diagUtilsLib.py
+M       diagnostics/diagnostics/ocn/model_vs_model.py
+M       diagnostics/diagnostics/ocn/Plots/ocn_diags_plot_factory.py
+M       diagnostics/diagnostics/ocn/Plots/surface_flux_fields.py
+M       diagnostics/diagnostics/ocn/Plots/surface_fields.py
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+
+================================================================================
+
+Originator: aliceb
+Date: 02 July 2015
+Model: postprocessing
+Version: postprocessing_20150702
+One-line: starting work to incorporate a config_plots_ocn.xml to separate the
+hard-coded strings in the code into XML data definitions
+
+
+M       diag_utils/diag_utils/diagUtilsLib.py
+M       SVN_EXTERNAL_DIRECTORIES
+A       diagnostics/diagnostics/ocn/model_vs_model.py
+M       diagnostics/diagnostics/ocn/Plots/ocn_diags_plot_factory.py
+M       diagnostics/diagnostics/ocn/Plots/surface_flux_fields.py
+A       diagnostics/diagnostics/ocn/Plots/surface_fields_control.py
+M       diagnostics/diagnostics/ocn/ocn_diags_bc.py
+M       diagnostics/diagnostics/ocn/tests/test_runAvg_mpi.csh
+A       diagnostics/diagnostics/ocn/tests/test_ocn_slice_control.py
+M       diagnostics/diagnostics/ocn/ocn_diags_factory.py
+A       diagnostics/diagnostics/ocn/Config/config_plots_ocn.xml
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       diagnostics/Makefile
+
+================================================================================
+
+Originator: aliceb
+Date: 01 July 2015
+Model: postprocessing
+Version: postprocessing_20150701
+One-line: added support for a -control-run option to create_postprocess
+
+M       docs/create_postprocess.notes
+M       templates/postprocess.tmpl
+M       templates/env_diags.tmpl
+M       create_postprocess
+M       diagnostics/diagnostics/ocn/tests/test_ocn_series.py
+M       diagnostics/diagnostics/ocn/tests/test_runAvg_mpi.csh
+M       diagnostics/diagnostics/ocn/tests/test_ocn_slice.py
+M       diagnostics/diagnostics/ocn/Config/config_definition.xsd
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       diagnostics/diagnostics/ocn/ocn_avg_generator.py
+M       timeseries/timeseries/cesm_tseries_generator.py
+
+================================================================================
+
+Originator: aliceb
+Date: 25 June 2015
+Model: postprocessing
+Version: postprocessing_20150625
+One-line: working with 1 diag class (model_vs_obs) and all plotting classes on geyser
+
+D       compile_za
+M       diag_utils/diag_utils/diagUtilsLib.py
+M       create_python_env.sh
+M       SVN_EXTERNAL_DIRECTORIES
+M       diagnostics/diagnostics/ocn/Plots/ocn_diags_plot_bc.py
+M       diagnostics/diagnostics/ocn/Plots/surface_flux_fields.py
+M       diagnostics/diagnostics/ocn/ocn_diags_bc.py
+M       diagnostics/diagnostics/ocn/tests/test_runAvg_mpi.csh
+M       diagnostics/diagnostics/ocn/tests/test_ocn_slice.py
+M       diagnostics/diagnostics/ocn/model_vs_obs.py
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+D       diagnostics/diagnostics/test
+
+================================================================================
+
+Originator: aliceb
+Date: 22 June 2015
+Model: postprocessing
+Version: postprocessing_20150622
+One-line: separated out the calls to the averager and the diagnostics.
+Still need to test the diags inter_comm setup.
+
+M       diagnostics/diagnostics/ocn/model_vs_obs.py
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+A       diagnostics/diagnostics/atm
+
+================================================================================
+
+Originator: aliceb
+Date: 12 June 2015
+Model: postprocessing
+Version: postprocessing_20150612
+One-line: testing end-to-end with single script to call averager and generate plots
+Currently, ocn_diags_generator fails when both the averages and plots are called
+in ocn_diags_generator.py using the same simplecomm. 
+
+M       diag_utils/diag_utils/diagUtilsLib.py
+M       SVN_EXTERNAL_DIRECTORIES
+M       diagnostics/diagnostics/ocn/tests/test_ocn_series.py
+M       diagnostics/diagnostics/ocn/tests/test_runAvg_mpi.csh
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+A       diagnostics/diagnostics/ocn/ocn_avg_generator.py
+
+================================================================================
+Originator: aliceb
+Date: 10 June 2015
+Model: postprocessing
+Version: postprocessing_20150610
+One-line: testing with longer runs on geyser with plots conversion in serial
+
+M       create_python_env.sh
+M       machines/machine_postprocess.xsd
+M       machines/machine_postprocess.xml
+M       templates/batch_yellowstone.tmpl
+M       SVN_EXTERNAL_DIRECTORIES
+M       create_postprocess
+M       diagnostics/diagnostics/ocn/Plots/regional_area.py
+M       diagnostics/diagnostics/ocn/Plots/ocn_diags_plot_bc.py
+M       diagnostics/diagnostics/ocn/Plots/seasonal_cycle.py
+D       diagnostics/diagnostics/ocn/ocn_diags_generator_dev.py
+D       diagnostics/diagnostics/ocn/ocn_diags_generator_serial.py
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+D       diagnostics/diagnostics/ocn/ocn_diags_generator_mpi.py
+M       timeseries/timeseries/cesm_tseries_generator.py
+
+================================================================================
+
+Originator: aliceb
+Date: 02 June 2015
+Model: postprocessing
+Version: postprocessing_20150602
+One-line: tested version with all plots working except a problem still with
+parallel calls. Also, plot conversion being done with subprocess call in serial.
+
+================================================================================
+
+Originator: aliceb
+Date: 12 May 2015
+Model: postprocessing
+Version: postprocessing_20150512
+One-line: not fully tested version with non-working ocn_diags integration
+
+M       create_python_env.sh
+M       machines/machine_postprocess.xsd
+M       machines/yellowstone_modules.sh
+M       machines/machine_postprocess.xml
+M       templates/postprocess.tmpl
+M       SVN_EXTERNAL_DIRECTORIES
+M       create_postprocess
+M       diagnostics/diagnostics/ocn/Plots/ocn_diags_plot_bc.py
+M       diagnostics/diagnostics/ocn/Plots/zonal_average_3d_fields.py
+M       diagnostics/diagnostics/ocn/Plots/surface_flux_fields.py
+M       diagnostics/diagnostics/ocn/Plots/surface_fields.py
+M       diagnostics/diagnostics/ocn/Plots/moc_fields.py
+A       diagnostics/diagnostics/ocn/ocn_diags_generator_serial.py
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+M       cesm_utils/cesm_utils/cesmEnvLib.py
+M       timeseries/timeseries/cesm_tseries_generator.py
+
+================================================================================
+	
+Originator: aliceb
+Date: 04 May 2015
+Model: postprocessing
+Version: postprocessing_20150504
+One-line: working version of timeseries using mpi_utils simplecomm 
+
+M       create_python_env.sh
+M       templates/postprocess.tmpl
+A  +    templates/template.ocn_diagnostics
+D       templates/template.ocn_diagsnostics
+A       Config/config_definition.xml
+M       cesm_utils/cesm_utils/cesmEnvLib.py
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       create_postprocess
+M       timeseries/timeseries/cesm_tseries_generator.py
+
+================================================================================
+	
+Originator: aliceb
+Date: 24 Apr 2015
+Model: postprocessing
+Version: postprocessing_20150424
+One-line: working version of create_postprocess
+
+X       ocn_diag
+M       create_python_env.sh
+M       machines/machine_postprocess.xsd
+M       machines/machine_postprocess.xml
+X       averager/pyAverager
+A       templates/batch_goldbach.tmpl
+A       templates/postprocess.tmpl
+D       templates/yellowstone_batch.tmpl
+A       templates/batch_yellowstone.tmpl
+A       templates/template.tseries_generate
+A       templates/env_postprocess.tmpl
+A       templates/env_diags.tmpl
+A       templates/template.ocn_diags_generate
+D       templates/template.timeseries.pl
+A       create_postprocess.notes
+X       mpi_utils/pyTools
+M       Config/config_postprocess.xml
+M       create_postprocess
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+M       diagnostics/diagnostics/ocn/Config/config_diags_ocn.xml
+M       diagnostics/Makefile
+X       reshaper/pyReshaper
+D       templates/template.tseries_generate
+A  +    templates/template.ocn_diagsnostics
+A  +    templates/template.timeseries
+D       templates/template.ocn_diags_generate
+
+================================================================================
+	
+Originator: aliceb
+Date: 14 Apr 2015
+Model: postprocessing
+Version: postprocessing_20150414
+One-line: Updates to Makefiles and additions to the top level scripts
+
+X       ocn_diag
+A       clean_archive
+D       diag_utils/diag_utils/tests/test_checkFile.py
+D       diag_utils/diag_utils/tests/test_checkXMLvar.py
+M       diag_utils/diag_utils/diagUtilsLib.py
+M       create_python_env.sh
+A       machines/machine_postprocess.xsd~
+M       machines/yellowstone_modules.sh
+A       machines/machine_postprocess.xml~
+A       machines/machine_postprocess.xsd
+A       machines/machine_postprocess.xml
+D       machines/yellowstone_batch.py
+X       averager/pyAverager
+A       templates
+A       templates/yellowstone_batch.tmpl
+A       templates/template.timeseries.pl
+X       mpi_utils/pyTools
+A       Config
+A       Config/config_postprocess.xsd
+A       Config/config_postprocess.xml
+M       create_postprocess
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+A       cesm_utils/cesm_utils/tests/test_checkFile.py
+A       cesm_utils/cesm_utils/tests/test_checkXMLvar.py
+M       cesm_utils/cesm_utils/cesmEnvLib.py
+X       reshaper/pyReshaper
+M       timeseries/timeseries/cesm_tseries_generator.py
+
+================================================================================
+	
+Originator: aliceb
+Date: 3 Apr 2015
+Model: postprocessing
+Version: postprocessing_20150403
+One-line: Updates to Makefiles and additions to the top level scripts
+
+X       ocn_diag
+D       create_diags.sh
+A       diag_utils
+A       diag_utils/requirements.txt
+A       diag_utils/requirements_links.txt
+A       diag_utils/diag_utils
+A       diag_utils/diag_utils/pop_gunzip.py
+A       diag_utils/diag_utils/tests
+A       diag_utils/diag_utils/tests/test_checkFile.py
+A       diag_utils/diag_utils/tests/__init__.py
+A       diag_utils/diag_utils/tests/test_checkXMLvar.py
+A       diag_utils/diag_utils/diagUtilsLib.py
+A       diag_utils/diag_utils/__init__.py
+A       diag_utils/diag_utils/pop_gunzip.submit
+A       diag_utils/diag_utils/pop_gunzip.run
+A       diag_utils/VERSION
+A       diag_utils/setup.py
+A       diag_utils/Makefile
+A       create_python_env.sh
+A       machines
+A       machines/yellowstone_modules.sh
+A       machines/yellowstone_batch.py
+X       averager/pyAverager
+X       mpi_utils/pyTools
+M       mpi_utils/Makefile
+M       cesm_utils/cesm_utils/cesmEnvLib.py
+M       cesm_utils/setup.py
+M       diagnostics/requirements.txt
+A       diagnostics/diagnostics/test
+M       diagnostics/diagnostics/__init__.py
+M       diagnostics/setup.py
+M       diagnostics/Makefile
+M       create_postprocess
+X       reshaper/pyReshaper
+M       reshaper/Makefile
+A       timeseries/test
+D       timeseries/tests
+M       timeseries/Makefile
+M       Makefile
+
+================================================================================
+	
+Originator: aliceb
+Date: 1 Apr 2015
+Model: postprocessing
+Version: postprocessing_20150401
+One-line: Updates to Makefiles and SVN_EXTERNALS to include pyTools
+
+M       SVN_EXTERNAL_DIRECTORIES
+M       diagnostics/diagnostics/ocn/ocn_diags_generator.py
+M       reshaper/Makefile
+M       timeseries/timeseries/cesm_tseries_generator.py
+M       averager/Makefile
+M       Makefile
+
+================================================================================
+	
+Originator: aliceb
+Date: 20 Mar 2015
+Model: postprocessing
+Version: postprocessing_20150320
+One-line: Updates with cesm_utils and added Makefiles to create virtualenv.
+
+	
+M       ChangeLog
+A       Makefile
+A       cesm_utils/Makefile
+D       cesm_utils/__init__.py
+D       cesm_utils/cesmEnvLib.py
+A       cesm_utils/cesm_utils
+A       cesm_utils/cesm_utils/__init__.py
+A       cesm_utils/cesm_utils/cesmEnvLib.py
+A       cesm_utils/cesm_utils/module_check.py
+A       cesm_utils/cesm_utils/tests
+A       cesm_utils/cesm_utils/tests/__init__.py
+A       cesm_utils/cesm_utils/tests/test_cesmEnvLib.py
+A       cesm_utils/cesm_utils.egg-info
+A       cesm_utils/cesm_utils.egg-info/PKG-INFO
+A       cesm_utils/cesm_utils.egg-info/SOURCES.txt
+A       cesm_utils/cesm_utils.egg-info/dependency_links.txt
+A       cesm_utils/cesm_utils.egg-info/top_level.txt
+A       cesm_utils/cesm_utils.egg-info/zip-safe
+D       cesm_utils/module_check.py
+A       cesm_utils/setup.py
+
+================================================================================	
+	
+Originator: aliceb
+Date: 17 Mar 2015
+Model: postprocessing
+Version: postprocessing_20150317
+One-line: updates to diag_utils to include generate_ncl_plots and plot classes. Doesn't
+work yet with MPI as need to use the messenger class instead of mpi4py
+
+M       SVN_EXTERNAL_DIRECTORIES
+M       diagnostics/ocn/ocn_diags_generator.py
+M       diagnostics/ocn/ocn_diags.run
+M       diagnostics/ocn/Plots/ocn_diags_plot_bc.py
+M       diagnostics/ocn/Plots/zonal_average_3d_fields.py
+M       diagnostics/ocn/Plots/moc_fields.py
+M       diagnostics/ocn/Plots/surface_flux_fields.py
+M       diagnostics/ocn/Plots/surface_fields.py
+M       diagnostics/diag_utils/diag_utils.py
+
+================================================================================
+
+Originator: aliceb
+Date: 12 Mar 2015
+Model: postprocessing
+Version: postprocessing_20150312
+One-line: working version in serial on goldbach with MPI calls
+
+M       diagnostics/ocn/ocn_diags_generator.py
+M       diagnostics/ocn/ocn_diags.run
+
+================================================================================
+
+Originator: aliceb
+Date: 09 Mar 2015
+Model: postprocessing
+Version: postprocessing_20150309
+One-line: first version of post-processing includes ocn diagnostics wrappers
+
+A       __init__.py
+A       diagnostics
+A       diagnostics/ocn
+A       diagnostics/ocn/Plots
+A       diagnostics/ocn/Plots/ocn_diags_plot_bc.py
+A       diagnostics/ocn/Plots/zonal_average_3d_fields.py
+A       diagnostics/ocn/Plots/ocn_diags_plot_factory.py
+A       diagnostics/ocn/Plots/surface_flux_fields.py
+A       diagnostics/ocn/Plots/surface_fields.py
+A       diagnostics/ocn/Plots/__init__.py
+A       diagnostics/ocn/Plots/moc_fields.py
+A       diagnostics/ocn/Config
+A       diagnostics/ocn/Config/config_diags_ocn.xml
+A       diagnostics/ocn/Config/config_definition.xsd
+A       diagnostics/ocn/__init__.py
+A       diagnostics/ocn/ocn_diags.submit
+A       diagnostics/ocn/ocn_diags.run
+A       diagnostics/ocn/ocn_diags_generator.py
+A       diagnostics/ocn/Templates
+A       diagnostics/ocn/Templates/moc_fields.tmpl
+A       diagnostics/ocn/Templates/logos
+A       diagnostics/ocn/Templates/logos/doe_logo.jpg
+A       diagnostics/ocn/Templates/logos/nsf1sm.gif
+A       diagnostics/ocn/Templates/logos/ncar-logo-sm.jpg
+A       diagnostics/ocn/Templates/model_vs_obs.tmpl
+A       diagnostics/ocn/Templates/surface_flux_fields.tmpl
+A       diagnostics/ocn/Templates/surface_fields.tmpl
+A       diagnostics/ocn/Templates/zonal_average_3d_fields.tmpl
+A       diagnostics/ocn/Templates/footer.tmpl
+A       diagnostics/ocn/Templates/diag_style.css
+A       diagnostics/diag_utils
+A       diagnostics/diag_utils/pop_gunzip.py
+A       diagnostics/diag_utils/unittests
+A       diagnostics/diag_utils/unittests/test_checkFile.py
+A       diagnostics/diag_utils/unittests/__init__.py
+A       diagnostics/diag_utils/unittests/test_checkXMLvar.py
+A       diagnostics/diag_utils/__init__.py
+A       diagnostics/diag_utils/diag_utils.py
+A       diagnostics/diag_utils/pop_gunzip.submit
+A       diagnostics/diag_utils/pop_gunzip.run
+A       diagnostics/README
+A       SVN_EXTERNAL_DIRECTORIES
+A       create_postprocess
+A       cesm_utils
+A       cesm_utils/__init__.py
+A       cesm_utils/module_check.py
+A       cesm_utils/cesmEnvLib.py
+A       timeseries
+A       timeseries/cesm_tseries_generator.py
+A       timeseries/__init__.py
+A       timeseries/tseries_generate.submit
+A       timeseries/tseries_generate.run
+A       SVN_IGNORE

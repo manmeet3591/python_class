@@ -1,0 +1,257 @@
+#!/bin/bash -l
+#
+# script to setup the python virtual environment for postprocessing
+#
+# Author: CSEG <cseg@cgd.ucar.edu>
+#
+
+#======================================================================
+# Local functions
+#======================================================================
+
+function Usage {
+    echo "SYNOPSIS"
+    echo "     $progname [options]"
+    echo ""
+    echo "     This script sets up the python virtual environment (env) for a given supported machine."
+    echo "     This script executes the following steps:"
+    echo "     - clones the NCAR Python Library (NPL) for this machine necessary to boot-strap the env"
+    echo "     - make env"
+    echo "     - activate env"
+    echo "     - install post-processing tools into the env"
+    echo "     - compile/install additional tools (e.g. zonal_average tool for ocn diag)"
+    echo "     - run unittests"
+    echo "     - deactivate env"
+    echo ""
+    echo "OPTIONS"
+    echo "     -machine        specify a CESM supported machine name (MANDATORY)."
+    echo "     -help           Print this help message and exit"
+}
+
+#======================================================================
+# Given a relative path, convert to an absolute path
+# (from http://www.lancejian.com/2011/04/13/get-absolute-path-of-the-running-bash-script.html)
+function absolute_path {
+    relative_path="$1"
+    absolute_path=`cd "$relative_path"; pwd`
+    echo "$absolute_path"
+}
+
+
+# Prints the test status and an info string, separated by ':'
+# Inputs:
+#   status: test status
+#   info: optional auxiliary info about test failure
+function print_result {
+    status="$1"
+    info="$2"
+    
+    echo "${status}:${info}"
+}
+
+#======================================================================
+# Begin main script
+#======================================================================
+
+progname=`basename $0`
+
+# need absolute path (rather than relative path) because we use this
+# path to get to the machines directory
+pp_dir=$(absolute_path `dirname $0`)  
+export pp_dir
+
+#----------------------------------------------------------------------
+# Set default return values
+#----------------------------------------------------------------------
+status='UNDEF'
+info=''
+
+#----------------------------------------------------------------------
+# Define default values for command-line arguments
+#---------------------------------------------------------------------- 
+machine_dir="${pp_dir}/Machines"
+echo $machine_dir
+machine=''
+
+#----------------------------------------------------------------------
+# Process command-line arguments
+#----------------------------------------------------------------------
+while [ $# -gt 0 ]; do
+    case $1 in
+        -machine )
+            machine=$2
+            shift
+            ;;
+        -help )
+            Usage
+            exit 0
+            ;;
+        * )
+            echo "$progname: Unknown argument: $1" >&2
+            echo "Run $progname -help for usage" >&2
+	    print_result $status "$info"
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+
+#----------------------------------------------------------------------
+# Exit if required command-line arguments weren't provided
+#----------------------------------------------------------------------
+error=0  # no errors yet
+
+if [ -z $machine ]; then
+    status="ERROR"
+    info="$progname: A valid, supported machine name must be provided." >&2
+    error=1
+fi
+
+if [ $error -gt 0 ]; then
+    echo "" >&2
+    echo "Run $progname -help for usage" >&2
+    # return default values for status & info
+    print_result $status "$info"
+    exit 1
+fi
+
+#----------------------------------------------------------------------
+# Determine whether [machine_dir]/[machine]_modules.sh file exists
+#----------------------------------------------------------------------
+module_script="${machine_dir}/${machine}_modules"
+if [ ! -x $module_script ]; then
+    status="ERROR"
+    info="$progname - ${module_script} does not exist. Please check input options."
+    print_result $status "$info"
+    exit 0
+fi
+
+#----------------------------------------------------------------------
+# load the python boot-strap modules for this machine
+#----------------------------------------------------------------------
+. $module_script
+
+#----------------------------------------------------------------------
+# check if cesm-env2 already exists, if so exit
+#----------------------------------------------------------------------
+env="${pp_dir}/cesm-env2"
+echo $env
+if [ ! -d $env ]; then
+    status="ERROR"
+    info="$progname - ${pp_dir}/cesm-env2 virtual environment does not exist.
+Check the $module_script for the correct ncar_pylib virtualenv clone command.
+If a new or updated virtual environment needs to be created then follow these steps:
+
+>cd ${pp_dir}
+>make clobber
+>make clobber-env
+
+and rerun this script."
+    print_result $status "$info"
+    exit 0
+fi
+
+#----------------------------------------------------------------------
+# install the external tools via the manage_externals/checkout_externals
+#----------------------------------------------------------------------
+./manage_externals/checkout_externals 
+
+curdir=`pwd`
+echo $curdir
+cd $pp_dir
+
+#----------------------------------------------------------------------
+# activate virtualenv for remainder of this script
+#----------------------------------------------------------------------
+echo "$progname - activating virtual environment in ${pp_dir}/cesm-env2."
+. cesm-env2/bin/activate
+
+#----------------------------------------------------------------------
+# install post processing packages
+#----------------------------------------------------------------------
+echo "$progname - installing all post processing tools into the virtual environment in ${pp_dir}/cesm-env2."
+make all
+if [ $? -ne 0 ]; then
+    echo "ERROR: Unable to install all postprocessing tools into the virtual environment in ${pp_dir}/cesm-env2. Exiting..."
+    exit 1
+fi
+
+#----------------------------------------------------------------------
+# run some self tests
+#----------------------------------------------------------------------
+echo "$progname - Testing post processing installation by listing the installed modules."
+# run unit tests here?
+
+#----------------------------------------------------------------------
+# is one of our installed executables in the path?
+#----------------------------------------------------------------------
+module_check
+if [ $? -ne 0 ]; then
+    echo "ERROR: Problem with running program module_check in the virtual environment in ${pp_dir}/cesm-env2. Exiting..."
+    exit 1
+fi
+
+#----------------------------------------------------------------------
+# compile and install ocn_diag remap shared object (remap.so) program
+#----------------------------------------------------------------------
+##echo "---------------------------------------------------------"
+##echo "$progname - Compiling ocn diagnostics remap.so"
+
+# reads XML and call subprocess f2py
+##create_f2py_remap --machine $machine
+##if [ $? -ne 0 ]; then
+##    echo "WARNING: Problem with ocean diagnostics create_f2py_remap in $pp_dir"
+##fi
+
+#----------------------------------------------------------------------
+# compile and install ocn_diag zonal average (za) program
+#----------------------------------------------------------------------
+
+echo "---------------------------------------------------------"
+echo "$progname - Compiling ocn diagnostics zonal average tool - za."
+create_ocn_za --machine $machine
+
+cd $pp_dir/ocn_diag/tool_lib/zon_avg
+
+# run the make clean command
+make clean
+
+# run the make command
+make
+if [ $? -ne 0 ]; then
+    echo "WARNING: Problem compiling the ocean diagnostics zonal average tool in fortran in $pp_dir/ocn_diag/tool_lib/zon_avg"
+fi
+
+# link the za compiled code to one level up for the NCL
+ln -sf $pp_dir/ocn_diag/tool_lib/zon_avg/za $pp_dir/ocn_diag/tool_lib/za
+
+#----------------------------------------------------------------------
+# cleanup and deactivate the virtualenv. 
+#----------------------------------------------------------------------
+deactivate
+
+cd $curdir
+
+status=""
+info="**********************************************************************************************
+
+SUCCESS: $progname CESM post processing virtual environment installed successfully in 
+${pp_dir}/cesm-env2.
+
+All interaction with the virtual environment including activating and deactivating is done via
+the post processing tools that reside in the experiment caseroot directory and are created 
+using the create_postprocess --caseroot [caseroot] script. These tools include:
+    env_postprocess.xml
+    timeseries
+    env_timeseries.xml
+    [component]_averages
+    [lnd,atm]_regrid
+    [component]_diagnostics
+    env_diags_[component].xml
+    env_conform.xml
+
+**********************************************************************************************"
+print_result $status "$info"
+
+exit 0

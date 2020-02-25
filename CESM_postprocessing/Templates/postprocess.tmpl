@@ -1,0 +1,60 @@
+{{ batchdirectives }}
+
+##########
+##
+## See https://github.com/NCAR/CESM_postprocessing/wiki for details
+## regarding settings for optimal performance for CESM postprocessing tools.
+##
+##########
+
+if [ ! -e {{ virtualEnvDir }} ]; then
+    echo "*************************************************************************************"
+    echo "CESM {{ processName }} exiting due to non-existant python virtual environment in"
+    echo "    {{ virtualEnvDir }}"
+    echo "You must first run:"
+    echo "$POSTPROCESS_PATH/create_python_env -machine [machine]"
+    echo "*************************************************************************************"
+    exit
+fi
+
+{% for module in reset_modules %}
+{{ module }}
+{% endfor %}
+
+{% if "ocn_diagnostics_dav" in processName %}
+pp_dav_path=`./pp_config --get POSTPROCESS_PATH_DAV --value`
+./pp_config --set OCNDIAG_DIAGROOTPATH=$pp_dav_path/ocn_diag
+{% endif %}
+
+## activate the virtualenv that contains all the non-bootstrapped dependencies
+
+cd {{ virtualEnvDir }}
+echo "Running from virtualenv directory:"
+pwd
+. activate
+
+## load the boot-strap modules 
+
+{% for module in modules %}
+{{ module }}
+{% endfor %}
+
+
+{% if pythonpath|length > 0 %}
+## The PYTHONPATH setting here is for libraries that are not available via modules.
+PYTHONPATH={{ pythonpath }}:$PYTHONPATH
+export PYTHONPATH
+{% endif %}
+
+today="$(date '+%Y%m%d-%H%M%S')"
+log_filename={{ caseRoot }}/logs/{{ processName }}.log.$today
+
+{% if imb_run %}
+{{ imb_env_vars }}
+{{ mpirun }} {{ imb_run }} {{ imb_options }} >> ${log_filename} 2>&1
+{% elif standalone %}
+{{ mpirun }} ./{{ postProcessCmd }} {{ debug }} {{ backtrace }} --caseroot {{ caseRoot }} --standalone {{ cmdl_opt }} >> ${log_filename} 2>&1
+{% else %}
+{{ mpirun }} ./{{ postProcessCmd }} {{ debug }} {{ backtrace }} --caseroot {{ caseRoot }} >> ${log_filename} 2>&1
+{% endif %}
+

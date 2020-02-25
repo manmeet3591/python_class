@@ -1,0 +1,549 @@
+<?xml version="1.0"?>
+
+<!-- =========================================================================== -->
+<!-- ICE Model Diagnostics XML                             -->
+<!-- =========================================================================== -->
+
+<config_definition version="1.0">
+
+  <!-- =========================================================================== -->
+  <!-- ice_settings - general settings to be applied to all diagnostics routines   -->
+  <!-- NOTE: case specific environment variables from env_*.xml will be            -->
+  <!-- gathered at runtime by the ice_diags_generator.py python script.            -->
+  <!-- They do not need to be specified in this XML file.                          -->
+  <!-- The full $PATH variable will be set in the ice_diags_generator.py file      -->
+  <!-- using all the path settings defined here.                                   -->
+  <!-- =========================================================================== -->
+
+<groups>
+  
+  <group name="global">
+  <order>0</order>
+  <comment>Environmental variables that control which Ice Model diagnostics to produce.</comment>
+
+  <entry id="ICEDIAG_DIAG_VERSION"
+         type="integer"
+         valid_values=""
+         value="150626"
+         group="global"
+         desc="Diagnostic package version"
+         ></entry>
+
+  <entry id="ICEDIAG_MODEL_VS_OBS"
+         type="logical"
+         valid_values="True/False"
+         value="True"
+         group="global"
+         desc="Controls whether to generate model vs. observations diagnostics"
+         ></entry>
+
+  <entry id="ICEDIAG_MODEL_VS_MODEL"
+         type="logical"
+         valid_values="True/False"
+         value="False"
+         group="global"
+         desc="Controls whether to generate model vs. model diagnostics"
+         ></entry>
+
+  <entry id="ICEDIAG_netcdf_format"
+         type="string"
+         valid_values="netcdf, netcdf4, netcdf4c, netcdfLarge"
+         value="netcdf"
+         group="global"
+         desc="Output NetCDF file format - either 'netcdf4c' (netcdf4 compressed (lev=1)), 
+'netcdf4' (netcdf classic), 'netcdf' (netcdf3 classic), or netcdfLarge for high-resolution data sets. DEFAULT = 'netcdf'. 
+Applies to both model and control cases."
+         ></entry>
+
+  <entry id="ICEDIAG_CLEANUP_FILES"
+         type="logical"
+         valid_values="True/False"
+         value="False"
+         group="global"
+         desc="Remove any existing diagnostic files."
+         ></entry>
+
+  </group>
+
+<!-- ============================================================================================== -->
+<!-- Set CONT datset                                                                                -->
+<!-- ============================================================================================== -->
+
+  <group name="cont_dataset">
+  <order>1</order>
+  <comment>Set CONT dataset</comment>
+
+  <entry id="ICEDIAG_COMPUTE_CLIMO_CONT"
+         type="logical"
+         valid_values="True/False"
+         value="True"
+         group="cont_dataset"
+         desc="Compute climatologies for the test case."
+         ></entry>
+
+  <entry id="ICEDIAG_CASE_TO_CONT"
+         type="char"
+         valid_values=""
+         value="$CASE"
+         group="cont_dataset"
+         desc="For plotting a single case"
+         ></entry>
+
+  <entry id="ICEDIAG_CONT_TIMESERIES"
+         type="logical"
+         valid_values="True/False"
+         value="False"
+         group="cont_dataset"
+         desc="Use input variable time series files to compute cont climos."
+         ></entry>
+
+  <entry id="ICEDIAG_GRID_CONT"
+         type="char"
+         valid_values=""
+         value="$ICE_GRID"
+         group="cont_dataset"
+         desc="Grid type"
+         ></entry>
+
+  <entry id="ICEDIAG_ICE_NX_CONT"
+         type="char"
+         valid_values=""
+         value="$ICE_NX"
+         group="cont_dataset"
+         desc="Number of ice cells in the i direction"
+         ></entry>
+
+  <entry id="ICEDIAG_ICE_NY_CONT"
+         type="char"
+         valid_values=""
+         value="$ICE_NY"
+         group="cont_dataset"
+         desc="Number of ice cells in the j direction"
+         ></entry>
+
+  <entry id="ICEDIAG_PATH_CONT"
+         type="char"
+         valid_values=""
+         value="$DOUT_S_ROOT"
+         group="cont_dataset"
+         desc="Path to root of cont case"
+         ></entry>
+
+  <entry id="ICEDIAG_PATH_CONT_SUBDIR"
+         type="char"
+         valid_values="/hist, /proc/tseries/month_1, /proc/tseries/monthly"
+         value="/hist"
+         group="cont_dataset"
+         desc="subdir path concatenated to $ICEDIAG_PATH_CONT/ice pointing to input history files, slice or series"
+         ></entry>
+
+  <entry id="ICEDIAG_PATH_CLIMO_CONT"
+         type="char"
+         valid_values=""
+         value="$ICEDIAG_PATH_CONT/ice/proc/climo/$ICEDIAG_CASE_TO_CONT/"
+         group="cont_dataset"
+         desc="Path to generated cont climos"
+         ></entry>
+
+  <entry id="ICEDIAG_DIAG_ROOT"
+         type="char"
+         valid_values=""
+         value="$ICEDIAG_PATH_CONT/ice/proc/diag/$ICEDIAG_CASE_TO_CONT/"
+         group="cont_dataset"
+         desc="Path to generated diags."
+         ></entry>
+
+  <entry id="ICEDIAG_PLOT_ROOT"
+         type="char"
+         valid_values=""
+         value="$ICEDIAG_PATH_CONT/ice/proc/diag/$ICEDIAG_CASE_TO_CONT/web_plots/"
+         group="cont_dataset"
+         desc="Path to generated diag web plots (local)."
+         ></entry>
+
+  <entry id="ICEDIAG_FILE_VAR_TYPE_CONT"
+         type="char"
+         valid_values="OLD/NEW"
+         value="NEW"
+         group="cont_dataset"
+         desc="OLD for $CASE csim netCDF filenames. NEW for $CASE cice netCDF filenames."
+         ></entry>
+
+  <entry id="ICEDIAG_VAR_NAME_TYPE_CONT"
+           type="char"
+           valid_values="CSIM/CICE/SIMIP"
+           value="SIMIP"
+           group="cont_dataset"
+           desc="OLD for u, v var names. NEW for uvel, vvel var names."
+           ></entry>
+
+  </group>
+
+<!-- ============================================================================================== -->
+<!-- Set DIFF datset                                                                                -->
+<!-- ============================================================================================== -->
+
+  <group name="diff_dataset">
+  <order>2</order>
+  <comment>Set DIFF datset</comment>
+
+  <entry id="ICEDIAG_COMPUTE_CLIMO_DIFF"
+         type="logical"
+         valid_values="True/False"
+         value="False"
+         group="diff_dataset"
+         desc="Compute climatologies for the cntl case."
+         ></entry>
+
+  <entry id="ICEDIAG_CASE_TO_DIFF"
+         type="char"
+         valid_values=""
+         value=""
+         group="diff_dataset"
+         desc="Diff case name. Difference plots will be of the form: CASE_TO_CONT - CASE_TO_DIFF"
+         ></entry>
+
+  <entry id="ICEDIAG_DIFF_TIMESERIES"
+         type="logical"
+         valid_values="True/False"
+         value="False"
+         group="diff_dataset"
+         desc="Use input variable time series files to compute diff climos."
+         ></entry>
+
+  <entry id="ICEDIAG_GRID_DIFF"
+         type="char"
+         valid_values=""
+         value="$ICE_GRID"
+         group="diff_dataset"
+         desc="Grid type"
+         ></entry>
+
+  <entry id="ICEDIAG_ICE_NX_DIFF"
+         type="char"
+         valid_values=""
+         value="$ICE_NX"
+         group="diff_dataset"
+         desc="Number of ice cells in the i direction"
+         ></entry>
+
+  <entry id="ICEDIAG_ICE_NY_DIFF"
+         type="char"
+         valid_values=""
+         value="$ICE_NY"
+         group="diff_dataset"
+         desc="Number of ice cells in the j direction"
+         ></entry>
+
+  <entry id="ICEDIAG_PATH_DIFF"
+         type="char"
+         valid_values=""
+         value=""
+         group="diff_dataset"
+         desc="Path to input history data files for the diff case"
+         ></entry>
+
+  <entry id="ICEDIAG_PATH_DIFF_SUBDIR"
+         type="char"
+         valid_values="/hist, /proc/tseries/month_1, /proc/tseries/monthly"
+         value="/hist"
+         group="cont_dataset"
+         desc="subdir path concatenated to $ICEDIAG_PATH_DIFF/ice pointing to input history files, slice or series"
+         ></entry>
+
+  <entry id="ICEDIAG_FILE_VAR_TYPE_DIFF"
+         type="char"
+         valid_values="OLD/NEW"
+         value="NEW"
+         group="diff_dataset"
+         desc="OLD for $CASE csim netCDF filenames. NEW for $CASE cice netCDF filenames."
+         ></entry>
+
+  <entry id="ICEDIAG_VAR_NAME_TYPE_DIFF"
+         type="char"
+         valid_values="CSIM/CICE/SIMIP"
+         value="SIMIP"
+         group="diff_dataset"
+         desc="OLD for u, v var names. NEW for uvel, vvel var names."
+         ></entry>
+
+  <entry id="ICEDIAG_PATH_CLIMO_DIFF"
+         type="char"
+         valid_values=""
+         value="$ICEDIAG_PATH_CONT/ice/proc/climo/$ICEDIAG_CASE_TO_DIFF/"
+         group="diff_dataset"
+         desc="Path to generated test climos"
+         ></entry>
+
+  <entry id="ICEDIAG_HIRES"
+         type="logical"
+         valid_values="True/False"
+         value="False"
+         group="diff_dataset"
+         desc="Boolean for high resolution."
+         ></entry>
+
+  </group>
+
+<!-- ============================================================================================== -->
+<!-- Set date ranges                                                                                -->
+<!-- ============================================================================================== -->
+
+  <group name="date_ranges">
+  <order>3</order>
+  <comment>Set date ranges</comment>
+
+  <entry id="ICEDIAG_BEGYR_CONT"
+         type="integer"
+         valid_values=""
+         value=""
+         group="date_ranges"
+         desc="Start year for CONT case for diagnostics (for line plots)."
+         ></entry>
+
+  <entry id="ICEDIAG_ENDYR_CONT"
+         type="integer"
+         valid_values=""
+         value=""
+         group="date_ranges"
+         desc="End year for CONT case for diagnostics (for line plots)."
+         ></entry>
+
+  <entry id="ICEDIAG_BEGYR_DIFF"
+         type="integer"
+         valid_values=""
+         value=""
+         group="date_ranges"
+         desc="Start year for DIFF case for diagnostics (for line plots)."
+         ></entry>
+
+  <entry id="ICEDIAG_ENDYR_DIFF"
+         type="integer"
+         valid_values=""
+         value=""
+         group="date_ranges"
+         desc="End year for DIFF case for diagnostics (for line plots)."
+         ></entry>
+
+  <entry id="ICEDIAG_YRS_TO_AVG"
+         type="integer"
+         valid_values=""
+         value=""
+         group="date_ranges"
+         desc="Number of years to avg (for contour plots). This uses the last yrs_to_avg years from the BEGYR to ENDYR for both CONT and DIFF."
+         ></entry>
+
+  </group>
+
+<!-- ============================================================================================== -->
+<!-- Input data paths                                                                               -->
+<!-- ============================================================================================== -->
+
+  <group name="input_path">
+  <order>4</order>
+  <comment>Input data paths</comment>
+
+  <entry id="ICEDIAG_GRIDFILECONT"
+         type="char"
+         valid_values=""
+         value="/glade/p/cesm/omwg/grids/($ICEDIAG_GRID_CONT)_grid.nc"
+         group="input_path"
+         desc="Grid file for control case. Note - this is an ocean grid file."
+         ></entry>
+
+  <entry id="ICEDIAG_GRIDFILEDIFF"
+         type="char"
+         valid_values=""
+         value="/glade/p/cesm/omwg/grids/($ICEDIAG_GRID_DIFF)_grid.nc"
+         group="input_path"
+         desc="Grid file for diff case. Note - this is an ocean grid file."
+         ></entry>
+
+  <entry id="ICEDIAG_SSMI_PATH"
+         type="char"
+         valid_values=""
+         value="$ICEDIAG_DIAGOBSROOT/SSMI.ifrac.1979-2000monthlymean.gx1v5.nc"
+         group="input_path"
+         desc="1981-2005 SSMI data."
+         ></entry>
+
+  <entry id="ICEDIAG_ASPeCt_PATH"
+         type="char"
+         valid_values=""
+         value="$ICEDIAG_DIAGOBSROOT/ASPeCt_monthly_1x1.nc"
+         group="input_path"
+         desc="1981-2005 SSMI data."
+         ></entry>
+
+  <entry id="ICEDIAG_REGION_MASK_FILE"
+         type="char"
+         valid_values=""
+         value="$ICEDIAG_DIAGOBSROOT/REGION_MASK_($ICEDIAG_GRID_CONT).nc"
+         group="input_path"
+         desc="Mask file that contains ice regions."
+         ></entry>
+
+  </group>
+
+<!-- ============================================================================================== -->
+<!-- Select Plot Sets                                                                               -->
+<!-- ============================================================================================== -->
+
+  <group name="plot_sets">
+  <order>5</order>
+  <comment>Select plot sets</comment>
+
+  <entry id="ICEDIAG_PLOT_CONT"
+         type="logical"
+         valid_values="True/False"
+         value="True"
+         group="plot_sets"
+         desc="Make contour plots cont case."
+         ></entry>
+
+  <entry id="ICEDIAG_PLOT_VECT"
+         type="logical"
+         valid_values="True/False"
+         value="True"
+         group="plot_sets"
+         desc="Make vector plots cont case."
+         ></entry>
+
+  <entry id="ICEDIAG_PLOT_LINE"
+         type="logical"
+         valid_values="True/False"
+         value="True"
+         group="plot_sets"
+         desc="Make line plots cont case."
+         ></entry>
+
+  <entry id="ICEDIAG_PLOT_LINE_LENS"
+         type="logical"
+         valid_values="True/False"
+         value="True"
+         group="plot_sets"
+         desc="Make line plots cont case vs. LENS spread (20thC only)."
+         ></entry>
+
+  <entry id="ICEDIAG_PLOT_CONT_DIFF"
+         type="logical"
+         valid_values="True/False"
+         value="True"
+         group="plot_sets"
+         desc="Make contour plots cont-diff case."
+         ></entry>
+
+  <entry id="ICEDIAG_PLOT_VECT_DIFF"
+         type="logical"
+         valid_values="True/False"
+         value="True"
+         group="plot_sets"
+         desc="Make vector plots cont-diff case."
+         ></entry>
+
+  <entry id="ICEDIAG_PLOT_LINE_DIFF"
+         type="logical"
+         valid_values="True/False"
+         value="True"
+         group="plot_sets"
+         desc="Make line plots cont-diff case."
+         ></entry>
+
+  <entry id="ICEDIAG_PLOT_LINE_DIFF_LENS"
+         type="logical"
+         valid_values="True/False"
+         value="True"
+         group="plot_sets"
+         desc="Make line plots cont-diff case vs. LENS spread (20thC only)."
+         ></entry>
+
+  <entry id="ICEDIAG_PLOT_REGIONS"
+         type="logical"
+         valid_values="True/False"
+         value="True"
+         group="plot_sets"
+         desc="Make regional cont line plots."
+         ></entry>
+
+  <entry id="ICEDIAG_PLOT_REGIONS_DIFF"
+         type="logical"
+         valid_values="True/False"
+         value="True"
+         group="plot_sets"
+         desc="Make regional cont-diff line plots."
+         ></entry>
+
+  </group>
+
+<!-- ============================================================================================== -->
+<!-- Select Plot Options									    --> 
+<!-- ============================================================================================== -->
+
+  <group name="plot_opts">
+  <order>6</order>
+  <comment>Select plot options</comment>
+
+  <entry id="ICEDIAG_X1_OFF"
+         type="integer"
+         valid_values=""
+         value="0"
+         group="plot_opts"
+         desc="Offset"
+         ></entry>
+
+  <entry id="ICEDIAG_X2_OFF"
+         type="integer"
+         valid_values=""
+         value="0"
+         group="plot_opts"
+         desc="Offset"
+         ></entry>
+
+  <entry id="ICEDIAG_PLOT_FORMAT"
+         type="char"
+         valid_values="ps/png"
+         value="png"
+         group="plot_opts"
+         desc="File type for plots"
+         ></entry>
+
+  <entry id="ICEDIAG_PLOT_RES"
+         type="integer"
+         valid_values=""
+         value="1500"
+         group="plot_opts"
+         desc="Plot resolution"
+         ></entry>
+
+  </group>
+
+<!-- ============================================================================================== -->
+<!-- Path settings                                                                                  -->
+<!-- ============================================================================================== -->
+
+  <group name="path_settings">
+  <order>7</order>
+  <comment>Path settings</comment>
+
+  <entry id="ICEDIAG_DIAG_HOME"
+         type="char"
+         valid_values=""
+         value="$POSTPROCESS_PATH/ice_diag/"
+         group="path_settings"
+         desc="Diagnostic package location"
+         ></entry>
+
+  <entry id="ICEDIAG_NCLPATH"
+         type="char"
+         valid_values=""
+         value="$ICEDIAG_DIAG_HOME/code/"
+         group="path_settings"
+         desc="Local machine path to ice diagnostics package NCL library directory."
+         ></entry>
+
+  </group>
+
+</groups>
+
+</config_definition>
+

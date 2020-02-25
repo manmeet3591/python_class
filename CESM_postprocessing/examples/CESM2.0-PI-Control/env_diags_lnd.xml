@@ -1,0 +1,771 @@
+<?xml version="1.0"?>
+
+<config_definition>
+
+<!-- ======================================================================= -->
+<!-- env_diags_[component].xml                                               -->
+<!-- boolean (True / False) controls for enabling post processing tasks      -->
+<!-- ======================================================================= -->
+
+
+
+<!-- ======================================================================= -->
+<!-- Machine dependent diagnostics observation files root path -->
+<!-- ======================================================================= -->
+<entry id="LNDDIAG_DIAGOBSROOT" value="/glade/p/cesm/lmwg/diag/lnd_diag_data" />
+
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Environment variables to control Land Model diagnostics -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Package Version -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_DIAG_VERSION" value="parallel_land_diag" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Path to data -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Postprocessed files output root path. -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_OUTPUT_ROOT_PATH" value="$DOUT_S_ROOT/lnd/proc" />
+       
+<!-- Description:  Postprocess output file location for CASE1 -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_PTMPDIR_1" value="$LNDDIAG_OUTPUT_ROOT_PATH" />
+       
+<!-- Description:  Postprocess output file location for CASE2 -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_PTMPDIR_2" value="$LNDDIAG_OUTPUT_ROOT_PATH" />
+       
+<!-- Description:  Root location of source history files for CASE1 -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_SOURCE_1" value="$DOUT_S_ROOT" />
+       
+<!-- Description:  subdir path concatenated to $LNDDIAG_SOURCE_1/[lnd,rof] pointing to input history files, slice or series -->
+<!-- Valid Values: /hist, /proc/tseries/month_1, /proc/tseries/monthly -->
+<entry id="LNDDIAG_SOURCE_1_SUBDIR" value="/proc/tseries/month_1" />
+       
+<!-- Description:  Root location of source history files for CASE2 -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_SOURCE_2" value="/glade/scratch/aliceb/archive/b.e20.B1850.f09_g16.pi_control.all.123.lndbugfix" />
+       
+<!-- Description:  subdir path concatenated to $LNDDIAG_SOURCE_2/[lnd,rof] pointing to input history files, slice or series -->
+<!-- Valid Values: /hist, /proc/tseries/month_1, /proc/tseries/monthly -->
+<entry id="LNDDIAG_SOURCE_2_SUBDIR" value="/proc/tseries/month_1" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Diagnostic paths -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Diagnostic package location -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_DIAG_HOME" value="$POSTPROCESS_PATH/lnd_diag/" />
+       
+<!-- Description:  Diagnostic package NCL script location -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_NCLPATH" value="$POSTPROCESS_PATH/lnd_diag/" />
+       
+<!-- Description:  Location of observational datasets -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_OBS_HOME" value="$LNDDIAG_DIAGOBSROOT/obs_data/" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Compare to observations in set 2 -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Compare to observations in set 2 (1 = compare to PD observations; 0 = OFF) -->
+<!-- Valid Values: 1/0 -->
+<entry id="LNDDIAG_plotObs" value="1" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Location of the variable lists -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Path to variable list file -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_INPUT_HOME" value="$LNDDIAG_DIAG_HOME" />
+       
+<!-- Description:  Master CN variable list -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_var_master_cn" value="variable_master4.3.ncl" />
+       
+<!-- Description:  Master CASA variable list -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_var_master_casa" value="variable_master_CASA.ncl" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Diagnostics Types -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Controls whether to generate model vs. observations diagnostics -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_MODEL_VS_OBS" value="True" />
+       
+<!-- Description:  Controls whether to generate model vs. model diagnostics -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_MODEL_VS_MODEL" value="True" />
+       
+<!-- Description:  Output NetCDF file format - either 'netcdf4c' (netcdf4 compressed (lev=1)),  'netcdf4' (netcdf classic), 'netcdf' (netcdf3 classic), or netcdfLarge for high-resolution data sets. DEFAULT = 'netcdf'.  Applies to both model and control cases. -->
+<!-- Valid Values: netcdf, netcdf4, netcdf4c, netcdfLarge -->
+<entry id="LNDDIAG_netcdf_format" value="netcdf" />
+       
+<!-- Description:  Remove any existing diagnostic files. -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_CLEANUP_FILES" value="False" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- CASE1 settings -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Compute climatologies for CASE1. -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_COMPUTE_CLIMO_CASE1" value="True" />
+       
+<!-- Description:  Output file names for CASE1 climos -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_prefix_1" value="$CASE.$LNDDIAG_lnd_modelstream_1." />
+       
+<!-- Description:  History file case name for CASE1 -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_caseid_1" value="$CASE" />
+       
+<!-- Description:  Identifying lnd model stream for CASE1 -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_lnd_modelstream_1" value="clm2.h0" />
+       
+<!-- Description:  Identifying atm model stream for CASE1 -->
+<!-- Valid Values: cam.h0,cam2.h0 -->
+<entry id="LNDDIAG_atm_modelstream_1" value="cam.h0" />
+       
+<!-- Description:  Identifying river model stream for CASE1 -->
+<!-- Valid Values: rtm.h0, mosart.h0 -->
+<entry id="LNDDIAG_rtm_modelstream_1" value="mosart.h0" />
+       
+<!-- Description:  Common name for ID'ing CASE1 -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_commonName_1" value="test" />
+       
+<!-- Description:  Use common name for CASE1 in plots -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_UseCommonName_1" value="False" />
+       
+<!-- Description:  Use tseries files to compute CASE1 climos. -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_CASE1_TIMESERIES" value="True" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- CASE2 settings -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Compute climatologies for CASE2. -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_COMPUTE_CLIMO_CASE2" value="True" />
+       
+<!-- Description:  Output file names for CASE2 climos -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_prefix_2" value="$LNDDIAG_caseid_2.$LNDDIAG_lnd_modelstream_2." />
+       
+<!-- Description:  History file case name for CASE2 -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_caseid_2" value="b.e20.B1850.f09_g16.pi_control.all.123.lndbugfix" />
+       
+<!-- Description:  Identifying model stream for CASE2 -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_lnd_modelstream_2" value="clm2.h0" />
+       
+<!-- Description:  Identifying atm model stream for CASE2 -->
+<!-- Valid Values: cam.h0,cam2.h0 -->
+<entry id="LNDDIAG_atm_modelstream_2" value="cam.h0" />
+       
+<!-- Description:  Identifying river model stream for CASE2 -->
+<!-- Valid Values: rtm.h0, mosart.h0 -->
+<entry id="LNDDIAG_rtm_modelstream_2" value="mosart.h0" />
+       
+<!-- Description:  Common name for ID'ing CASE2 -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_commonName_2" value="test" />
+       
+<!-- Description:  Use common name for CASE2 in plots -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_UseCommonName_2" value="False" />
+       
+<!-- Description:  Use tseries files to compute CASE2 climos. -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_CASE2_TIMESERIES" value="True" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Set which climatological files need to be created -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Overwrite existing trend files -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_overWriteTrend" value="False" />
+       
+<!-- Description:  Overwrite existing climo files -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_overWriteClimo" value="False" />
+       
+<!-- Description:  Create averages as a weighted averages -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_weightAvg" value="True" />
+       
+<!-- Description:  Create seasonal means. Required for Model vs Model, optional for Model vs Obs -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_meansFlag" value="True" />
+       
+<!-- Description:  Create trends for CASE1. (set1 and set6) Make trends for case1 simulation -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_trends_lnd_1" value="True" />
+       
+<!-- Description:  Create climos for CASE1. (set2 and set3 and set5 and set7) Make climo for case1 simulation -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_climo_lnd_1" value="True" />
+       
+<!-- Description:  Create trends for atm CASE1. (set4)  Make atm trends for case1 -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_trends_atm_1" value="False" />
+       
+<!-- Description:  Create climos for atm CASE1. (set4)  Make atm climo for case1 -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_climo_atm_1" value="False" />
+       
+<!-- Description:  (set7) Set to True for case1 if Mosart was used or False if RTM was used in the simulation -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_rmodel_1" value="True" />
+       
+<!-- Description:  (set7) Set to True for case1 if RTM variables are on separate history files -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_rtm_1" value="True" />
+       
+<!-- Description:  Create trends for rtm CASE1. (set7). Should always be set to False. -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_trends_rtm_1" value="False" />
+       
+<!-- Description:  Create climos for rtm CASE1 (set7) -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_climo_rtm_1" value="True" />
+       
+<!-- Description:  Create trends for CASE2. (set1 and set6) Make trends for case2 simulation -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_trends_lnd_2" value="True" />
+       
+<!-- Description:  Create climos for CASE2. (set2 and set3 and set5 and set7) Make climo for case2 simulation -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_climo_lnd_2" value="True" />
+       
+<!-- Description:  Create trends for atm CASE2.  (set4)  Make atm trends for case2 -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_trends_atm_2" value="True" />
+       
+<!-- Description:  Create climos for atm CASE2.  (set4)  Make atm climo for case2 -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_climo_atm_2" value="False" />
+       
+<!-- Description:  (set7) Set to True for case2 if Mosart was used or False if RTM was used in the simulation -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_rmodel_2" value="True" />
+       
+<!-- Description:  (set7) Set to True for case2 if RTM variables are on separate history files -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_rtm_2" value="True" />
+       
+<!-- Description:  Create trends for rtm CASE2. (set7). Should always be False -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_trends_rtm_2" value="False" />
+       
+<!-- Description:  Create climos for rtm CASE2 (set7) -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_climo_rtm_2" value="True" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Set date ranges -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Start year for CASE1 (CLIMO) -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_clim_first_yr_1" value="2" />
+       
+<!-- Description:  Number of years for CASE1 (CLIMO) -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_clim_num_yrs_1" value="8" />
+       
+<!-- Description:  Start year for CASE2 (CLIMO) -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_clim_first_yr_2" value="2" />
+       
+<!-- Description:  Number of years for CASE2 (CLIMO) -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_clim_num_yrs_2" value="8" />
+       
+<!-- Description:  Start year for CASE1 (TRENDS) -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_trends_first_yr_1" value="1" />
+       
+<!-- Description:  Number of years for CASE1 (TRENDS) -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_trends_num_yrs_1" value="9" />
+       
+<!-- Description:  Start year for CASE2 (TRENDS) -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_trends_first_yr_2" value="1" />
+       
+<!-- Description:  Number of years for CASE2 (TRENDS) -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_trends_num_yrs_2" value="9" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Special case description -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Compare different years for trends. 0 for False 1 for True. -->
+<!-- Valid Values: 0/1 -->
+<entry id="LNDDIAG_trends_match_Flag" value="0" />
+       
+<!-- Description:  First year of overlap case1 (TRENDS). Set to any year. -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_trends_match_yr_1" value="1" />
+       
+<!-- Description:  First year of overlap case2 (TRENDS). Set to any year. -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_trends_match_yr_2" value="1" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Active variables? -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Logical: Is CN active? -->
+<!-- Valid Values: 0/1 -->
+<entry id="LNDDIAG_CN" value="1" />
+       
+<!-- Description:  Logical: Is C13 active? -->
+<!-- Valid Values: 0/1 -->
+<entry id="LNDDIAG_C13" value="0" />
+       
+<!-- Description:  True: CLAMP terminology/False: CLM-CN terminology -->
+<!-- Valid Values: 0/1 -->
+<entry id="LNDDIAG_CLAMP" value="0" />
+       
+<!-- Description:  True: CASA terminology/False: CLM-CN terminology -->
+<!-- Valid Values: 0/1 -->
+<entry id="LNDDIAG_CASA" value="0" />
+       
+<!-- Description:  Logical: HYDRO vars active? -->
+<!-- Valid Values: 0/1 -->
+<entry id="LNDDIAG_HYDRO" value="1" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Select plot sets -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Plot Set 1: ANNUAL TRENDS -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_set_1" value="True" />
+       
+<!-- Description:  Plot Set 2: CE CONTOUR PLOTS -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_set_2" value="True" />
+       
+<!-- Description:  Plot Set 3: REGIONAL MONTHLY 2M-TEMP,PRECIP,RUNOFF,RADIATIVE AND TURBULENT FLUXES -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_set_3" value="True" />
+       
+<!-- Description:  Plot Set 4: VERTICAL PROFILES - *NOTE* Plot set 4 is not currently working -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_set_4" value="False" />
+       
+<!-- Description:  Plot Set 5: ANNUAL MEANS OF REGIONAL HYDROLOGIC CYCLE AND GLOBAL QUANTITIES -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_set_5" value="True" />
+       
+<!-- Description:  Plot Set 6: ANNUAL TRENDS FOR REGIONS -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_set_6" value="True" />
+       
+<!-- Description:  Plot Set 7: RIVER FLOW AND DISCHARGE -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_set_7" value="True" />
+       
+<!-- Description:  Plot Set 8: OCN-ATMOS TRACERS - *NOTE* Plot set 8 is not currently working -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_set_8" value="False" />
+       
+<!-- Description:  Plot Set 8_lnd: LND-ATMOS TRACERS - *NOTE* Plot set 8 is not currently working -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_set_8_lnd" value="False" />
+       
+<!-- Description:  Plot Set 9: VALIDATION DIAGNOSTICS (ONLY FOR MODEL-MODEL) -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_set_9" value="True" />
+       
+<!-- Description:  Plot Set 10: Regional ice sheet plots: Greenland -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_set_10" value="True" />
+  
+<!-- Description:  Plot Set 11: Regional ice sheet plots: Antarctica -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_set_11" value="True" />
+
+<!-- Description:  Plot Set 11: Ice sheet averages -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_set_12" value="True" />
+   
+   
+   
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Select plot options -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  1=Cylindrical Equidistant, 0=Robinson -->
+<!-- Valid Values: 0/1 -->
+<entry id="LNDDIAG_projection" value="0" />
+       
+<!-- Description:  1=use Blue-Yellow-Red Colormap, 0=use original colormaps -->
+<!-- Valid Values: 0/1 -->
+<entry id="LNDDIAG_colormap" value="1" />
+       
+<!-- Description:  Controls density of output images -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_density" value="144" />
+       
+<!-- Description:  Raster mode for set2 contour plots -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_raster" value="True" />
+       
+<!-- Description:  Raster mode for set2 contour plots -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_expContours" value="False" />
+       
+<!-- Description:  turn on time stamp on bottom of plots -->
+<!-- Valid Values: True,False -->
+<entry id="LNDDIAG_time_stamp" value="False" />
+       
+<!-- Description:  Plot output type -->
+<!-- Valid Values: ps/png -->
+<entry id="LNDDIAG_p_type" value="png" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Regridding options -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Regrid CASE1 -->
+<!-- Valid Values: True,False -->
+<entry id="LNDDIAG_regrid_1" value="False" />
+       
+<!-- Description:  Regridding method used for CASE1 -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_method_1" value="conserve" />
+       
+<!-- Description:  Resolution to regrid from for CASE1 -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_old_res_1" value="SE_NE30" />
+       
+<!-- Description:  Resolution to regrid to for CASE1 -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_new_res_1" value="FV_192x288" />
+       
+<!-- Description:  Exact path to weighted file directory -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_wgt_dir_1" value="$LNDDIAG_DIAGOBSROOT/regriddingFiles/ne30/" />
+       
+<!-- Description:  Exact path to area file directory -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_area_dir_1" value="$LNDDIAG_DIAGOBSROOT/regriddingFiles/" />
+       
+<!-- Description:  Regrid CASE2 -->
+<!-- Valid Values: True,False -->
+<entry id="LNDDIAG_regrid_2" value="False" />
+       
+<!-- Description:  Regridding method used for CASE2 -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_method_2" value="conserve" />
+       
+<!-- Description:  Resolution to regrid from for CASE2 -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_old_res_2" value="SE_NE30" />
+       
+<!-- Description:  Resolution to regrid to for CASE2 -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_new_res_2" value="FV_192x288" />
+       
+<!-- Description:  Exact path to weighted file directory -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_wgt_dir_2" value="$LNDDIAG_DIAGOBSROOT/regriddingFiles/ne30/" />
+       
+<!-- Description:  Exact path to area file directory -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_area_dir_2" value="$LNDDIAG_DIAGOBSROOT/regriddingFiles/" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Plot set 2 options -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  level of significance (set 2) -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_sig_lvl" value="0.10" />
+       
+<!-- Description:  0 = SUBREGION, 1 = GLOBAL (set 2) -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_reg_contour" value="1" />
+       
+<!-- Description:  southern boundary in degrees north (set 2) -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_min_lat" value="30." />
+       
+<!-- Description:  northern boundary in degrees north (set 2) -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_max_lat" value="80." />
+       
+<!-- Description:  western boundary in degrees east (set 2) -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_min_lon" value="-130." />
+       
+<!-- Description:  eastern boundary in degrees east (set 2) -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_max_lon" value="-50." />
+       
+<!-- Description:  observation resolution (set 2) -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_OBS_RES" value="T42" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Paleo options -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  True: use or create coastlines -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_paleo" value="False" />
+       
+<!-- Description:  minimum land in test case (fraction 0-1)  (default=0) -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_land_mask1" value="0" />
+       
+<!-- Description:  minimum land in std case (fraction 0-1)  (default=0) -->
+<!-- Valid Values:  -->
+<entry id="LNDDIAG_land_mask2" value="0" />
+       
+<!-- Description:  True: make difference plots for different continental outlines -->
+<!-- Valid Values: True/False -->
+<entry id="LNDDIAG_paleo_diff_plots" value="False" />
+       
+    
+  
+    
+  
+    
+  
+
+
+</config_definition>

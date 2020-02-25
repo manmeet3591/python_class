@@ -1,0 +1,40 @@
+#! /usr/bin/env bash
+##########
+##
+## See https://github.com/NCAR/CESM_postprocessing/wiki for details
+## regarding settings for optimal performance for CESM postprocessing tools.
+##
+##########
+
+{{ batchdirectives }}
+
+if [ ! -e {{ virtualEnvDir }} ]; then
+    echo "*************************************************************************************"
+    echo "CESM {{ processName }} exiting due to non-existant python virtual environment in"
+    echo "    {{ virtualEnvDir }}"
+    echo "You must first run:"
+    echo "$SRCROOT/postprocessing/create_python_env -machine [machine]"
+    echo "*************************************************************************************"
+    exit
+fi
+
+{% for module in reset_modules %}
+{{ module }}
+{% endfor %}
+
+source {{virtualEnvDir}}/activate
+
+
+{% for module in modules %}
+{{ module }}
+{% endfor %}
+
+{% if pythonpath|length > 0 %}
+PYTHONPATH={{ pythonpath }}:$PYTHONPATH
+export PYTHONPATH
+{% endif %}
+
+today="$(date '+%Y%m%d-%H%M%S')"
+
+{{ postProcessCmd }}  --caseroot {{ caseRoot }} >> {{ caseRoot }}/logs/{{ processName }}.log.$today 2>&1
+

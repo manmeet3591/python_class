@@ -1,0 +1,1211 @@
+#!/usr/bin/env python
+"""Read the necessary xml files from the postprocessing configuration system and translate
+them into bash scripts for batch submission of postprocessing tasks. 
+
+Arguments:
+caseroot (mandatory) - full path to a CESM case
+
+Author: CSEG <cseg@cgd.ucar.edu>
+"""
+
+#from __future__ import print_function
+
+import sys
+
+# check the system python version and require 2.7.x or greater
+if sys.hexversion < 0x02070000:
+    print(70 * "*")
+    print("ERROR: {0} requires python >= 2.7.x. ".format(sys.argv[0]))
+    print("It appears that you are running python {0}".format(
+            ".".join(str(x) for x in sys.version_info[0:3])))
+    print(70 * "*")
+    sys.exit(1)
+
+#
+# built-in modules
+#
+import argparse
+import collections
+import errno
+import getpass
+import itertools
+import os
+import platform
+from operator import itemgetter
+import re
+import shutil
+import subprocess
+import traceback
+
+#
+# installed dependencies
+#
+try:
+    import lxml.etree as etree
+except:
+    import xml.etree.ElementTree as etree
+
+if sys.version_info[0] == 2:
+    from ConfigParser import SafeConfigParser as config_parser
+else:
+    from configparser import ConfigParser as config_parser
+
+#
+# check the POSTPROCESS_PATH which must be set
+#
+try:
+    os.environ["POSTPROCESS_PATH"]
+except KeyError:
+    err_msg = ('create_postprocess ERROR: please set the POSTPROCESS_PATH environment variable.' \
+               ' For example on cheyenne: setenv POSTPROCESS_PATH /glade/p/cesm/postprocessing_ch' \
+               ' In addition, for NCAR DAV support use the --add-dav command line option.')
+    raise OSError(err_msg)
+
+cesm_pp_path = os.environ["POSTPROCESS_PATH"]
+
+#
+# activate the virtual environment that was created by create_python_env
+#
+if not os.path.isfile('{0}/cesm-env2/bin/activate_this.py'.format(cesm_pp_path)):
+    err_msg = ('create_postprocess ERROR: the virtual environment cesm-env2 does not exist.' \
+               ' Please run $POSTPROCESS_PATH/create_python_env -machine [machine name]')
+    raise OSError(err_msg)
+
+execfile('{0}/cesm-env2/bin/activate_this.py'.format(cesm_pp_path), dict(__file__='{0}/cesm-env2/bin/activate_this.py'.format(cesm_pp_path)))
+
+#
+# import modules installed in the virtual environment
+#
+from cesm_utils import cesmEnvLib
+import jinja2
+
+# -------------------------------------------------------------------------------
+# define a class to be used for the xml entry, id, desc values
+# -------------------------------------------------------------------------------
+class XmlEntry(object):
+    def __init__(self, id, value, desc, valid_values):
+        self._id = id
+        self._value = value
+        self._desc = desc
+        self._valid_values = valid_values
+    
+    def id(self):
+        return self._id
+    
+    def value(self):
+        return self._value
+
+    def desc(self):
+        return self._desc
+
+    def valid_values(self):
+        return self._valid_values
+
+# -------------------------------------------------------------------------------
+# commandline_options - parse any command line options
+# -------------------------------------------------------------------------------
+
+def commandline_options():
+    """Process the command line arguments.
+
+    """
+    parser = argparse.ArgumentParser(
+        description='Read the necessary XML files from the postprocessing configuration system and translate them into bash scripts for batch submission of postprocessing tasks. Runtime options can be set in the XML files in the caseroot.')
+
+    parser.add_argument('-backtrace', '--backtrace', action='store_true',
+                        help='show exception backtraces as extra debugging output')
+
+    parser.add_argument('-debug', '--debug', nargs=1, required=False, type=int, default=0,
+                        help='debugging verbosity level output: 0 = none, 1 = minimum, 2 = maximum. 0 is default')
+
+    parser.add_argument('-caseroot', '--caseroot', nargs=1, required=True, 
+                        help='fully quailfied path to case root directory (required)')
+
+    parser.add_argument('-cesmtag', '--cesmtag', nargs=1, required=False,
+                        help='CESM repository tag (optional)')
+
+    parser.add_argument('-project', '--project', nargs=1, required=False,
+                        help='Project code (optional). This setting will override the environment variable setting.')
+
+    parser.add_argument('-username', '--username', nargs=1, required=False,
+                        help='User name (optional). Defaults to user login name.')
+
+    parser.add_argument('-add-dav', '--add-dav', dest='add_dav', nargs=1, required=False,
+                        help='Fully qualified path to the root of the CESM postprocessing ' \
+                        'virtualenv for the NCAR DAV cluster. This option sets the XML ' \
+                        'variable POSTPROCESS_PATH_DAV in env_postprocess.xml and ' \
+                        'creates all the necessary postprocessing batch scripts for the ' \
+                        'NCAR DAV Slurm manager. This option is only available when create_postprocess ' \
+                        'is run on NCAR machine cheyenne. A set of batch submission scripts in the ' \
+                        'postprocessing caseroot with the "_dav" extension are included along side '\
+                        'the cheyenne PBS submission scripts. '\
+                        'Example: /glade/p/cesm/postprocessing_dav. '\
+                        'Defaults to "undefined". (optional)')
+
+    options = parser.parse_args()
+        
+    return options
+
+
+# -------------------------------------------------------------------------------
+# check_standalone - read the env_postprocess.xml, if it exists, and check for
+# the STANDALONE xml entry
+# -------------------------------------------------------------------------------
+def check_standalone(caseroot):
+    """read the postprocess.xml, if it exists, and check for
+    the STANDALONE xml entry
+    
+    Arguments:
+    caseroot (string) - caseroot directory path
+    
+    Returns:
+    standalone (boolean) - indicate if caseroot is standalone or not
+    """
+
+    configFile = '{0}/env_postprocess.xml'.format(caseroot)
+    rc, err_msg = cesmEnvLib.checkFile(configFile, 'read')
+    standalone = False
+
+    if rc:
+        xml_tree = etree.ElementTree()
+        xml_tree.parse(configFile)
+        for entry_tag in xml_tree.findall('entry'):
+            if (entry_tag.get('id') == 'STANDALONE' and entry_tag.get('value').lower() == 'true'):
+                standalone = True
+
+    return standalone
+
+# -------------------------------------------------------------------------------
+# create_env_file - generate the XML file
+# -------------------------------------------------------------------------------
+def create_env_file(envDict, configFile, tmplFile, envFile, obs_root, comp, standalone):
+    """create the XML file in the CASEROOT
+    
+    Arguments:
+    envDict (dictionary) - environment dictionary
+    configFile (string) - full path to input config_[definition].xml file
+    tmplFile (string) - template file for output [file].xml
+    envFile (string) - output [file].xml name
+    obs_root (string) - observation data file root directory
+    comp (string) - component
+    standalone (boolean) - indicate if this is postprocessing for a standalone case
+    
+    """
+    group_list = list()
+    sorted_group_list = list()
+    rc, err_msg = cesmEnvLib.checkFile(configFile, 'read')
+    if not rc:
+        raise OSError(err_msg)
+
+    rc, err_msg = cesmEnvLib.checkFile('{0}/Templates/{1}'.format(envDict['POSTPROCESS_PATH'], tmplFile), 'read')
+    if not rc:
+        raise OSError(err_msg)
+
+    xml_tree = etree.ElementTree()
+    #print ('creating configFile = {0}'.format(configFile))
+    xml_tree.parse(configFile)
+    
+    for group_tag in xml_tree.findall('./groups/group'):
+        xml_list = list()
+        group_dict = dict()
+        name = group_tag.get('name')
+        order = int(group_tag.find('order').text)
+        comment = group_tag.find('comment').text
+        
+        for entry_tag in group_tag.findall('entry'):
+            # check if the value needs to be inherited from the envDict
+            if entry_tag.get('value') == 'inherit':
+                xml_list.append(XmlEntry(entry_tag.get('id'), envDict[entry_tag.get('id')], 
+                                         entry_tag.get('desc'), entry_tag.get('valid_values')))
+            else:
+                xml_list.append(XmlEntry(entry_tag.get('id'), entry_tag.get('value'), 
+                                         entry_tag.get('desc'), entry_tag.get('valid_values')))
+                    
+        group_dict = { 'order' : order, 'name' : name, 'comment' : comment, 'xml_list' : xml_list }
+        group_list.append(group_dict)
+
+    sorted_group_list = sorted(group_list, key=itemgetter('order'))
+
+    # add an additional entry for machine dependent input observation files root path
+    xml_list = list()
+    if obs_root:
+        if len(obs_root) > 0:
+            xml_obs = XmlEntry('{0}DIAG_DIAGOBSROOT'.format(comp.upper()), obs_root, 
+                               'Machine dependent diagnostics observation files root path', '')
+            xml_list.append(xml_obs)
+        
+    # the xml_list now contains a list of XmlEntry classes that can be written to the template
+    templateLoader = jinja2.FileSystemLoader( searchpath='{0}/Templates'.format(envDict['POSTPROCESS_PATH']) )
+    templateEnv = jinja2.Environment( loader=templateLoader )
+
+    template = templateEnv.get_template( tmplFile )
+    templateVars = { 'xml_list' : xml_list,
+                     'group_list' : sorted_group_list,
+                     'standalone' : standalone }
+        
+    # render the template
+    env_tmpl = template.render( templateVars )
+
+    # write the env_file
+    with open( envFile, 'w') as xml:
+        xml.write(env_tmpl)
+
+# -------------------------------------------------------------------------------
+# read_machine_xml
+# -------------------------------------------------------------------------------
+def read_machine_xml(machineName, xmlFile):
+    """ read_machine_xml - read the xmlFile with specified machine pe 
+    counts for postprocessing tasks.
+
+    Arguments:
+    machine (string) - machine name
+    xmlFile (string) - XML file containing machine pe layout for postprocessing
+
+    Return:
+    machine (dictionary) - dictionary with machine specific settings read from the XML file
+    """
+    machine = dict()
+    machine['modules'] = []
+    machine['reset_modules'] = []
+    found = False
+    rc, err_msg = cesmEnvLib.checkFile(xmlFile, 'read')
+    if not rc:    
+        raise OSError(err_msg)
+
+    xml_tree = etree.ElementTree()
+    xml_tree.parse(xmlFile)
+
+    # find the matching machine name
+    for xmlmachine in xml_tree.findall('machine'):
+        if machineName.lower() == xmlmachine.get('name').lower():
+
+            found = True
+
+            # get the timeseries pes 
+            tseries_pes = xmlmachine.find('timeseries_pes')
+            machine['timeseries_pes'] = tseries_pes.text
+            machine['timeseries_queue'] = ''
+            if 'queue' in tseries_pes.attrib:
+                machine['timeseries_queue'] = tseries_pes.get('queue').lower()
+            machine['timeseries_ppn'] = tseries_pes.get('pes_per_node').lower()
+            machine['timeseries_wallclock'] = tseries_pes.get('wallclock').lower()
+            machine['timeseries_nodes'] = ''
+            if 'nodes' in tseries_pes.attrib:
+                machine['timeseries_nodes'] = tseries_pes.get('nodes').lower()
+            machine['timeseries_memory'] = ''
+            if 'memory' in tseries_pes.attrib:
+                machine['timeseries_memory'] = tseries_pes.get('memory')
+
+            # get the conform pes 
+            xconform_pes = xmlmachine.find('xconform_pes')
+            machine['xconform_pes'] = xconform_pes.text
+            machine['conform_queue'] = ''
+            if 'queue' in xconform_pes.attrib:
+                machine['conform_queue'] = xconform_pes.get('queue').lower()
+            machine['conform_ppn'] = xconform_pes.get('pes_per_node').lower()
+            machine['conform_wallclock'] = xconform_pes.get('wallclock').lower()
+            machine['conform_nodes'] = ''
+            if 'nodes' in xconform_pes.attrib:
+                machine['conform_nodes'] = xconform_pes.get('nodes').lower()
+            machine['conform_memory'] = ''
+            if 'memory' in xconform_pes.attrib:
+                machine['conform_memory'] = xconform_pes.get('memory')
+
+            # get the ocn_remap pes 
+            ocn_remap_pes = xmlmachine.find('ocn_remap_pes')
+            machine['ocn_remap_pes'] = ocn_remap_pes.text
+            machine['ocn_remap_queue'] = ''
+            if 'queue' in ocn_remap_pes.attrib:
+                machine['ocn_remap_queue'] = ocn_remap_pes.get('queue').lower()
+            machine['ocn_remap_ppn'] = ocn_remap_pes.get('pes_per_node').lower()
+            machine['ocn_remap_wallclock'] = ocn_remap_pes.get('wallclock').lower()
+            machine['ocn_remap_nodes'] = ''
+            if 'nodes' in ocn_remap_pes.attrib:
+                machine['ocn_remap_nodes'] = ocn_remap_pes.get('nodes').lower()
+            machine['ocn_remap_memory'] = ''
+            if 'memory' in ocn_remap_pes.attrib:
+                machine['ocn_remap_memory'] = ocn_remap_pes.get('memory')
+
+            # get the mpi run command
+            machine['mpi_command'] = xmlmachine.find('mpi_command').text
+
+            # get the pythonpath command
+            machine['pythonpath'] = xmlmachine.find('pythonpath').text
+            if machine['pythonpath'] is None:
+                machine['pythonpath'] = ''
+
+            # loop through the reset_module list
+            for mod in xmlmachine.findall("reset_modules/module"):
+                machine['reset_modules'].append(mod.text)
+
+            # loop through the module list
+            for mod in xmlmachine.findall("modules/module"):
+                machine['modules'].append(mod.text)
+
+            # loop through the compList to get the component PE layouts
+            # and observation data root
+            for comp in xmlmachine.findall("components/component"):
+                compName = comp.get("name").lower()
+
+                avg = comp.find('averages_pes')
+                if avg is not None:
+                    machine['{0}_averages_pes'.format(compName)] = avg.text
+                    machine['{0}_averages_queue'.format(compName)] = ''
+                    if 'queue' in avg.attrib:
+                        machine['{0}_averages_queue'.format(compName)] = avg.get('queue').lower()
+                    machine['{0}_averages_ppn'.format(compName)] = avg.get('pes_per_node').lower()
+                    machine['{0}_averages_wallclock'.format(compName)] = avg.get('wallclock').lower()
+                    machine['{0}_averages_nodes'.format(compName)] = ''
+                    if 'nodes' in avg.attrib:
+                        machine['{0}_averages_nodes'.format(compName)] = avg.get('nodes').lower()
+                    machine['{0}_averages_memory'.format(compName)] = ''
+                    if 'memory' in avg.attrib:
+                        machine['{0}_averages_memory'.format(compName)] = avg.get('memory')
+
+
+                diags = comp.find('diagnostics_pes')
+                if diags is not None:
+                    machine['{0}_diagnostics_pes'.format(compName)] = diags.text
+                    machine['{0}_diagnostics_queue'.format(compName)] = ''
+                    if 'queue' in diags.attrib:
+                        machine['{0}_diagnostics_queue'.format(compName)] = diags.get('queue').lower()
+                    machine['{0}_diagnostics_ppn'.format(compName)] = diags.get('pes_per_node').lower()
+                    machine['{0}_diagnostics_wallclock'.format(compName)] = diags.get('wallclock').lower()
+                    machine['{0}_diagnostics_nodes'.format(compName)] = ''
+                    if 'nodes' in diags.attrib:
+                        machine['{0}_diagnostics_nodes'.format(compName)] = diags.get('nodes').lower()
+                    machine['{0}_diagnostics_memory'.format(compName)] = ''
+                    if 'memory' in diags.attrib:
+                        machine['{0}_diagnostics_memory'.format(compName)] = diags.get('memory')
+
+                init = comp.find('initialize_pes')
+                if init is not None:
+                    machine['{0}_initialize_pes'.format(compName)] = init.text
+                    machine['{0}_initialize_queue'.format(compName)] = ''
+                    if 'queue' in init.attrib:
+                        machine['{0}_initialize_queue'.format(compName)] = init.get('queue').lower()
+                    machine['{0}_initialize_ppn'.format(compName)] = init.get('pes_per_node').lower()
+                    machine['{0}_initialize_wallclock'.format(compName)] = init.get('wallclock').lower()
+                    machine['{0}_initialize_nodes'.format(compName)] = ''
+                    if 'nodes' in init.attrib:
+                        machine['{0}_initialize_nodes'.format(compName)] = init.get('nodes').lower()
+                    machine['{0}_initialize_memory'.format(compName)] = ''
+                    if 'memory' in init.attrib:
+                        machine['{0}_initialize_memory'.format(compName)] = init.get('memory')
+
+                regrid = comp.find('regrid_pes')
+                if regrid is not None:
+                    machine['{0}_regrid_pes'.format(compName)] = regrid.text
+                    machine['{0}_regrid_queue'.format(compName)] = ''
+                    if 'queue' in regrid.attrib:
+                        machine['{0}_regrid_queue'.format(compName)] = regrid.get('queue').lower()
+                    machine['{0}_regrid_ppn'.format(compName)] = regrid.get('pes_per_node').lower()
+                    machine['{0}_regrid_wallclock'.format(compName)] = regrid.get('wallclock').lower()
+                    machine['{0}_regrid_nodes'.format(compName)] = ''
+                    if 'nodes' in regrid.attrib:
+                        machine['{0}_regrid_nodes'.format(compName)] = regrid.get('nodes').lower()
+                    machine['{0}_regrid_memory'.format(compName)] = ''
+                    if 'memory' in regrid.attrib:
+                        machine['{0}_regrid_memory'.format(compName)] = regrid.get('memory')
+
+                machine['{0}_obs_root'.format(compName)] = comp.find('obs_root').text
+
+    if not found:
+        err_msg = ('create_postprocess ERROR: Invalid machine "{0}" requested for postprocessing'.format(machine))
+        raise OSError(err_msg)
+
+    return machine
+
+# -------------------------------------------------------------------------------
+# create_batch - create the batch files for post processing submission
+# -------------------------------------------------------------------------------
+def create_batch(ppDir, pes, batchTmpl, runTmpl, postProcessCmd, mpiCmd, outFile, processName,
+                 project, pythonpath, caseRoot, reset_modules, modules, queue, ppn, nodes,
+                 wallclock, memory, options, standalone,
+                 imb_name=None, imb_run=None, imb_env_vars=None, imb_options=None):
+    """create the batch submission files for post processing
+
+    Arguments:
+    ppDir (string) - postprocessing directory
+    pes (integer) - number or PEs for post processing 
+    batchTmpl (string) - machine dependent batch template file name 
+    runTmpl (string) - run script template file 
+    postProcessCmd (string) - post process command
+    mpiCmd (string) - mpi run command
+    outFile (string) - full path to output file for batch script
+    processName (string) - post processing name for batch submission
+    project (string) - project account number
+    caseRoot (string) - case root directory path
+    reset_modules (string) - module commands
+    modules (string) - module commands
+    queue (string) - queue for batch submission
+    ppn (string) - pes-per-node
+    nodes (string) - number of nodes
+    wallclock (string) - wallclock time
+    options (object) - commandline options
+    standalone (boolean) - indicate if this is postprocessing for a standalone case
+    imb_name (string) - the name of the imb suite, e.g. ilamb or iomb
+    imb_run (string) - executable for IMB, International Modeling Benchmarks, diags
+    imb_env_vars (string) - jinja template string or data for imb environment variables
+    imb_options (string) - jinja template string or data for imb command line options
+    """
+    # first check if outFile already exists, if so delete and recreate
+    rc, err_msg = cesmEnvLib.checkFile(outFile, 'read')
+    if rc:
+        os.unlink(outFile)
+
+    # check if template files exist and are readable
+    rc, err_msg = cesmEnvLib.checkFile('{0}/Templates/{1}'.format(ppDir, batchTmpl), 'read')
+    if not rc:
+        raise OSError(err_msg)
+
+    rc, err_msg = cesmEnvLib.checkFile('{0}/Templates/{1}'.format(ppDir, runTmpl), 'read')
+    if not rc:
+        raise OSError(err_msg)
+
+    virtualEnvDir = '{0}/cesm-env2/bin'.format(ppDir)
+    # check that the postProcessCmd exists in the virtualenv
+    rc, err_msg = cesmEnvLib.checkFile('{0}/{1}'.format(virtualEnvDir, postProcessCmd), 'read')
+    if not rc:
+        raise OSError(err_msg)
+
+    debug = '--debug 0'
+    if options.debug:
+        debug = '--debug {0}'.format(options.debug[0])
+
+    backtrace = ''
+    if options.backtrace:
+        backtrace = '--backtrace'
+
+    # other command line options that should be passed to the process
+    cmdl_opt = ''
+    if imb_name:
+        cmdl_opt = '{0} --imb-name {1}'.format(cmdl_opt, imb_name)
+
+    # all files look good so start parsing the template file starting with the batchTmpl
+    templateLoader = jinja2.FileSystemLoader( searchpath='{0}/Templates'.format(ppDir) )
+    templateEnv = jinja2.Environment( loader=templateLoader )
+    template = templateEnv.get_template( batchTmpl )
+    templateVars = { 'pes' : pes,
+                     'queue' : queue,
+                     'nodes' : nodes,
+                     'processName' : processName,
+                     'project' : project,
+                     'ppn' : ppn,
+                     'wallclock' : wallclock,
+                     'memory' : memory }
+        
+    # render this template into the batchdirectives string
+    batchdirectives = template.render( templateVars )
+
+    # get the postprocessing run template 
+    template = templateEnv.get_template( runTmpl )
+    templateVars = { 'batchdirectives' : batchdirectives,
+                     'reset_modules' : reset_modules,
+                     'modules' : modules,
+                     'pes' : pes,
+                     'nodes' : nodes,
+                     'mpirun' : mpiCmd,
+                     'pythonpath': pythonpath,
+                     'processName' : processName,
+                     'postProcessCmd' : postProcessCmd,
+                     'caseRoot' : caseRoot,
+                     'virtualEnvDir' : virtualEnvDir,
+                     'debug' : debug,
+                     'backtrace' : backtrace,
+                     'standalone' : standalone,
+                     'cmdl_opt': cmdl_opt, }
+
+
+    if imb_run:
+        templateVars['imb_run'] = imb_run
+        if imb_env_vars:
+            templateVars['imb_env_vars'] = imb_env_vars
+        else:
+            print('WARNING: create_batch: imb_run specified, but imb_env_vars was undefined!')
+
+        if imb_options:
+            templateVars['imb_options'] = imb_options
+        else:
+            print('WARNING: create_batch: imb_run specified, but imb_options was undefined!')
+
+
+    # render this template into the runScript string
+    runScript = template.render( templateVars )
+
+    # write the runScript to the outFile
+    with open( outFile, 'w') as fh:
+        fh.write(runScript)
+
+    # make runScript permission executable
+    try:
+        subprocess.check_call( ['chmod', '+x', outFile ] )
+    except subprocess.CalledProcessError as e:
+        print('create_postprocess: {0} could not be made executable'.format(outFile))
+        print('WARNING: manually add execute permission to {0}'.format(outFile))
+        print('    {0} - {1}'.format(e.cmd, e.output))
+
+
+# -------------------------------------------------------------------------------
+# initialize_main - initialization from main
+# -------------------------------------------------------------------------------
+def initialize_main(envDict, options, standalone):
+    """initialize_main - initialize main settings
+    
+    Arguments:
+    options (list) - input options from command line
+    envDict (dictionary) - environment dictionary
+    standalone (boolean) - indicate if this is postprocessing for a standalone case
+
+    Return:
+    envDict (dictionary) - environment dictionary
+    """
+    # CASEROOT is given on the command line as required option --caseroot
+    caseroot = options.caseroot[0]
+    pp = envDict['POSTPROCESS_PATH']
+
+    if not standalone:
+        # run xmlquery to get the variables needed for postprocessing
+        os.chdir(caseroot)
+        var_names = ['CASE', 'DOUT_S_ROOT', 'ATM_GRID', 'ICE_GRID', 'LND_GRID', 'OCN_GRID', 'ICE_NX', 'ICE_NY']
+        for var_name in var_names:
+            cmd = ['./xmlquery {0} -value'.format(var_name)]
+            try:
+                pipe = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                output, err = pipe.communicate()
+            except OSError as e:
+                print('WARNING',e.errno,e.strerror)
+            envDict[var_name] = output
+        os.chdir(pp)
+    else:
+        caseList = caseroot.split('/')
+        envDict['CASE'] = caseList[-1]
+        var_names = ['DOUT_S_ROOT', 'ATM_GRID', 'ICE_GRID', 'LND_GRID', 'OCN_GRID', 'ICE_NX', 'ICE_NY']
+        for var_name in var_names:
+            envDict[var_name] = 'undefined'
+
+    # refer to the caseroot that was specified on the command line instead of what
+    # is read in the environment as the caseroot may have changed from what is listed
+    # in the env xml
+    envDict['CASEROOT'] = caseroot
+    envDict['POSTPROCESS_PATH'] = pp
+
+    envDict['CESM_TAG'] = 'undefined'
+    if options.cesmtag:
+        envDict['CESM_TAG'] = options.cesmtag[0]
+
+    # set the project code
+    envDict['PROJECT'] = os.getenv('PROJECT')
+    if options.project:
+        envDict['PROJECT'] = options.project[0]
+
+    # set the user name
+    envDict['USER_NAME'] = getpass.getuser()
+    if options.username:
+        envDict['USER_NAME'] = options.username[0]
+
+    # set the POSTPROCESS_PATH_DAV if option add-dav is specified
+    envDict['POSTPROCESS_PATH_DAV'] = 'undefined'
+    if options.add_dav:
+        # check to make sure virtualenv exists
+        if os.path.isfile('{0}/cesm-env2/bin/activate_this.py'.format(options.add_dav[0])):
+            envDict['POSTPROCESS_PATH_DAV'] = options.add_dav[0]
+
+    return envDict
+
+# -------------------------------------------------------------------------------
+# main
+# -------------------------------------------------------------------------------
+def main(options):
+    """ main
+
+    Arguments:
+    options (list) - input options from command line
+    """
+    envDict = dict()
+
+    # set the postprocessing dir in the envDict
+    envDict['POSTPROCESS_PATH'] = cesm_pp_path
+
+    # create the postprocess directories in the caseroot
+    standalone = check_standalone(options.caseroot[0])
+
+    # check to make sure CASEROOT is a valid, readable directory
+    if not os.path.isdir(options.caseroot[0]):
+        # stand-alone caseroot
+        standalone = True
+        pp_case_path = options.caseroot[0]
+        log_path = '{0}/logs'.format(pp_case_path)
+        web_dirs = '{0}/web_dirs'.format(pp_case_path)
+    else:
+        pp_case_path = '{0}/postprocess'.format(options.caseroot[0])
+        log_path = '{0}/logs'.format(pp_case_path)
+        web_dirs = '{0}/web_dirs'.format(pp_case_path)
+
+    # initialize the environment dictionary
+    envDict = initialize_main(envDict, options, standalone)
+    envDict['PP_CASE_PATH'] = pp_case_path
+
+    # get the machine name from the hostname
+    hostname = cesmEnvLib.get_hostname()
+    envDict['MACH'] = cesmEnvLib.get_machine_name(hostname, '{0}/Machines/machine_postprocess.xml'.format(envDict['POSTPROCESS_PATH']))
+
+    # check for undefined machine
+    if not envDict['MACH']:
+        raise OSError('create_postprocess ERROR: hostname "{0}" is not currently supported. Exiting...'.format(hostname))
+
+    # make the appropriate dirs in the caseroot
+    try:
+        os.mkdir(pp_case_path)
+    except:
+        raise OSError('create_postprocess ERROR: cannot create directory {0}. Exiting...'.format(pp_case_path))
+    try:
+        os.mkdir(log_path)
+    except:
+        raise OSError('create_postprocess ERROR: cannot create directory {0}. Exiting...'.format(log_path))
+    try:
+        os.mkdir(web_dirs)
+        shutil.copy2('{0}/Config/README.web_dirs'.format(envDict['POSTPROCESS_PATH']), 
+                     '{0}/README.web_dirs'.format(web_dirs))
+    except:
+        raise OSError('create_postprocess ERROR: cannot create directory {0}. Exiting...'.format(web_dirs))
+    
+    # set the list of components
+    compList = ['atm','ice','lnd','ocn']
+    regridList = ['atm','lnd']
+    regridList = ['lnd']
+    imbList = ['ilamb', 'iomb']
+
+    # get the machine dependent variables, modules and mpi run command in a dictionary
+    machine = dict()
+    machine = read_machine_xml(machineName=envDict['MACH'], 
+                               xmlFile='{0}/Machines/machine_postprocess.xml'.format(envDict['POSTPROCESS_PATH']))
+
+    # generate the env_postprocess.xml file
+    config_file = '{0}/Config/config_postprocess.xml'.format(envDict['POSTPROCESS_PATH'])
+    tmpl_file = 'env_postprocess.tmpl'
+    env_file = '{0}/env_postprocess.xml'.format(envDict['PP_CASE_PATH'])
+    create_env_file(envDict=envDict, configFile=config_file, tmplFile=tmpl_file, 
+                    envFile=env_file, obs_root='', comp='', standalone=standalone)
+
+    # generate the env_timeseries.xml file
+    config_file = '{0}/Config/config_timeseries.xml'.format(envDict['POSTPROCESS_PATH'])
+    env_file = '{0}/env_timeseries.xml'.format(envDict['PP_CASE_PATH'])
+    shutil.copy2(config_file, env_file)
+
+    # generate the env_conform.xml file
+    config_file = '{0}/Config/config_conform.xml'.format(envDict['POSTPROCESS_PATH'])
+    env_file = '{0}/env_conform.xml'.format(envDict['PP_CASE_PATH'])
+    tmpl_file = 'env_postprocess.tmpl'
+    create_env_file(envDict=envDict, configFile=config_file, tmplFile=tmpl_file, 
+                    envFile=env_file, obs_root='', comp='', standalone=standalone)
+
+    # generate the env_ocn_remap.xml file
+    config_file = '{0}/diagnostics/diagnostics/ocn/Config/config_ocn_remap.xml'.format(envDict['POSTPROCESS_PATH'])
+    env_file = '{0}/env_ocn_remap.xml'.format(envDict['PP_CASE_PATH'])
+    tmpl_file = 'env_postprocess.tmpl'
+    create_env_file(envDict=envDict, configFile=config_file, tmplFile=tmpl_file, 
+                    envFile=env_file, obs_root='', comp='', standalone=standalone)
+
+    # generate the env_diags_[component].xml files
+    for comp in itertools.chain(compList, imbList):
+        dir_name = comp
+        if dir_name in imbList:
+            dir_name = 'imb'
+        config_file = '{0}/diagnostics/diagnostics/{1}/Config/config_diags_{2}.xml'.format(envDict['POSTPROCESS_PATH'], dir_name, comp)
+        tmpl_file = 'env_diags.tmpl'
+        env_file = '{0}/env_diags_{1}.xml'.format(envDict['PP_CASE_PATH'], comp)
+        create_env_file(envDict=envDict, configFile=config_file, tmplFile=tmpl_file, 
+                        envFile=env_file, obs_root=machine['{0}_obs_root'.format(comp)], 
+                        comp=comp, standalone=standalone)
+
+    # define the template files for the batch scripts
+    batch_tmpl = 'batch_{0}.tmpl'.format(envDict['MACH'])
+    run_tmpl = 'postprocess.tmpl'
+
+    # generate the timeseries batch submit script from template files
+    postProcessCmd = 'cesm_tseries_generator.py'
+    processName = 'timeseries'
+    outFile = '{0}/{1}'.format(envDict['PP_CASE_PATH'],processName)
+    create_batch(ppDir=envDict['POSTPROCESS_PATH'], 
+                 pes=machine['timeseries_pes'], 
+                 batchTmpl=batch_tmpl, runTmpl=run_tmpl, 
+                 postProcessCmd=postProcessCmd, 
+                 mpiCmd=machine['mpi_command'], outFile=outFile, 
+                 processName=processName, 
+                 project=envDict['PROJECT'], 
+                 pythonpath=machine['pythonpath'], 
+                 caseRoot=envDict['PP_CASE_PATH'], 
+                 reset_modules=machine['reset_modules'], 
+                 modules=machine['modules'], 
+                 queue=machine['timeseries_queue'],
+                 ppn=machine['timeseries_ppn'],
+                 nodes=machine['timeseries_nodes'],
+                 wallclock=machine['timeseries_wallclock'],
+                 memory=machine['timeseries_memory'],
+                 options=options, standalone=standalone)
+
+    # generate the xconform batch submit script from template files
+    postProcessCmd = 'cesm_conform_generator.py'
+    processName = 'xconform'
+    outFile = '{0}/{1}'.format(envDict['PP_CASE_PATH'],processName)
+    xconform_tmpl = 'xconform.tmpl'
+    create_batch(ppDir=envDict['POSTPROCESS_PATH'], 
+                 pes=machine['xconform_pes'], 
+                 batchTmpl=batch_tmpl, runTmpl=xconform_tmpl, 
+                 postProcessCmd=postProcessCmd, 
+                 mpiCmd=machine['mpi_command'], outFile=outFile, 
+                 processName=processName, 
+                 project=envDict['PROJECT'], 
+                 pythonpath=machine['pythonpath'], 
+                 caseRoot=envDict['PP_CASE_PATH'], 
+                 reset_modules=machine['reset_modules'], 
+                 modules=machine['modules'], 
+                 queue=machine['conform_queue'], 
+                 ppn=machine['conform_ppn'], 
+                 nodes=machine['conform_nodes'], 
+                 wallclock=machine['conform_wallclock'], 
+                 memory=machine['conform_memory'],
+                 options=options, standalone=standalone)
+
+    # generate the iconform batch submit script from template files
+    postProcessCmd = 'cesm_conform_initialize.py'
+    processName = 'iconform'
+    outFile = '{0}/{1}'.format(envDict['PP_CASE_PATH'],processName)
+    iconform_tmpl = 'iconform.tmpl'
+    create_batch(ppDir=envDict['POSTPROCESS_PATH'], 
+                 pes=machine['xconform_pes'], 
+                 batchTmpl=batch_tmpl, runTmpl=iconform_tmpl, 
+                 postProcessCmd=postProcessCmd, 
+                 mpiCmd=machine['mpi_command'], outFile=outFile, 
+                 processName=processName, 
+                 project=envDict['PROJECT'], 
+                 pythonpath=machine['pythonpath'], 
+                 caseRoot=envDict['PP_CASE_PATH'], 
+                 reset_modules=machine['reset_modules'], 
+                 modules=machine['modules'], 
+                 queue=machine['conform_queue'],
+                 ppn=machine['conform_ppn'],
+                 nodes=machine['conform_nodes'],
+                 wallclock=machine['conform_wallclock'],
+                 memory=machine['conform_memory'],
+                 options=options, standalone=standalone)
+
+    # generate the ocn_remap batch submit script from template files
+    postProcessCmd = 'ocn_remap_generator.py'
+    processName = 'ocn_remap'
+    outFile = '{0}/{1}'.format(envDict['PP_CASE_PATH'],processName)
+    ocn_remap_tmpl = 'postprocess.tmpl'
+    create_batch(ppDir=envDict['POSTPROCESS_PATH'], 
+                 pes=machine['ocn_remap_pes'], 
+                 batchTmpl=batch_tmpl, runTmpl=ocn_remap_tmpl, 
+                 postProcessCmd=postProcessCmd, 
+                 mpiCmd=machine['mpi_command'], outFile=outFile, 
+                 processName=processName, 
+                 project=envDict['PROJECT'], 
+                 pythonpath=machine['pythonpath'], 
+                 caseRoot=envDict['PP_CASE_PATH'], 
+                 reset_modules=machine['reset_modules'], 
+                 modules=machine['modules'], 
+                 queue=machine['ocn_remap_queue'], 
+                 ppn=machine['ocn_remap_ppn'], 
+                 nodes=machine['ocn_remap_nodes'], 
+                 wallclock=machine['ocn_remap_wallclock'], 
+                 memory=machine['ocn_remap_memory'],
+                 options=options, standalone=standalone)
+
+
+    # generate the diagnostics batch submit scripts from template files
+    for comp in compList:
+        # generate the averages batch submit script
+        postProcessCmd = '{0}_avg_generator.py'.format(comp)
+        processName = '{0}_averages'.format(comp)
+        outFile = '{0}/{1}'.format(envDict['PP_CASE_PATH'], processName)
+        create_batch(ppDir=envDict['POSTPROCESS_PATH'], 
+                     pes=machine['{0}_averages_pes'.format(comp)], 
+                     batchTmpl=batch_tmpl, runTmpl=run_tmpl, 
+                     postProcessCmd=postProcessCmd, 
+                     mpiCmd=machine['mpi_command'], outFile=outFile, 
+                     processName=processName, 
+                     project=envDict['PROJECT'], 
+                     pythonpath=machine['pythonpath'], 
+                     caseRoot=envDict['PP_CASE_PATH'], 
+                     reset_modules=machine['reset_modules'], 
+                     modules=machine['modules'], 
+                     queue=machine['{0}_averages_queue'.format(comp)], 
+                     ppn=machine['{0}_averages_ppn'.format(comp)], 
+                     nodes=machine['{0}_averages_nodes'.format(comp)], 
+                     wallclock=machine['{0}_averages_wallclock'.format(comp)], 
+                     memory=machine['{0}_averages_memory'.format(comp)], 
+                     options=options, standalone=standalone)
+
+        # generate the diagnostics batch submit script
+        postProcessCmd = '{0}_diags_generator.py'.format(comp)
+        processName = '{0}_diagnostics'.format(comp)
+        outFile = '{0}/{1}'.format(envDict['PP_CASE_PATH'], processName)
+        create_batch(ppDir=envDict['POSTPROCESS_PATH'], 
+                     pes=machine['{0}_diagnostics_pes'.format(comp)], 
+                     batchTmpl=batch_tmpl, runTmpl=run_tmpl, 
+                     postProcessCmd=postProcessCmd, 
+                     mpiCmd=machine['mpi_command'], outFile=outFile, 
+                     processName=processName, 
+                     project=envDict['PROJECT'], 
+                     pythonpath=machine['pythonpath'], 
+                     caseRoot=envDict['PP_CASE_PATH'], 
+                     reset_modules=machine['reset_modules'], 
+                     modules=machine['modules'], 
+                     queue=machine['{0}_diagnostics_queue'.format(comp)], 
+                     ppn=machine['{0}_diagnostics_ppn'.format(comp)], 
+                     nodes=machine['{0}_diagnostics_nodes'.format(comp)], 
+                     wallclock=machine['{0}_diagnostics_wallclock'.format(comp)], 
+                     memory=machine['{0}_diagnostics_memory'.format(comp)], 
+                     options=options, standalone=standalone)
+
+    # generate the regrid batch submit scripts from template files
+    for comp in regridList:
+        # generate the regrid batch submit script
+        postProcessCmd = '{0}_regrid_generator.py'.format(comp)
+        processName = '{0}_regrid'.format(comp)
+        outFile = '{0}/{1}'.format(envDict['PP_CASE_PATH'], processName)
+        create_batch(ppDir=envDict['POSTPROCESS_PATH'], 
+                     pes=machine['{0}_regrid_pes'.format(comp)], 
+                     batchTmpl=batch_tmpl, runTmpl=run_tmpl, 
+                     postProcessCmd=postProcessCmd, 
+                     mpiCmd=machine['mpi_command'], outFile=outFile, 
+                     processName=processName, 
+                     project=envDict['PROJECT'], 
+                     pythonpath=machine['pythonpath'], 
+                     caseRoot=envDict['PP_CASE_PATH'],  
+                     reset_modules=machine['reset_modules'], 
+                     modules=machine['modules'], 
+                     queue=machine['{0}_regrid_queue'.format(comp)], 
+                     ppn=machine['{0}_regrid_ppn'.format(comp)], 
+                     nodes=machine['{0}_regrid_nodes'.format(comp)],
+                     wallclock=machine['{0}_regrid_wallclock'.format(comp)],
+                     memory=machine['{0}_regrid_memory'.format(comp)],  
+                     options=options, standalone=standalone)
+
+    # generate the ILAMB and IOMB batch submit scripts from template files
+    for imb in imbList:
+        # generate the serial script that sets up the imb config file.
+        postProcessCmd = 'imb_initialize.py'
+        processName = '{0}_initialize'.format(imb)
+        outFile = '{0}/{1}'.format(envDict['PP_CASE_PATH'], processName)
+        create_batch(ppDir=envDict['POSTPROCESS_PATH'],
+                     pes=machine['{0}_initialize_pes'.format(imb)],
+                     batchTmpl=batch_tmpl, runTmpl=run_tmpl,
+                     postProcessCmd=postProcessCmd,
+                     mpiCmd='', outFile=outFile,
+                     processName=processName,
+                     project=envDict['PROJECT'],
+                     pythonpath=machine['pythonpath'],
+                     caseRoot=envDict['PP_CASE_PATH'],
+                     reset_modules=machine['reset_modules'],
+                     modules=machine['modules'],
+                     queue=machine['{0}_initialize_queue'.format(imb)],
+                     ppn=machine['{0}_initialize_ppn'.format(imb)],
+                     nodes=machine['{0}_initialize_nodes'.format(imb)],
+                     wallclock=machine['{0}_initialize_wallclock'.format(imb)],
+                     memory=machine['{0}_initialize_memory'.format(imb)],
+                     options=options, standalone=standalone, imb_name=imb)
+
+        # NOTE(bja, 2017-10) the imb_diagnostics file created here is
+        # a template that is only partially expanded by create_batch()
+        # There are additional fields based on user xml variables that
+        # do not get expanded until imb_initialize.py is run. By
+        # calling the file imb_diagnostics, but writing it to
+        # imb_diagnostics.tmpl, the processName values are expanded
+        # correctly (i.e. without .tmpl), but the user can change xml
+        # variables and run imb_initialize multiple times, each time
+        # write it out to imb_diagnostics.
+        postProcessCmd = 'imb_diags_generator.py'
+        processName = '{0}_diagnostics'.format(imb)
+        outFile = '{0}/{1}.tmpl'.format(envDict['PP_CASE_PATH'], processName)
+        create_batch(ppDir=envDict['POSTPROCESS_PATH'],
+                     pes=machine['{0}_diagnostics_pes'.format(imb)],
+                     batchTmpl=batch_tmpl, runTmpl=run_tmpl,
+                     postProcessCmd=postProcessCmd,
+                     mpiCmd=machine['mpi_command'], outFile=outFile,
+                     processName=processName,
+                     project=envDict['PROJECT'],
+                     pythonpath=machine['pythonpath'],
+                     caseRoot=envDict['PP_CASE_PATH'],
+                     reset_modules=machine['reset_modules'],
+                     modules=machine['modules'],
+                     queue=machine['{0}_diagnostics_queue'.format(imb)],
+                     ppn=machine['{0}_diagnostics_ppn'.format(imb)],
+                     nodes=machine['{0}_diagnostics_nodes'.format(imb)],
+                     wallclock=machine['{0}_diagnostics_wallclock'.format(imb)],
+                     memory=machine['{0}_diagnostics_memory'.format(imb)],
+                     options=options, standalone=standalone,
+                     imb_name=imb,
+                     imb_run='{{ imb_exe }}',
+                     imb_env_vars='{% for env in imb_env_vars %}\n{{ env }}\n{% endfor %}',
+                     imb_options='{{ imb_options }}')
+        
+    # check if machine is cheyenne then create a set of dav submission scripts
+    if envDict['MACH'] == 'cheyenne' and envDict['POSTPROCESS_PATH_DAV'] != 'undefined':
+        hostname = 'dav'
+        envDict['MACH'] = cesmEnvLib.get_machine_name(hostname, '{0}/Machines/machine_postprocess.xml'.format(envDict['POSTPROCESS_PATH']))
+        pp_dav = envDict["POSTPROCESS_PATH_DAV"]
+
+        # get the machine dependent variables, modules and mpi run command in a dictionary
+        machine = dict()
+        machine = read_machine_xml(machineName=envDict['MACH'], 
+                                   xmlFile='{0}/Machines/machine_postprocess.xml'.format(pp_dav))
+
+        # define the template files for the batch scripts
+        batch_tmpl = 'batch_{0}.tmpl'.format(envDict['MACH'])
+        run_tmpl = 'postprocess.tmpl'
+
+        # generate the timeseries batch submit script from template files
+        postProcessCmd = 'cesm_tseries_generator.py'
+        processName = 'timeseries_dav'
+        outFile = '{0}/{1}'.format(envDict['PP_CASE_PATH'],processName)
+        create_batch(ppDir=pp_dav,
+                     pes=machine['timeseries_pes'], 
+                     batchTmpl=batch_tmpl, runTmpl=run_tmpl, 
+                     postProcessCmd=postProcessCmd, 
+                     mpiCmd=machine['mpi_command'], outFile=outFile, 
+                     processName=processName, 
+                     project=envDict['PROJECT'], 
+                     pythonpath=machine['pythonpath'], 
+                     caseRoot=envDict['PP_CASE_PATH'], 
+                     reset_modules=machine['reset_modules'], 
+                     modules=machine['modules'], 
+                     queue=machine['timeseries_queue'],
+                     ppn=machine['timeseries_ppn'],
+                     nodes=machine['timeseries_nodes'],
+                     wallclock=machine['timeseries_wallclock'],
+                     memory=machine['timeseries_memory'],
+                     options=options, standalone=standalone)
+
+        # generate the xconform batch submit script from template files
+        postProcessCmd = 'cesm_conform_generator.py'
+        processName = 'xconform_dav'
+        outFile = '{0}/{1}'.format(envDict['PP_CASE_PATH'],processName)
+        xconform_tmpl = 'xconform.tmpl'
+        create_batch(ppDir=pp_dav,
+                     pes=machine['xconform_pes'], 
+                     batchTmpl=batch_tmpl, runTmpl=xconform_tmpl, 
+                     postProcessCmd=postProcessCmd, 
+                     mpiCmd=machine['mpi_command'], outFile=outFile, 
+                     processName=processName, 
+                     project=envDict['PROJECT'], 
+                     pythonpath=machine['pythonpath'], 
+                     caseRoot=envDict['PP_CASE_PATH'], 
+                     reset_modules=machine['reset_modules'], 
+                     modules=machine['modules'], 
+                     queue=machine['conform_queue'],
+                     ppn=machine['conform_ppn'],
+                     nodes=machine['conform_nodes'],
+                     wallclock=machine['conform_wallclock'],
+                     memory=machine['conform_memory'],
+                     options=options, standalone=standalone)
+
+        # generate the iconform batch submit script from template files
+        postProcessCmd = 'cesm_conform_initialize.py'
+        processName = 'iconform_dav'
+        outFile = '{0}/{1}'.format(envDict['PP_CASE_PATH'],processName)
+        iconform_tmpl = 'iconform.tmpl'
+        create_batch(ppDir=pp_dav,
+                     pes=machine['xconform_pes'], 
+                     batchTmpl=batch_tmpl, runTmpl=iconform_tmpl, 
+                     postProcessCmd=postProcessCmd, 
+                     mpiCmd=machine['mpi_command'], outFile=outFile, 
+                     processName=processName, 
+                     project=envDict['PROJECT'], 
+                     pythonpath=machine['pythonpath'], 
+                     caseRoot=envDict['PP_CASE_PATH'], 
+                     reset_modules=machine['reset_modules'], 
+                     modules=machine['modules'], 
+                     queue=machine['conform_queue'],
+                     ppn=machine['conform_ppn'],
+                     nodes=machine['conform_nodes'],
+                     wallclock=machine['conform_wallclock'],
+                     memory=machine['conform_memory'],
+                     options=options, standalone=standalone)
+
+        # generate the ocn_remap batch submit script from template files
+        postProcessCmd = 'ocn_remap_generator.py'
+        processName = 'ocn_remap_dav'
+        outFile = '{0}/{1}'.format(envDict['PP_CASE_PATH'],processName)
+        create_batch(ppDir=pp_dav,
+                     pes=machine['ocn_remap_pes'], 
+                     batchTmpl=batch_tmpl, runTmpl=run_tmpl, 
+                     postProcessCmd=postProcessCmd, 
+                     mpiCmd=machine['mpi_command'], outFile=outFile, 
+                     processName=processName, 
+                     project=envDict['PROJECT'], 
+                     pythonpath=machine['pythonpath'], 
+                     caseRoot=envDict['PP_CASE_PATH'], 
+                     reset_modules=machine['reset_modules'], 
+                     modules=machine['modules'], 
+                     queue=machine['ocn_remap_queue'],
+                     ppn=machine['ocn_remap_ppn'],
+                     nodes=machine['ocn_remap_nodes'],
+                     wallclock=machine['ocn_remap_wallclock'],
+                     memory=machine['ocn_remap_memory'],
+                     options=options, standalone=standalone)
+
+        # generate the diagnostics batch submit scripts from template files
+        for comp in compList:
+            # generate the averages batch submit script
+            postProcessCmd = '{0}_avg_generator.py'.format(comp)
+            processName = '{0}_averages_dav'.format(comp)
+            outFile = '{0}/{1}'.format(envDict['PP_CASE_PATH'], processName)
+            create_batch(ppDir=pp_dav,
+                         pes=machine['{0}_averages_pes'.format(comp)], 
+                         batchTmpl=batch_tmpl, runTmpl=run_tmpl, 
+                         postProcessCmd=postProcessCmd, 
+                         mpiCmd=machine['mpi_command'], outFile=outFile, 
+                         processName=processName, 
+                         project=envDict['PROJECT'], 
+                         pythonpath=machine['pythonpath'], 
+                         caseRoot=envDict['PP_CASE_PATH'], 
+                         reset_modules=machine['reset_modules'], 
+                         modules=machine['modules'], 
+                         queue=machine['{0}_averages_queue'.format(comp)], 
+                         ppn=machine['{0}_averages_ppn'.format(comp)], 
+                         nodes=machine['{0}_averages_nodes'.format(comp)], 
+                         wallclock=machine['{0}_averages_wallclock'.format(comp)], 
+                         memory=machine['{0}_averages_memory'.format(comp)], 
+                         options=options, standalone=standalone)
+
+            # generate the diagnostics batch submit script
+            postProcessCmd = '{0}_diags_generator.py'.format(comp)
+            processName = '{0}_diagnostics_dav'.format(comp)
+            outFile = '{0}/{1}'.format(envDict['PP_CASE_PATH'], processName)
+            create_batch(ppDir=pp_dav,
+                         pes=machine['{0}_diagnostics_pes'.format(comp)], 
+                         batchTmpl=batch_tmpl, runTmpl=run_tmpl, 
+                         postProcessCmd=postProcessCmd, 
+                         mpiCmd=machine['mpi_command'], outFile=outFile, 
+                         processName=processName, 
+                         project=envDict['PROJECT'], 
+                         pythonpath=machine['pythonpath'], 
+                         caseRoot=envDict['PP_CASE_PATH'], 
+                         reset_modules=machine['reset_modules'], 
+                         modules=machine['modules'], 
+                         queue=machine['{0}_diagnostics_queue'.format(comp)], 
+                         ppn=machine['{0}_diagnostics_ppn'.format(comp)], 
+                         nodes=machine['{0}_diagnostics_nodes'.format(comp)], 
+                         wallclock=machine['{0}_diagnostics_wallclock'.format(comp)], 
+                         memory=machine['{0}_diagnostics_memory'.format(comp)], 
+                         options=options, standalone=standalone)
+
+        # generate the regrid batch submit scripts from template files
+        for comp in regridList:
+            # generate the regrid batch submit script
+            postProcessCmd = '{0}_regrid_generator.py'.format(comp)
+            processName = '{0}_regrid_dav'.format(comp)
+            outFile = '{0}/{1}'.format(envDict['PP_CASE_PATH'], processName)
+            create_batch(pp_dav,
+                         pes=machine['{0}_regrid_pes'.format(comp)], 
+                         batchTmpl=batch_tmpl, runTmpl=run_tmpl, 
+                         postProcessCmd=postProcessCmd, 
+                         mpiCmd=machine['mpi_command'], outFile=outFile, 
+                         processName=processName, 
+                         project=envDict['PROJECT'], 
+                         pythonpath=machine['pythonpath'], 
+                         caseRoot=envDict['PP_CASE_PATH'],  
+                         reset_modules=machine['reset_modules'], 
+                         modules=machine['modules'], 
+                         queue=machine['{0}_regrid_queue'.format(comp)], 
+                         ppn=machine['{0}_regrid_ppn'.format(comp)], 
+                         nodes=machine['{0}_regrid_nodes'.format(comp)],
+                         wallclock=machine['{0}_regrid_wallclock'.format(comp)], 
+                         memory=machine['{0}_regrid_memory'.format(comp)],  
+                         options=options, standalone=standalone)
+
+        # generate the ILAMB and IOMB batch submit scripts from template files
+        for imb in imbList:
+            # generate the serial script that sets up the imb config file.
+            postProcessCmd = 'imb_initialize.py'
+            processName = '{0}_initialize_dav'.format(imb)
+            outFile = '{0}/{1}'.format(envDict['PP_CASE_PATH'], processName)
+            create_batch(ppDir=pp_dav,
+                         pes=machine['{0}_initialize_pes'.format(imb)],
+                         batchTmpl=batch_tmpl, runTmpl=run_tmpl,
+                         postProcessCmd=postProcessCmd,
+                         mpiCmd='', outFile=outFile,
+                         processName=processName,
+                         project=envDict['PROJECT'],
+                         pythonpath=machine['pythonpath'],
+                         caseRoot=envDict['PP_CASE_PATH'],
+                         reset_modules=machine['reset_modules'],
+                         modules=machine['modules'],
+                         queue=machine['{0}_initialize_queue'.format(imb)],
+                         ppn=machine['{0}_initialize_ppn'.format(imb)],
+                         nodes=machine['{0}_initialize_nodes'.format(imb)],
+                         wallclock=machine['{0}_initialize_wallclock'.format(imb)],
+                         memory=machine['{0}_initialize_memory'.format(imb)],
+                         options=options, standalone=standalone, imb_name=imb)
+            
+            # NOTE(bja, 2017-10) the imb_diagnostics file created here is
+            # a template that is only partially expanded by create_batch()
+            # There are additional fields based on user xml variables that
+            # do not get expanded until imb_initialize.py is run. By
+            # calling the file imb_diagnostics, but writing it to
+            # imb_diagnostics.tmpl, the processName values are expanded
+            # correctly (i.e. without .tmpl), but the user can change xml
+            # variables and run imb_initialize multiple times, each time
+            # write it out to imb_diagnostics.
+            postProcessCmd = 'imb_diags_generator.py'
+            processName = '{0}_diagnostics_dav'.format(imb)
+            outFile = '{0}/{1}.tmpl'.format(envDict['PP_CASE_PATH'], processName)
+            create_batch(ppDir=pp_dav,
+                         pes=machine['{0}_diagnostics_pes'.format(imb)],
+                         batchTmpl=batch_tmpl, runTmpl=run_tmpl,
+                         postProcessCmd=postProcessCmd,
+                         mpiCmd=machine['mpi_command'], outFile=outFile,
+                         processName=processName,
+                         project=envDict['PROJECT'],
+                         pythonpath=machine['pythonpath'],
+                         caseRoot=envDict['PP_CASE_PATH'],
+                         reset_modules=machine['reset_modules'],
+                         modules=machine['modules'],
+                         queue=machine['{0}_diagnostics_queue'.format(imb)],
+                         ppn=machine['{0}_diagnostics_ppn'.format(imb)],
+                         nodes=machine['{0}_diagnostics_nodes'.format(imb)],
+                         wallclock=machine['{0}_diagnostics_wallclock'.format(imb)],
+                         memory=machine['{0}_diagnostics_memory'.format(imb)],
+                         options=options, standalone=standalone,
+                         imb_name=imb,
+                         imb_run='{{ imb_exe }}',
+                         imb_env_vars='{% for env in imb_env_vars %}\n{{ env }}\n{% endfor %}',
+                         imb_options='{{ imb_options }}')
+
+
+    # copy some tools to the PP_CASE_PATH
+    files_to_copy = ['copy_html', 'pp_config', 'create_env_script', 'env_file.xsd', 'create_links']
+    for file_to_copy in files_to_copy:
+        shutil.copy2('{0}/Tools/{1}'.format(envDict['POSTPROCESS_PATH'], file_to_copy), 
+                     '{0}/{1}'.format(envDict['PP_CASE_PATH'], file_to_copy))
+
+    print('*****************************************************************************************')
+    print('')
+    print('SUCCESS!')
+    print(' The CASEROOT postprocess directory {0}'.format(envDict['PP_CASE_PATH']))
+    print(' now contains all the necessary post-processing submit scripts and associated')
+    print(' XML configuration files. Please review the on-line documentation at')
+    print(' http://github.com/NCAR/CESM_postprocessing/wiki for a complete description of how')
+    print(' to configure and use the CESM post-processing tools.')
+    if standalone:
+        print(' NOTICE: The env_postprocess.xml file in the new CASEROOT postprocess directory will need to be updated.')
+    print('')
+    print('*****************************************************************************************')
+    
+    
+#===================================
+
+if __name__ == "__main__":
+    options = commandline_options()
+    try:
+        status = main(options)
+        sys.exit(status)
+    except Exception as error:
+        print(str(error))
+        if options.backtrace:
+            traceback.print_exc()
+        sys.exit(1)

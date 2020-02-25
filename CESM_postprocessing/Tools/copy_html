@@ -1,0 +1,441 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+
+import sys
+
+# check the system python version and require 2.7.x or greater
+if sys.hexversion < 0x02070000:
+    print(70 * "*")
+    print("ERROR: {0} requires python >= 2.7.x. ".format(sys.argv[0]))
+    print("It appears that you are running python {0}".format(
+            ".".join(str(x) for x in sys.version_info[0:3])))
+    print(70 * "*")
+    sys.exit(1)
+
+#
+# built-in modules
+#
+import argparse
+import errno
+import glob
+import os
+import subprocess
+import traceback
+
+try:
+    import lxml.etree as etree
+except:
+    import xml.etree.ElementTree as etree
+
+# get the postprocess virtualenv path from the env_postprocess.xml file
+env_file = './env_postprocess.xml'
+postprocess_path = ''
+standalone = ''
+if os.path.isfile(env_file):
+    xml_tree = etree.ElementTree()
+    xml_tree.parse(env_file)
+    for entry_tag in xml_tree.findall('entry'):
+        if entry_tag.get('id') == 'POSTPROCESS_PATH':
+            postprocess_path = entry_tag.get('value')
+        if entry_tag.get('id') == 'STANDALONE':
+            standalone = entry_tag.get('value')
+else:
+    err_msg = ('copy_html ERROR: env_postprocess.xml does not exist in this directory.')
+    raise OSError(err_msg)
+
+# check if virtualenv is activated
+if hasattr(sys, 'real_prefix'):
+    try:
+        import cesm_utils
+    except:
+        activate_file = '{0}/cesm-env2/bin/activate_this.py'.format(postprocess_path)
+        if not os.path.isfile(activate_file):
+            err_msg = ('copy_html ERROR: the virtual environment in {0} does not exist.'.format(postprocess_path) \
+                          + 'Please run {0}/create_python_env.sh -cimeroot [cimeroot] -machine [machine name]'.format(postprocess_path))
+            raise OSError(err_msg)
+
+        try:
+            execfile(activate_file, dict(__file__=activate_file))
+        except:
+            raise OSError('copy_html ERROR: Unable to activate python virtualenv {0}'.format(activate_file))
+else:
+    activate_file = '{0}/cesm-env2/bin/activate_this.py'.format(postprocess_path)
+    if not os.path.isfile(activate_file):
+             err_msg = ('copy_html ERROR: the virtual environment in {0} does not exist.'.format(postprocess_path) \
+                           + 'Please run {0}/create_python_env.sh -cimeroot [cimeroot] -machine [machine name]'.format(postprocess_path))
+             raise OSError(err_msg)
+
+    try:
+        execfile(activate_file, dict(__file__=activate_file))
+    except:
+        raise OSError('copy_html ERROR: Unable to activate python virtualenv {0}'.format(activate_file))
+
+if sys.version_info[0] == 2:
+    from ConfigParser import SafeConfigParser as config_parser
+else:
+    from configparser import ConfigParser as config_parser
+
+from cesm_utils import cesmEnvLib
+import jinja2
+
+#=======================================================================
+# commandline_options - parse any command line options
+#=======================================================================
+
+def commandline_options():
+    """Process the command line arguments.
+
+    """
+    parser = argparse.ArgumentParser(
+        description='Read the necessary XML files from the caseroot postprocessing configuration and secure copy the html files and diagnostics plot files to a remote webserver.')
+
+    parser.add_argument('-backtrace', '--backtrace', action='store_true',
+                        help='show exception backtraces as extra debugging '
+                        'output')
+
+    parser.add_argument('-debug', '--debug', nargs=1, required=False, type=int, default=0,
+                        help='debugging verbosity level output: 0 = none, 1 = minimum, 2 = maximum. 0 is default')
+
+    parser.add_argument('--use-ssh-key', dest='use_ssh_key', action='store_true',
+                        help='Use a ssh key to connect to the remove web host defined by '\
+                        'XML variables "GLOBAL_WEBHOST" and "GLOBAL_WEBLOGIN". '\
+                        'If a ssh key is not present, then this option will cause '\
+                        'execution to stop as opposed to issuing a warning '\
+                        'and prompting for a password multiple times. '\
+                        'More details about how to create ssh keys is available at '\
+                        '"http://tools.cgd.ucar.edu/make_user_ssh_keys/index.html"')
+
+    options = parser.parse_args()
+        
+    return options
+
+
+#=======================================================================
+# get_years
+#=======================================================================
+def get_years(env, comp):
+    """ get_years - get the start and stop years for diagnostics based on component
+    
+    Arguments:
+    env (dict) - dictionary of env variables
+    comp (string) - component name
+
+    Return:
+    model_start_year (string) - model start year for diagnostics
+    model_stop_year (string) - model stop year for diagnostics
+    control_start_year (string) - control start year for diagnostics
+    control_stop_year (string) - control stop year for diagnostics
+    trends_start_year1 (string) - model trends start year for diagnostics
+    trends_stop_year1 (string) - model trends stop year for diagnostics
+    trends_start_year2 (string) - control trends start year for diagnostics
+    trends_stop_year2 (string) - control trends stop year for diagnostics
+    """
+
+    # define component-year mapping for model
+    comp_lookup = {'atm' : {'start_year':'ATMDIAG_test_first_yr', 'num_years':'ATMDIAG_test_nyrs'},
+                   'ice' : {'start_year':'ICEDIAG_BEGYR_CONT', 'stop_year':'ICEDIAG_ENDYR_CONT'},
+                   'lnd' : {'start_year':'LNDDIAG_clim_first_yr_1', 'num_years':'LNDDIAG_clim_num_yrs_1'},
+                   'ocn' : {'start_year':'OCNDIAG_YEAR0', 'stop_year':'OCNDIAG_YEAR1'}}
+
+    # define component-year mapping for control
+    comp_lookup_control = {'atm' : {'start_year':'ATMDIAG_cntl_first_yr', 'num_years':'ATMDIAG_cntl_nyrs'},
+                           'ice' : {'start_year':'ICEDIAG_BEGYR_DIFF', 'stop_year':'ICEDIAG_ENDYR_DIFF'},
+                           'lnd' : {'start_year':'LNDDIAG_clim_first_yr_2', 'num_years':'LNDDIAG_clim_num_yrs_2'},
+                           'ocn' : {'start_year':'OCNDIAG_CNTRLYEAR0', 'stop_year':'OCNDIAG_CNTRLYEAR1'}}
+
+    # define component-year mapping for trends and timeseries
+    comp_lookup_trends = {'atm' : {},
+                          'ice' : {},
+                          'lnd' : {'start_year1':'LNDDIAG_trends_first_yr_1', 'num_years1':'LNDDIAG_trends_num_yrs_1',
+                                   'start_year2':'LNDDIAG_trends_first_yr_2', 'num_years2':'LNDDIAG_trends_num_yrs_2'},
+                          'ocn' : {'start_year':'OCNDIAG_TSERIES_YEAR0', 'stop_year':'OCNDIAG_TSERIES_YEAR1'}}
+
+    # get the model years
+    comp_data = comp_lookup[comp]
+    model_start_year = '{0}'.format(env[comp_data['start_year']])
+    if comp_data.has_key('num_years'):
+        model_stop_year = '{0}'.format(int(model_start_year) + int(env[comp_data['num_years']]))
+    else:
+        model_stop_year = '{0}'.format(env[comp_data['stop_year']])
+
+    # get the control years
+    comp_data = comp_lookup_control[comp]
+    control_start_year = '{0}'.format(env[comp_data['start_year']])
+    control_stop_year = None
+    if comp_data.has_key('num_years'):
+        # check that the strings are not empty
+        if len(control_start_year) > 0 and len(env[comp_data['num_years']]) > 0:
+            control_stop_year = '{0}'.format(int(control_start_year) + int(env[comp_data['num_years']]))
+    else:
+        control_stop_year = '{0}'.format(env[comp_data['stop_year']])
+
+    # get the trends years
+    comp_data = comp_lookup_trends[comp]
+    trends_start_year1 = trends_stop_year1 = trends_start_year2 = trends_stop_year2 = None
+    if comp == 'ocn':
+        trends_start_year1 = '{0}'.format(env[comp_data['start_year']])
+        trends_stop_year1 = '{0}'.format(env[comp_data['stop_year']])
+    elif comp == 'lnd':
+        trends_start_year1 = '{0}'.format(env[comp_data['start_year1']])
+        if len(trends_start_year1) > 0 and len(env[comp_data['num_years1']]) > 0:
+            trends_stop_year1 = '{0}'.format(int(trends_start_year1) + int(env[comp_data['num_years1']]))
+        trends_start_year2 = '{0}'.format(env[comp_data['start_year2']])
+        if len(trends_start_year2) > 0 and len(env[comp_data['num_years2']]) > 0:
+            trends_stop_year2 = '{0}'.format(int(trends_start_year2) + int(env[comp_data['num_years2']]))
+
+    return model_start_year, model_stop_year, control_start_year, control_stop_year, \
+        trends_start_year1, trends_stop_year1, trends_start_year2, trends_stop_year2 
+
+
+#=======================================================================
+# check_ssh_key
+#=======================================================================
+def check_ssh_key(env, use_ssh_key):
+
+    # check if ssh key is set for passwordless access to the web host
+    try:
+        output = subprocess.check_output( "ssh -oNumberOfPasswordPrompts=0 {0}@{1} 'echo hello'".format(env['GLOBAL_WEBLOGIN'],env['GLOBAL_WEBHOST']), 
+                                 stderr=subprocess.STDOUT,
+                                 shell=True)
+    except subprocess.CalledProcessError as e:
+        if use_ssh_key:
+            print('ERROR: unable to connect to remote web host {0}@{1} without a password'.format(env['GLOBAL_WEBLOGIN'],env['GLOBAL_WEBHOST']))
+            sys.exit(1)
+        else:
+            print('WARNING: unable to connect to remote web host {0}@{1} without a password'.format(env['GLOBAL_WEBLOGIN'],env['GLOBAL_WEBHOST']))
+            print('    You will be prompted for a password multiple times in order to copy the files.')
+
+
+#=======================================================================
+# create_top_level
+#=======================================================================
+def create_top_level(env, comp):
+
+    # make sure top level remote directory exists
+    try:
+        pipe = subprocess.Popen( ["ssh {0}@{1} 'mkdir -p {2}/{3}'".format(env['GLOBAL_WEBLOGIN'],env['GLOBAL_WEBHOST'],env['GLOBAL_REMOTE_WEBDIR'],comp)], shell=True)
+        pipe.wait()
+    except Exception as e:
+        print('ERROR: unable to create remote directory {0}@{1}:{2}/{3}'.format(env['GLOBAL_WEBLOGIN'],env['GLOBAL_WEBHOST'],env['GLOBAL_REMOTE_WEBDIR'],comp))
+        print('    {0} - {1}'.format(e.errno, e.strerror))
+        sys.exit(1)
+
+#=======================================================================
+# scp_files - scp files to a remote server
+#=======================================================================
+def scp_files(env, local, remote):
+
+    try:
+        pipe = subprocess.Popen( ['scp -r {0} {1}'.format(local, remote)], shell=True)
+        pipe.wait()
+        return True
+    except Exception as e:
+        print('copy_html WARNING: scp command failed with error:')
+        print('    {0} - {1}'.format(e.errno, e.strerror))
+        return False
+
+
+#=======================================================================
+# read_paths - get the paths from the web_dirs files
+#=======================================================================
+def read_paths(env, comp_data):
+    """ read the $PP_CASE_PATH/web_dirs files specified in the comp_data dictionary
+        to get the path to the web directories."
+
+    Arguments:
+    env (dictionary) - environment dictionary
+    comp_data (map) - component diag dir mapping
+    """
+    for diag_type, key in comp_data.iteritems():
+        web_files = sorted(glob.glob('{0}/web_dirs/{1}.*'.format(env['PP_CASE_PATH'],key)))
+        for web_file in web_files:
+            if not web_file.endswith('~'):
+                lines = [line.rstrip('\n') for line in open(web_file,'r')]
+                for line in lines:
+                    values = line.split(':')
+                    if 'copied' not in values[-1].lower():
+                        if values[-2] not in env.keys():
+                            env[values[-2]] = [values[-1]]
+                        else:
+                            env[values[-2]].append(values[-1])
+                    else:
+                        env[values[-2]] = []
+
+    if 'OCNDIAG_WEBDIR' not in env:
+        env['OCNDIAG_WEBDIR'] = list()
+
+    return env
+
+
+#=======================================================================
+# update_web_dirs - update the web_dirs with the copied status
+#=======================================================================
+def update_web_dirs(env, comp_data):
+    """ update the $PP_CASE_PATH/web_dirs files specified in the comp_data dictionary
+        to add the :copied string.
+
+    Arguments:
+    env (dictionary) - environment dictionary
+    comp_data (map) - component diag dir mapping
+    """
+    for diag_type, key in comp_data.iteritems():
+        web_files = sorted(glob.glob('{0}/web_dirs/{1}.*'.format(env['PP_CASE_PATH'],key)))
+        for web_file in web_files:
+            if not web_file.endswith('~'):
+                newlines = list()
+                lines = [line.rstrip('\n') for line in open(web_file,'r')]
+                for line in lines:
+                    newline = line
+                    values = line.split(':')
+                    if 'copied' not in values[-1].lower():
+                        newline = '{0}:copied'.format(line)
+                    newlines.append(newline)
+
+                with open(web_file, 'w') as f:
+                    f.write('\n'.join(newlines) + '\n')
+                f.close()
+
+    return env
+
+#=======================================================================
+# copy_files - scp files from workdir to remote directory 
+#=======================================================================
+def copy_files(env, comp, comp_data):
+    """ copy html files from workdir to remote dir.
+        Will prompt user if ssh keys are not set.
+
+    Arguments:
+    env (dictionary) - environment dictionary
+    comp (string) - component 
+    comp_data (map) - component diag dir mapping
+    """
+    remote = '{0}@{1}:{2}/{3}'.format(env['GLOBAL_WEBLOGIN'], env['GLOBAL_WEBHOST'], env['GLOBAL_REMOTE_WEBDIR'], comp)
+    
+    if comp != 'ocn':
+        for diag_type, key in comp_data.iteritems():
+            # check if the diag_type key string that points to the local webdir is empty or not
+            if key in env.keys():
+                for diag_dir in env[key]:
+                    if len(diag_dir) > 0:
+                        local = diag_dir
+                    if not os.path.isdir(local):
+                        print('copy_html WARNING: local directory = {0} does not exists.'.format(local))
+                    else:
+                        # copy local to remote
+                        if not scp_files(env, local, remote):
+                            print('copy_html WARNING: unable to copy {0} to {1}'.format(local, remote))
+                            print('     You will need to copy the files manually')
+    else:
+        # ocean need to create a tar file first
+        for diag_dir in env['OCNDIAG_WEBDIR']:
+            if os.path.isdir(diag_dir):
+                ok_to_copy = True
+                rootdir, workdir = os.path.split(diag_dir)
+
+                # fix for when there is a / at the end of the path
+                if len(workdir) == 0:
+                    rootdir, workdir = os.path.split(rootdir)
+
+                # parse the workdir for years
+                diag_parts = workdir.split('.')[-1].split('-')
+                year0 = diag_parts[0]
+                year1 = diag_parts[1]
+                
+                tarfile = 'ocn{0}-{1}.tar.gz'.format(year0, year1)
+                cwd = os.getcwd()
+                os.chdir(rootdir)
+                if os.path.isfile(os.path.join(rootdir,tarfile)):
+                    print('copy_html WARNING: ocean tar file = {0} already exists - please delete first.'.format(os.path.join(rootdir,tarfile)))
+                    ok_to_copy = False
+                else:
+                    tar_cmd = "tar cvfz {0} --exclude='*.nc' --exclude='*.nc_tmp' --exclude='*.tmp' --exclude='*.log.*' --exclude='*.asc' --exclude='*.ncl' --exclude='*.dt.*' {1}".format(tarfile, workdir)
+                try:
+                    pipe = subprocess.Popen([tar_cmd], shell=True)
+                    pipe.wait()
+                except Exception as e:
+                    print('copy_html WARNING: unable to execute tar command {0}'.format(tar_cmd))
+                    print('    You will need to copy the files in {0} manually to a web server.'.format(diag_dir))
+                    print('    {0} - {1}'.format(e.returncode, e.output))
+                    ok_to_copy = False
+                if ok_to_copy:
+                    if scp_files(env, tarfile, remote):
+                        # untar the file on remote server
+                        ok_to_remove = True
+                        try:
+                            pipe = subprocess.Popen(["ssh {0}@{1} 'cd {2}/{3} ; tar xvfz {4}'".format(env['GLOBAL_WEBLOGIN'],env['GLOBAL_WEBHOST'],env['GLOBAL_REMOTE_WEBDIR'],comp,tarfile)], shell=True)
+                            pipe.wait()
+                        except Exception as e:
+                            print('copy_html WARNING: unable to untar file {0} on remote server {1}@{2}:{3}/{4}'.format(tarfile, env['GLOBAL_WEBLOGIN'],env['GLOBAL_WEBHOST'],env['GLOBAL_REMOTE_WEBDIR'],comp))
+                            print('   You will need to untar files manually')
+                            ok_to_remove = False
+                        if ok_to_remove:
+                            # remove the tar file on the remote server
+                            try:
+                                pipe = subprocess.Popen(["ssh {0}@{1} 'cd {2}/{3} ; rm {4}'".format(env['GLOBAL_WEBLOGIN'],env['GLOBAL_WEBHOST'],env['GLOBAL_REMOTE_WEBDIR'],comp,tarfile)], shell=True)
+                                pipe.wait()
+                            except Exception as e:
+                                print('copy_html WARNING: unable to remove tar file {0} on remote server {1}@{2}:{3}/{4}'.format(tarfile, env['GLOBAL_WEBLOGIN'],env['GLOBAL_WEBHOST'],env['GLOBAL_REMOTE_WEBDIR'],comp))
+                os.chdir(cwd)
+
+#=======================================================================
+# main
+#=======================================================================
+def main(options):
+    """ main
+
+    Arguments:
+    options (list) - input options from command line
+    """
+    env = dict()
+    envFileList = list()
+    compList = ['atm','ice','lnd','ocn']
+    activeList = list()
+
+    # define diag dir mapping
+    comp_lookup = {'atm' : {'model_vs_obs':'ATMDIAG_WEBDIR_MODEL_VS_OBS', 'model_vs_model':'ATMDIAG_WEBDIR_MODEL_VS_MODEL'},
+                   'ice' : {'model_vs_obs':'ICEDIAG_WEBDIR_MODEL_VS_OBS', 'model_vs_model':'ICEDIAG_WEBDIR_MODEL_VS_MODEL'},
+                   'lnd' : {'model_vs_obs':'LNDDIAG_WEBDIR_MODEL_VS_OBS', 'model_vs_model':'LNDDIAG_WEBDIR_MODEL_VS_MODEL'},
+                   'ocn' : {'model_webdir':'OCNDIAG_WEBDIR'}}
+
+    # this script always run from the postprocessing caseroot 
+    pp_caseroot = os.getcwd()
+
+    # initialize the env from the env*.xml files in the casedir
+    envFileList.append('env_postprocess.xml')
+    for comp in compList:
+        envFile = 'env_diags_{0}.xml'.format(comp)
+        envFileList.append(envFile)
+
+    # load the env with all the env file entries
+    env = cesmEnvLib.readXML(pp_caseroot, envFileList)
+
+    # check if ssh key is set
+    check_ssh_key(env, options.use_ssh_key)
+
+    # copy the different diag component web files
+    for comp in compList:
+        key = 'GENERATE_DIAGS_{0}'.format(comp).upper()
+
+        if env[key].upper() in ['T','TRUE'] :
+            # create the toplevel remote directory if it doesn't already exist
+            create_top_level(env, comp)
+            comp_data = comp_lookup[comp]
+            # read the web_dirs files to get the paths
+            env = read_paths(env, comp_data)
+            copy_files(env, comp, comp_data)
+            activeList.append(comp)    
+            update_web_dirs(env, comp_data)
+
+#===================================
+
+if __name__ == "__main__":
+    options = commandline_options()
+    try:
+        status = main(options)
+        sys.exit(status)
+    except Exception as error:
+        print(str(error))
+        if options.backtrace:
+            traceback.print_exc()
+        sys.exit(1)

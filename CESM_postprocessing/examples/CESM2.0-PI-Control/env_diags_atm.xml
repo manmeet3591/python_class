@@ -1,0 +1,882 @@
+<?xml version="1.0"?>
+
+<config_definition>
+
+<!-- ======================================================================= -->
+<!-- env_diags_[component].xml                                               -->
+<!-- boolean (True / False) controls for enabling post processing tasks      -->
+<!-- ======================================================================= -->
+
+
+
+<!-- ======================================================================= -->
+<!-- Machine dependent diagnostics observation files root path -->
+<!-- ======================================================================= -->
+<entry id="ATMDIAG_DIAGOBSROOT" value="/glade/p/cesm/amwg/amwg_data" />
+
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Environmental variables that control which AMWG diagnostics to produce -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Diagnostic package version -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_DIAG_VERSION" value="150626" />
+       
+<!-- Description:  Controls whether to generate model vs. observations diagnostics -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_MODEL_VS_OBS" value="True" />
+       
+<!-- Description:  Controls whether to generate model vs. model diagnostics -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_MODEL_VS_MODEL" value="True" />
+       
+<!-- Description:  Remove any existing diagnostic files. -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_CLEANUP_FILES" value="False" />
+       
+<!-- Description:  Postprocessed files output root path. -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_OUTPUT_ROOT_PATH" value="$DOUT_S_ROOT/atm/proc" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Set test datset -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Identifying test casename -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_test_casename" value="$CASE" />
+       
+<!-- Description:  Identifying test model stream -->
+<!-- Valid Values: cam.h0,cam2.h0 -->
+<entry id="ATMDIAG_test_modelstream" value="cam.h0" />
+       
+<!-- Description:  Use variable time series files to compute test climos instead of history time slice input files. -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_TEST_TIMESERIES" value="True" />
+       
+<!-- Description:  Path to root of test case archive. -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_test_path_history" value="$DOUT_S_ROOT" />
+       
+<!-- Description:  subdir path concatenated to $ATMDIAG_test_path_history pointing to input history files, slice or series -->
+<!-- Valid Values: /atm/hist, /atm/proc/tseries/month_1, /atm/proc/tseries/monthly -->
+<entry id="ATMDIAG_test_path_history_subdir" value="/proc/tseries/month_1" />
+       
+<!-- Description:  Path to generated test climos -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_test_path_climo" value="$ATMDIAG_OUTPUT_ROOT_PATH/climo/$ATMDIAG_test_casename/" />
+       
+<!-- Description:  Path to generated diags. -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_test_path_diag" value="$ATMDIAG_OUTPUT_ROOT_PATH/diag/$ATMDIAG_test_casename/" />
+       
+<!-- Description:  Compute climatologies for the test case. -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_test_compute_climo" value="True" />
+       
+<!-- Description:  Compute zonal average climatologies for the test case (used with WACCM plots). -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_test_compute_zonalAvg" value="True" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Set control datset -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Identifying cntl casename -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_cntl_casename" value="b.e20.B1850.f09_g16.pi_control.all.123.lndbugfix" />
+       
+<!-- Description:  Identifying control model stream -->
+<!-- Valid Values: cam.h0,cam2.h0 -->
+<entry id="ATMDIAG_cntl_modelstream" value="cam.h0" />
+       
+<!-- Description:  Use variable time series files to compute control climos instead of history time slice input files. -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_CNTL_TIMESERIES" value="True" />
+       
+<!-- Description:  Path to root of control case archive. -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_cntl_path_history" value="/glade/scratch/aliceb/archive/$ATMDIAG_cntl_casename" />
+       
+<!-- Description:  subdir path concatenated to $ATMDIAG_cntl_path_history pointing to input history files, slice or series -->
+<!-- Valid Values: /atm/hist, /atm/proc/tseries/month_1, /atm/proc/tseries/monthly -->
+<entry id="ATMDIAG_cntl_path_history_subdir" value="/proc/tseries/month_1" />
+       
+<!-- Description:  Path to generated control climos -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_cntl_path_climo" value="$ATMDIAG_OUTPUT_ROOT_PATH/climo/$ATMDIAG_cntl_casename/" />
+       
+<!-- Description:  Compute climatologies for the control case. -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_cntl_compute_climo" value="True" />
+       
+<!-- Description:  Compute zonal average climatologies for the control case (used with WACCM plots). -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_cntl_compute_zonalAvg" value="True" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Set date ranges -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Start year for test case for diagnostics. -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_test_first_yr" value="2" />
+       
+<!-- Description:  The number of years of test data to be used for the diagnostics. -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_test_nyrs" value="8" />
+       
+<!-- Description:  Start year for control case for diagnostics. -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_cntl_first_yr" value="2" />
+       
+<!-- Description:  The number of years of control data to be used for the diagnostics. -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_cntl_nyrs" value="8" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Set input data paths -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Local machine fully qualified directory path to AMWG observational data. -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_OBS_DATA" value="$ATMDIAG_DIAGOBSROOT/obs_data" />
+       
+<!-- Description:  Local machine fully qualified directory path to AMWG comparison data. -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_CAM35_DATA" value="$ATMDIAG_DIAGOBSROOT/cam35_data" />
+       
+<!-- Description:  Local machine fully qualified directory path to AMWG mapping data. -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_MAP_DATA" value="$ATMDIAG_DIAGOBSROOT/map_files" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Set climatology specific settings -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Strip off unused variables in the climo files. -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_strip_off_vars" value="True" />
+       
+<!-- Description:  Weight the months by their number of days. -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_weight_months" value="True" />
+       
+<!-- Description:  Output NetCDF file format - either 'netcdf4c' (netcdf4 compressed (lev=1)),  'netcdf4' (netcdf classic), 'netcdf' (netcdf3 classic), or netcdfLarge for WACCM data sets. DEFAULT = 'netcdf'.  Applies to both test and control cases. -->
+<!-- Valid Values: netcdf, netcdf4, netcdf4c, netcdfLarge -->
+<entry id="ATMDIAG_netcdf_format" value="netcdf" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Select plot sets -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Toggle to produce all standard plotting sets. -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_all_sets" value="True" />
+       
+<!-- Description:  Run plotting set 1 - tables of global,regional means -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_set_1" value="False" />
+       
+<!-- Description:  Run plotting set 2 - implied transport plots -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_set_2" value="False" />
+       
+<!-- Description:  Run plotting set 3 - zonal mean line plots -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_set_3" value="False" />
+       
+<!-- Description:  Run plotting set 4 - vertical zonal mean contour plots -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_set_4" value="False" />
+       
+<!-- Description:  Run plotting set 4a - vertical zonal mean contour plots -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_set_4a" value="False" />
+       
+<!-- Description:  Run plotting set 5 - 2D-field contour plots -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_set_5" value="False" />
+       
+<!-- Description:  Run plotting set 6 - 2D-field vector plots -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_set_6" value="False" />
+       
+<!-- Description:  Run plotting set 7 - 2D-field polar plots -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_set_7" value="False" />
+       
+<!-- Description:  Run plotting set 8 - annual cycle (vs lat) contour plots -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_set_8" value="False" />
+       
+<!-- Description:  Run plotting set 9 - DJF-JJA difference plots -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_set_9" value="False" />
+       
+<!-- Description:  Run plotting set 10 - annual cycle line plots -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_set_10" value="False" />
+       
+<!-- Description:  Run plotting set 11 - miscellaneous plots -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_set_11" value="False" />
+       
+<!-- Description:  Run plotting set 12 - stations -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_set_12" value="False" />
+       
+<!-- Description:  Run plotting set 13 - COSP cloud simulator plots -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_set_13" value="False" />
+       
+<!-- Description:  Run plotting set 14 - Taylor diagram plots -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_set_14" value="False" />
+       
+<!-- Description:  Run plotting set 15 - Annual Cycle Plots for Select stations -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_set_15" value="False" />
+       
+<!-- Description:  Run plotting set 16 - Budget Terms for Select stations -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_set_16" value="False" />
+       
+<!-- Description:  Cntl case to compare against for Taylor Diagrams -->
+<!-- Valid Values: ccsm3_5/cam3_5 -->
+<entry id="ATMDIAG_TAYLOR_BASECASE" value="ccsm3_5" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Select WACCM plot sets -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Run all the WACCM sets -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_all_waccm_sets" value="False" />
+       
+<!-- Description:  Run WACCM set 1 - tables of regional min, max, means -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_wset_1" value="False" />
+       
+<!-- Description:  Run WACCM set 2 - vertical zonal mean contour plots (log scale) -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_wset_2" value="False" />
+       
+<!-- Description:  Run WACCM set 3 - vertical seasonal cycle contour plots (log scale) -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_wset_3" value="False" />
+       
+<!-- Description:  Run WACCM set 4 - vertical zonal mean contour plots (log scale) -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_wset_4" value="False" />
+       
+<!-- Description:  Run WACCM set 5 - horizontal contour plots -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_wset_5" value="False" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Select chemistry plot sets -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Run all the CHEM sets -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_all_chem_sets" value="False" />
+       
+<!-- Description:  Run CHEM set 1 - tables of global budgets -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_cset_1" value="False" />
+       
+<!-- Description:  Run CHEM set 2 - vertical zonal mean contour plots (log scale) -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_cset_2" value="False" />
+       
+<!-- Description:  Run CHEM set 3 - Ozonesonde comparisions -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_cset_3" value="False" />
+       
+<!-- Description:  Run CHEM set 4 - Column Ozone/CO Comparisons -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_cset_4" value="False" />
+       
+<!-- Description:  Run CHEM set 5 - NOAA Aircraft comparisons -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_cset_5" value="False" />
+       
+<!-- Description:  Run CHEM set 6 - Emmons Aircraft climatology -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_cset_6" value="False" />
+       
+<!-- Description:  Run CHEM set 7 - surface comparisons (ozone, co, improve) -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_cset_7" value="False" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Select which seasons to generate climatolgies and plots -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Create Annual plots - used by sets 1-7,11 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_plot_ANN_climo" value="True" />
+       
+<!-- Description:  Create winter plots - used by sets 1,3-7,9,11 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_plot_DJF_climo" value="True" />
+       
+<!-- Description:  Create Spring plots - used by sets 1,3-7,9,11 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_plot_MAM_climo" value="True" />
+       
+<!-- Description:  Create Summer plots - used by sets 1,3-7,9,11 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_plot_JJA_climo" value="True" />
+       
+<!-- Description:  Create Autum plots - used by sets 1,3-7,9,11 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_plot_SON_climo" value="True" />
+       
+<!-- Description:  Create monthly plots - used by sets 8,10,11,12 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_plot_MON_climo" value="True" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Customized plot settings -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  File type for plots -->
+<!-- Valid Values: ps/png -->
+<entry id="ATMDIAG_p_type" value="png" />
+       
+<!-- Description:  Output color type -->
+<!-- Valid Values: COLOR/MONO -->
+<entry id="ATMDIAG_c_type" value="COLOR" />
+       
+<!-- Description:  Plot color scheme -->
+<!-- Valid Values: default/blue_red/blue_yellow_red -->
+<entry id="ATMDIAG_color_bar" value="blue_red" />
+       
+<!-- Description:  Add timestamp to plots -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_time_stamp" value="False" />
+       
+<!-- Description:  Add tick marks and labels to plot sets 5,6,7 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_tick_marks" value="False" />
+       
+<!-- Description:  Use custom names for plots -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_custom_names" value="False" />
+       
+<!-- Description:  Custom test name for plots -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_test_name" value="$ATMDIAG_test_casename" />
+       
+<!-- Description:  Custom cntl name for plots -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_cntl_name" value="$ATMDIAG_cntl_casename" />
+       
+<!-- Description:  Create webpages -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_web_pages" value="True" />
+       
+<!-- Description:  Save temp netCDF files created by plotting scripts. -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_save_ncdfs" value="False" />
+       
+<!-- Description:  Compute significance -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_significance" value="False" />
+       
+<!-- Description:  Level of significance -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_sig_lvl" value="0.05" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Additional misc. settings -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Diagnostic package location. This must point to a parallel version of the AMWG diagnostics package -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_DIAG_HOME" value="$POSTPROCESS_PATH/atm_diag" />
+       
+<!-- Description:  Local machine path to AMWG diagnostics package NCL library directory. -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_NCLPATH" value="$ATMDIAG_DIAG_HOME" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Interpolation settings -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Interpolation method -->
+<!-- Valid Values: bilinear/patch/conserve -->
+<entry id="ATMDIAG_INTERP_METHOD" value="bilinear" />
+       
+<!-- Description:  Interpolate the test climo files -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_test_regrid" value="False" />
+       
+<!-- Description:  Original test climo resolution -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_test_res_in" value="$ATM_GRID" />
+       
+<!-- Description:  Interpolated test climo FV resolution -->
+<!-- Valid Values: 0.9x1.25/ -->
+<entry id="ATMDIAG_test_res_out" value="0.9x1.25" />
+       
+<!-- Description:  Interpolate the cntl climo files -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_cntl_regrid" value="False" />
+       
+<!-- Description:  Original cntl climo resolution -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_cntl_res_in" value="$ATM_GRID" />
+       
+<!-- Description:  Interpolated cntl climo FV resolution -->
+<!-- Valid Values: 0.9x1.25/ -->
+<entry id="ATMDIAG_cntl_res_out" value="0.9x1.25" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Stations to plot (set 12) -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Plot station western_alaska #24 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_western_alaska" value="False" />
+       
+<!-- Description:  Plot station whitehorse_canada #45 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_whitehorse_canada" value="False" />
+       
+<!-- Description:  Plot station resolute_canada #5 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_resolute_canada" value="True" />
+       
+<!-- Description:  Plot station thule_greenland #25 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_thule_greenland" value="True" />
+       
+<!-- Description:  Plot station new_dehli_india #51 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_new_dehli_india" value="False" />
+       
+<!-- Description:  Plot station kagoshima_japan #21 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_kagoshima_japan" value="False" />
+       
+<!-- Description:  Plot station tokyo_japan #30 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_tokyo_japan" value="False" />
+       
+<!-- Description:  Plot station midway_island #43 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_midway_island" value="True" />
+       
+<!-- Description:  Plot station shipP_gulf_alaska #36 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_shipP_gulf_alaska" value="True" />
+       
+<!-- Description:  Plot station san_francisco_ca #26 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_san_francisco_ca" value="True" />
+       
+<!-- Description:  Plot station denver_colorado #27 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_denver_colorado" value="False" />
+       
+<!-- Description:  Plot station great_plains_usa #7 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_great_plains_usa" value="True" />
+       
+<!-- Description:  Plot station oklahoma_city_ok #46 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_oklahoma_city_ok" value="False" />
+       
+<!-- Description:  Plot station miami_florida #34 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_miami_florida" value="True" />
+       
+<!-- Description:  Plot station new_york_usa #39 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_new_york_usa" value="False" />
+       
+<!-- Description:  Plot station w_north_atlantic #14 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_w_north_atlantic" value="False" />
+       
+<!-- Description:  Plot station shipC_n_atlantic #37 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_shipC_n_atlantic" value="False" />
+       
+<!-- Description:  Plot station azores #38 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_azores" value="False" />
+       
+<!-- Description:  Plot station gibraltor #47 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_gibraltor" value="False" />
+       
+<!-- Description:  Plot station london_england #28 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_london_england" value="False" />
+       
+<!-- Description:  Plot station western_europe #3 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_western_europe" value="True" />
+       
+<!-- Description:  Plot station crete #29 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_crete" value="False" />
+       
+<!-- Description:  Plot station central_india #8 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_central_india" value="False" />
+       
+<!-- Description:  Plot station madras_india #52 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_madras_india" value="False" />
+       
+<!-- Description:  Plot station diego_garcia #1 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_diego_garcia" value="True" />
+       
+<!-- Description:  Plot station cocos_islands #42 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_cocos_islands" value="True" />
+       
+<!-- Description:  Plot station christmas_island #40 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_christmas_island" value="False" />
+       
+<!-- Description:  Plot station singapore #15 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_singapore" value="False" />
+       
+<!-- Description:  Plot station danang_vietnam #53 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_danang_vietnam" value="False" />
+       
+<!-- Description:  Plot station manila #16 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_manila" value="False" />
+       
+<!-- Description:  Plot station darwin_australia #40 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_darwin_australia" value="False" />
+       
+<!-- Description:  Plot station yap_island #54 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_yap_island" value="True" />
+       
+<!-- Description:  Plot station port_moresby #22 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_port_moresby" value="False" />
+       
+<!-- Description:  Plot station truk_island #2 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_truk_island" value="True" />
+       
+<!-- Description:  Plot station raoui_island #44 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_raoui_island" value="False" />
+       
+<!-- Description:  Plot station gilbert_islands #17 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_gilbert_islands" value="False" />
+       
+<!-- Description:  Plot station marshall_islands #9 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_marshall_islands" value="True" />
+       
+<!-- Description:  Plot station samoa #35 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_samoa" value="False" />
+       
+<!-- Description:  Plot station hawaii #18 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_hawaii" value="True" />
+       
+<!-- Description:  Plot station panama #13 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_panama" value="True" />
+       
+<!-- Description:  Plot station mexico_city #48 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_mexico_city" value="False" />
+       
+<!-- Description:  Plot station lima_peru #33 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_lima_peru" value="False" />
+       
+<!-- Description:  Plot station san_juan_pr #23 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_san_juan_pr" value="False" />
+       
+<!-- Description:  Plot station recife_brazil #49 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_recife_brazil" value="False" />
+       
+<!-- Description:  Plot station ascension_island #0 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_ascension_island" value="True" />
+       
+<!-- Description:  Plot station ethiopia #4 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_ethiopia" value="False" />
+       
+<!-- Description:  Plot station nairobi_kenya #50 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_nairobi_kenya" value="False" />
+       
+<!-- Description:  Plot station heard_island #20 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_heard_island" value="False" />
+       
+<!-- Description:  Plot station w_desert_australia #6 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_w_desert_australia" value="False" />
+       
+<!-- Description:  Plot station sydney_australia #31 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_sydney_australia" value="False" />
+       
+<!-- Description:  Plot station christchurch_nz #32 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_christchurch_nz" value="False" />
+       
+<!-- Description:  Plot station easter_island #10 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_easter_island" value="True" />
+       
+<!-- Description:  Plot station san_paulo_brazil #19 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_san_paulo_brazil" value="False" />
+       
+<!-- Description:  Plot station falkland_islands #55 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_falkland_islands" value="False" />
+       
+<!-- Description:  Plot station mcmurdo_antarctica #11 -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_mcmurdo_antarctica" value="True" />
+       
+    
+  
+    
+  
+    
+  
+
+  
+    
+       
+    
+  
+    
+<!-- ======================================================================= -->
+<!-- Paleoclimate settings -->
+<!-- ======================================================================= -->
+       
+<!-- Description:  Create coastlines (sets 5,6,7,9) -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_paleo" value="False" />
+       
+<!-- Description:  Land value in test case -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_land_mask1" value="1" />
+       
+<!-- Description:  Land value in cntl case -->
+<!-- Valid Values:  -->
+<entry id="ATMDIAG_land_mask2" value="1" />
+       
+<!-- Description:  Create paleo conitinental difference plots. -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_diff_plots" value="False" />
+       
+<!-- Description:  Morrison-Gettleman Microphysics plots -->
+<!-- Valid Values: True/False -->
+<entry id="ATMDIAG_microph" value="False" />
+       
+    
+  
+    
+  
+    
+  
+
+
+</config_definition>
