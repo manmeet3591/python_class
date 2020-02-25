@@ -1,0 +1,213 @@
+#!/usr/bin/env python
+
+import sys,getopt,os,re,site,commands,string,fileinput
+
+py_cmd = 'python'
+
+#
+#  pynglex usage statement
+#
+def print_usage():
+  print """
+  usage: pynglex [options] [example_names]
+
+    options (must appear separately if more than one):
+      -a 
+        Run all of the exmaples.
+      -w type
+        Specifies an overriding output workstation type.  "type"
+        can be one of "ps", "pdf", "ncgm", "x11" (or ps, pdf,
+        ncgm, x11 - i.e. without quotes).  "ps" is the default.  
+        The -w option requires a type be specified.
+      -n
+        Copy over the source files, but do not execute.
+      --numeric
+        Deprecated.
+      --numpy
+        Deprecated.
+      -l
+        List out the available example names.
+      -h
+        Print out this usage message.
+
+    example names
+      A list of the examples you want to run.
+     
+          """
+
+#
+#  Create a dictionary from the getopt option list.
+#
+def crt_dic(olist):
+  d = {}
+  for i in xrange(len(olist)):
+    key = olist[i][0]
+    value = olist[i][1]
+#
+#  Check that the value for a -w option is valid.
+#
+    if (key == "-w"):
+      if (value != "x11" and value != "ncgm" and value != "png"  and \
+          value != "ps"  and value != "pdf"):
+        print "Invalid workstation type indicated with -w: ",value
+        sys.exit()
+    d[key] = value
+  return d
+
+#
+#  Main program.
+#
+argc = len(sys.argv)
+if (argc < 2):
+  print_usage()
+  sys.exit()
+
+#
+#  Parse the command line options (opts lists the options and
+#  pargs lists the non-option arguments).  The non-option arguments
+#  will be example name requests.
+#
+try:
+  opts,pargs = getopt.getopt(sys.argv[1:],"w:anlh",["numeric","type="])
+except getopt.GetoptError,e:
+  print "pynglex - command line parsing error: ", e
+  sys.exit()
+
+#
+#  Turn the option argument list into a dictionary.
+#
+odict = crt_dic(opts)
+
+#
+#  Print out the usage message for a -h option.
+#
+if (odict.has_key("-h")):
+  print_usage()
+  sys.exit()
+
+#
+# Since Numeric is no longer supported, print a message if somebody
+# references the --numeric option.
+#
+if (odict.has_key("--numeric")):
+  print "\nError: Numeric support has been dropped in this version of"
+  print "       Ngl and Nio. This option will no longer work."
+  sys.exit()
+
+try:
+  import Ngl
+except:
+  print "\nError: I am unable to import the NumPy version of Ngl via"
+  print "         'import Ngl'."
+  sys.exit()
+
+#
+#  Determine the root directory that contains the PyNGL
+#  supplemental files (example sources, data, fontcaps, etc.)
+#  If the PYNGL_NCARG environment variable is set, its setting
+#  will override the default of
+#
+#   sys.prefix + "/lib/python" + sys.version[:3] + "/site-packages/PyNGL/ncarg"
+#
+#  Primarily for internal use, setting the environment variable
+#  PYNGL_EXAMPLES will set the directory for the example sources
+#  and resource file sources only (not the data, fontcaps, etc.)
+#  This allows pynglex to point to a directory containing test 
+#  examples.
+#
+os.environ["NCARG_NCARG"] = Ngl.pynglpath("ncarg")
+example_dir = Ngl.pynglpath("examples")
+env_set_test = os.environ.get("PYNGL_EXAMPLES")
+if (env_set_test != None):
+  if (os.path.exists(env_set_test)):
+    example_dir = env_set_test
+  else:
+    print "  User-set directory PYNGL_EXAMPLES does not exist."
+    print "  Setting example directory to the default."
+    example_dir = Ngl.pynglpath("pynglex")
+
+#
+#  List out the available examples.
+#
+if (odict.has_key("-l")):
+  cmd = "ls " + example_dir + "/*.py"
+  file_names = string.split(commands.getoutput(cmd))
+  print "\n  pynglex:  The available examples are:"
+  for i in xrange(len(file_names)):
+    base_name = os.path.basename(file_names[i][0:-1])
+    print "   ",os.path.splitext(base_name)[0]
+  print ""
+  sys.exit()
+
+#
+#  Loop through the list of desired examples and execute.
+#
+if (odict.has_key("-a")):
+#
+#  Get the names of all the examples and put them into pargs.
+#  In the case that there is no -a flag, then pargs will be
+#  the specified list of example names.
+#
+  cmd = "ls " + example_dir + "/*.py"
+  file_names = string.split(commands.getoutput(cmd))
+  pargs = []
+  for i in xrange(len(file_names)):
+    base_name = os.path.basename(file_names[i][0:-1])
+    example_name = os.path.splitext(base_name)[0]
+    pargs.append(example_name)
+
+#
+#  At this point pargs is either the list of examples as specified
+#  on the command line if there is no -a option specified, or 
+#  a list of all examples if there is a -a option specified.
+#
+#  We loop over the requested examples in pargs.
+#
+for i in xrange(len(pargs)):
+  print "\nPyNGL example <" + pargs[i] + ">."
+  efile = example_dir + "/" + pargs[i] + ".py"
+  if (not (os.path.exists(efile))):
+    print "pynglex: <" + pargs[i] + "> is not a known example."
+    sys.exit()
+  print "\n   Copying " + pargs[i] + ".py"
+  os.system("cp " + efile + " .")
+#
+#  Copy over the res file if it is there.
+#
+  res_file_test = example_dir + "/" + pargs[i] + ".res"
+  if (os.path.exists(res_file_test)):
+    print "   Copying " + pargs[i] + ".res\n"
+    os.system("cp " + res_file_test + " .")
+#
+#  We are finished if a -n option was specified, since all
+#  of the source files have been copied over.  Otherwise,
+#  invoke python.
+#
+  if (not (odict.has_key("-n"))):
+#
+#  If the -w option was given, then change the output workstation.
+#
+    if (odict.has_key("-w")):
+#
+#  Replace the output workstation type with that requested.
+#
+      for line in fileinput.input([pargs[i] + ".py"],1):
+        if (re.search("^wks_type = ",line) != None):
+          print 'wks_type = "' + odict["-w"] + '"'
+        else:
+          print line,
+
+#
+    cmd = py_cmd + " " + pargs[i] + ".py"
+    print 'Executing "' + cmd + '"'
+#
+#  Execute python.
+#
+    os.system(cmd)
+    if (pargs[i] == "ngl08p"):
+      print """
+   ngl08p produces output to x11, ps, pdf, and ncgm workstations.
+   A -w option on pynglex is ignored for ngl08p.
+      """
+ 
+    print 'Finished "' + cmd + '"'

@@ -1,0 +1,6 @@
+include setup.py
+include README.md
+include data/sysresfile
+include version
+recursive-include src *
+recursive-include examples *.py *.res

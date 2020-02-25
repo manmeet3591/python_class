@@ -1,0 +1,185 @@
+cells:
+
+- markdown: |
+    # Introduction to Mayavi
+
+    **Prabhu Ramachandran**
+
+    **Department of Aerospace Engineering, IIT Bombay**
+    <br/>
+
+    **The STFC Data Intensive, AI and ML Summer School 2019**
+
+    **Sussex University, UK, July 2019**
+
+  metadata:
+    slideshow:
+      slide_type: slide
+
+
+- markdown: |
+    ## Material
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+
+    <center>
+    <a href="https://github.com/prabhuramachandran/mayavi-tutorial">
+    github.com/prabhuramachandran/mayavi-tutorial</a>
+    </center>
+
+  metadata:
+    slideshow:
+      slide_type: slide
+
+
+- markdown: |
+    ## Outline
+
+    - What is Mayavi?
+    - What can it do for you?
+
+  metadata:
+    slideshow:
+      slide_type: slide
+
+- markdown: |
+
+    <center>
+    <img width="90%" src="MEDIA/m2/m2_app3_3.png"/>
+    </center>
+
+  metadata:
+    slideshow:
+      slide_type: slide
+
+- markdown: |
+    <center>
+    <img width="90%" src="MEDIA/m2/ipython_mayavi.png"/>
+    </center>
+
+  metadata:
+    slideshow:
+      slide_type: slide
+
+
+- markdown: |
+    <center>
+    <img width="90%" src="MEDIA/m2/lorenz_ui1.png"/>
+    </center>
+
+  metadata:
+    slideshow:
+      slide_type: slide
+
+- markdown: |
+    <center>
+    <img width="90%" src="MEDIA/m2/m2_envisage.png"/>
+    </center>
+
+  metadata:
+    slideshow:
+      slide_type: slide
+
+- markdown: |
+    <center>
+    <img width="90%" src="MEDIA/m2/mayavi_jupyter.png"/>
+    </center>
+
+  metadata:
+    slideshow:
+      slide_type: slide
+
+- markdown: |
+    ## History
+
+    - Mayavi-1.0 released in 2001
+    - Rewritten to use ETS in 2004-2005
+    - Gael Varoquaux: 2007 - 2012
+    - Contributions from Deepak Surti and other Enthought developers
+    - Many other contributors through PRs
+    - Support from Enthought over the years
+    - IIT Bombay supports with an academic environment
+
+  metadata:
+    slideshow:
+      slide_type: slide
+
+- markdown: |
+    ## Information
+
+    - Old package: around for > 15 years
+    - Seamless NumPy integration
+    - Fully scriptable
+    - Can be used with a GUI
+    - https://github.com/enthought/mayavi
+    - Uses VTK (http://www.vtk.org)
+    - Provides a GUI for VTK
+
+  metadata:
+    slideshow:
+      slide_type: slide
+
+- markdown: |
+    ## Visualization features
+
+    - Supports a variety of datasets
+    - Polygonal data, structured grids, unstructured grids
+    - Many visualization algorithms
+    - Scalar, vector, and tensor visualization
+    - Volume rendering
+
+  metadata:
+    slideshow:
+      slide_type: slide
+
+- markdown: |
+    ## Other features
+
+    * Automatic script recording
+    * wxPython and Qt/PySide support
+    * Powerful command line options
+    * Off-screen support
+
+  metadata:
+    slideshow:
+      slide_type: slide
+
+- markdown: |
+    ## Overview of architecture
+    <center>
+    <img width="80%" height="80%" src="MEDIA/m2/layers.png"/>
+    </center>
+
+  metadata:
+    slideshow:
+      slide_type: slide
+
+- markdown: |
+    ## What next?
+
+    - Get started with `mlab`
+    - Simple animation
+    - Understanding the mayavi pipeline
+    - Making your own datasets
+    - Learning the filters and modules by example
+
+  metadata:
+    slideshow:
+      slide_type: slide
+
+# The lines below here may be deleted if you do not need them.
+# ---------------------------------------------------------------------------
+metadata:
+  celltoolbar: Slideshow
+  language: python
+  livereveal:
+    controls: true
+    help: true
+    scroll: true
+    slideNumber: true
+    transition: none
+nbformat: 4
+nbformat_minor: 2
