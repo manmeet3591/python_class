@@ -37,4 +37,4 @@ Some of the tutorials to follow
 33. https://uwescience.github.io/sat-image-analysis/resources.html
 34. Radar data analysis https://data.world/datasets/radar https://arm-doe.github.io/pyart/ https://docs.wradlib.org/
 35. https://www.earthdatascience.org/courses/use-data-open-source-python/multispectral-remote-sensing/landsat-in-Python/
-36. Deep Learning on Satellite Imagery https://github.com/robmarkcole/satellite-image-deep-learning
+36. Deep Learning on Satellite Imagery https://github.com/robmarkcole/satellite-image-deep-learning 
