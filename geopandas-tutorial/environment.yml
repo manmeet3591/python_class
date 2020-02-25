@@ -1,0 +1,15 @@
+channels:
+  - conda-forge
+dependencies:
+  - python=3.7
+  - geopandas
+  - contextily
+  - rasterio
+  - cartopy
+  - geoplot
+  - mapclassify
+  - folium
+  - ipyleaflet
+  - rasterstats
+  - jupyter
+  - jupyterlab
