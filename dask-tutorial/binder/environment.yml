@@ -1,0 +1,33 @@
+name: dask-tutorial
+channels:
+  - conda-forge
+dependencies:
+  - python=3.7
+  - nodejs
+  - jupyterlab>=1.0
+  - numpy>=1.16.4
+  - h5py
+  - scipy>=1.3.0
+  - toolz
+  - bokeh>=1.2.0
+  - dask=2.8.1
+  - dask-labextension>=1.0.3
+  - distributed=2.8.1
+  - notebook
+  - matplotlib
+  - Pillow
+  - pandas>=0.24.2
+  - pandas-datareader
+  - pytables
+  - scikit-learn>=0.21.1
+  - scikit-image>=0.15.0
+  - snakeviz
+  - ujson
+  - pip
+  - s3fs=0.4.0
+  - fastparquet=0.3.2
+  - dask-ml=1.1.1
+  - ipywidgets>=7.5
+  - cachey
+  - python-graphviz
+  - zarr
