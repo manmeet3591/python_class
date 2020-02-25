@@ -1,0 +1,16 @@
+Center: 34 Japanese Meteorological Agency - Tokyo (RSMC)
+Table_version: 3
+----------------------------------------------------------
+1   sp   Surface pressure (Pa)
+6   zz   Geopotential (m**2 s**-2)
+7   gh   Geopotential Height (gpm)
+8   hs   Geometric Height (m)
+11  tt   Temperature (K)
+33  uu   U velocity (m s**-1)
+34  vv   V velocity (m s**-1)
+51  qq   Specific humidity (kg kg**-1)
+52  rh   Relative humidity (%)
+76  clwc Cloud liquid water content (kg kg**-1)
+237 o3   Ozone mass mixing ratio (kg kg**-1)
+220 lnsp Logarithm of surface pressure ()
+

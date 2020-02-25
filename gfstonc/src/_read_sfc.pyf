@@ -1,0 +1,38 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module _read_sfc ! in 
+    interface  ! in :_read_sfc.pyf
+        subroutine read_header(filename,nlons,nlats,lsoil,idate,fhour) ! in :_read_sfc.pyf:read_sfc.f90
+            use sfcio_module, only: sfcio_srhead,sfcio_srdata,sfcio_sclose,sfcio_srohdc,sfcio_aldata,sfcio_head,sfcio_axdata,sfcio_sropen,sfcio_data
+            character*500 intent(in) :: filename
+            integer intent(out) :: nlons
+            integer intent(out) :: nlats
+            integer intent(out) :: lsoil
+            integer dimension(4),intent(out) :: idate
+            real intent(out) :: fhour
+        end subroutine read_header
+        subroutine read_griddata(filename,nlons,nlats,lsoil,grids2d,grids2d_desc,grids2d_name,grids3d,grids3d_desc,grids3d_name) ! in :_read_sfc.pyf:read_sfc.f90
+            use kinds, only: r_kind
+            use sfcio_module, only: sfcio_srhead,sfcio_srdata,sfcio_sclose,sfcio_srohdc,sfcio_aldata,sfcio_head,sfcio_axdata,sfcio_swohdc,sfcio_sropen,sfcio_data
+            character*500 intent(in) :: filename
+            integer intent(in) :: nlons
+            integer intent(in) :: nlats
+            integer intent(in) :: lsoil
+            real(kind=r_kind) dimension(nlons,nlats,32),intent(out),depend(nlons,nlats) :: grids2d
+            integer dimension(32,72),intent(out) :: grids2d_desc
+            integer dimension(32,8),intent(out) :: grids2d_name
+            real(kind=r_kind) dimension(nlons,nlats,lsoil,3),intent(out),depend(nlons,nlats,lsoil) :: grids3d
+            integer dimension(3,72),intent(out) :: grids3d_desc
+            integer dimension(3,72),intent(out) :: grids3d_name
+        end subroutine read_griddata
+        subroutine strtoarr(strin,chararr,n_str) ! in :_read_sfc.pyf:read_sfc.f90
+            character*n_str intent(in) :: strin
+            integer dimension(n_str),intent(out),depend(n_str) :: chararr
+            integer intent(in) :: n_str
+        end subroutine strtoarr
+    end interface 
+end python module _read_sfc
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/

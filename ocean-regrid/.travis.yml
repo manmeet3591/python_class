@@ -1,0 +1,27 @@
+language: python
+python:
+  # We don't actually use the Travis Python, but this keeps it organized.
+  - "2.7"
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install libnetcdf-dev gfortran -y
+
+install:
+  - wget http://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a
+
+  - conda env create -f regrid.yml
+  - source activate regrid
+  - wget http://s3-ap-southeast-2.amazonaws.com/dp-drop/ocean-regrid/grid_defs.tar.gz
+  - tar zxf grid_defs.tar.gz
+  - cd contrib
+  - source build_esmf.sh
+  - cd ../
+
+script: python -m pytest -s test/

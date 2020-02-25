@@ -1,0 +1,15 @@
+Center: European Center for Medium-Range Weather Forecasts
+Table_version: 128
+----------------------------------------------------------
+129 zz  Geopotential (m**2 s**-2)
+156 gh Geopotential Height (gpm)
+130 tt  Temperature (K)
+131 uu U velocity (m s**-1)
+132 vv V velocity (m s**-1)
+133 qq Specific humidity (kg kg**-1)
+157 rh Relative humidity (%)
+246 clwc Cloud liquid water content (kg kg**-1)
+247 ciwc Cloud ice water content (kg kg**-1)
+203 o3 Ozone mass mixing ratio (kg kg**-1)
+134 sp Surface pressure (Pa)
+152 lnsp Logarithm of surface pressure ()

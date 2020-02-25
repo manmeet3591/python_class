@@ -1,0 +1,3 @@
+{
+"ExcludedVar": ["VD01","AEROD_v","AODDUST","AODDUST1","AODDUST3","AODVIS","ICEFRAC","LANDFRAC","OCNFRAC","PHIS","SFDMS","SFH2O2","SFH2SO4","SFSO2","SFSOAG","SFbc_a1","SFbc_a4","SFnum_a4","SFpom_a1","SFpom_a4","SFso4_a1","SFso4_a2","SFso4_a3","SFsoa_a1","SFsoa_a2","SNOWHICE","SOLIN","bc_a4_CLXF","bc_a4_CMXF","num_a4_CLXF","num_a4_CMXF","pom_a4_CLXF","pom_a4_CMXF","ncl_a2SF","ncl_a1SF","TSMN","TSMX","SFdst_a1","ncl_a3SF","SFdst_a3","dst_a2SF", "LWCF","FSNT","FLUT","SFnum_a2","SWCF","SFncl_a3","SFnum_a1","FSUTOA","TGCLDCWP","num_a1SF","num_a3SF","dst_a3SF","dst_a1SF","num_a2SF","SFdst_a2","SL","Z3","ZM_CLUBB","ZT_CLUBB","PS","PSL","SNOWHLND"]
+}

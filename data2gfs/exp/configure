@@ -1,0 +1,34 @@
+#!/bin/sh
+#----------------------------------------
+# setting for exp shell script
+#----------------------------------------
+export OMP_NUM_THREADS=4
+
+# output gfs file parameter
+export JCAP=${JCAP:-62}
+export LEVS=${LEVS:-64}
+
+# directory setting
+export DATADIR=${DATADIR:-/axs/miyachi/data}
+export FIXGLOBAL=${FIXGLOBAL:-/home/miyachi/ncepgsm_nwprod/fix}
+export FIX=${FIX:-/home/miyachi/work/data2gfs/fix}
+export COMOUT=${COMOUT:-/home/miyachi/gfsinit}
+export DATA=${DATA:-/tmp/$(whoami)/data2gfs/$$}
+
+PGM=/home/miyachi/work/data2gfs/exec/data2gfs
+
+export OROGRAPHY=${OROGRAPHY:-${FIXGLOBAL}/global_orography.t${JCAP}.grb}
+export O3CLIM=${O3CLIM:-${FIXGLOBAL}/global_o3clim.txt}
+
+case $JCAP in
+    574 ) LONB=1760 && LATB=880 ;;
+    382 ) LONB=1152 && LATB=576 ;;
+    254 ) LONB=768  && LATB=384 ;;
+    190 ) LONB=576  && LATB=288 ;;
+    126 ) LONB=384  && LATB=190 ;;
+    62 )  LONB=192  && LATB=94  ;;
+    * ) echo 'No fix file exit JCAP='$JCAP
+	exit 1 ;;
+esac	
+
+export ERRSCRIPT=${ERRSCRIPT:-'eval [ $err = 0 ]'}
