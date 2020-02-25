@@ -1,0 +1,60 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module _toms623 ! in 
+    interface  ! in :_toms623
+        subroutine reordr(n,iflag,a,b,c,d,ind) ! in :_toms623:_toms623.f90
+            integer, intent(in) :: n
+            integer, intent(in) :: iflag
+            double precision dimension(n), intent(inout) :: a
+            double precision dimension(n), intent(inout) :: b
+            double precision dimension(n), intent(inout) :: c
+            double precision dimension(n), intent(inout) :: d
+            integer dimension(n), intent(out) :: ind
+        end subroutine reordr
+        subroutine trans(n,rlat,rlon,x,y,z) ! in :_toms623:_toms623.f90
+            integer, intent(in) :: n
+            double precision dimension(n), intent(in) :: rlat
+            double precision dimension(n), intent(in) :: rlon
+            double precision dimension(n), intent(out) :: x
+            double precision dimension(n), intent(out) :: y
+            double precision dimension(n), intent(out) :: z
+        end subroutine trans
+        subroutine trmesh(n,x,y,z,iadj,iend,ier) ! in :_toms623:_toms623.f90
+            integer, intent(in) :: n
+            double precision dimension(n), intent(in) :: x
+            double precision dimension(n), intent(in) :: y
+            double precision dimension(n), intent(in) :: z
+            integer dimension(6*(n-1)), intent(out) :: iadj
+            integer dimension(n), intent(out) :: iend
+            integer, intent(out) :: ier
+        end subroutine trmesh
+        subroutine intrpc1_n(npts,nptso,olats,olons,x,y,z,data,iadj,iend,odata,ierr)
+           integer, intent(in) :: npts, nptso
+           integer, intent(out) :: ierr
+           double precision, intent(in), dimension(nptso) :: olats,olons
+           double precision, intent(in), dimension(npts) :: x,y,z,data
+           double precision, intent(out), dimension(nptso) :: odata
+           integer, intent(in), dimension(npts) :: iend
+           integer, intent(in), dimension(6*(npts-1)) :: iadj
+        end subroutine intrpc1_n
+        subroutine intrpc0_n(npts,nptso,olats,olons,x,y,z,data,iadj,iend,odata,ierr)
+           integer, intent(in) :: npts, nptso
+           integer, intent(out) :: ierr
+           double precision, intent(in), dimension(nptso) :: olats,olons
+           double precision, intent(in), dimension(npts) :: x,y,z,data
+           double precision, intent(out), dimension(nptso) :: odata
+           integer, intent(in), dimension(npts) :: iend
+           integer, intent(in), dimension(6*(npts-1)) :: iadj
+        end subroutine intrpc0_n
+        subroutine intrpnn_n(npts,nptso,olats,olons,x,y,z,data,iadj,iend,odata,ierr)
+           integer, intent(in) :: npts, nptso
+           integer, intent(out) :: ierr
+           double precision, intent(in), dimension(nptso) :: olats,olons
+           double precision, intent(in), dimension(npts) :: x,y,z,data
+           double precision, intent(out), dimension(nptso) :: odata
+           integer, intent(in), dimension(npts) :: iend
+           integer, intent(in), dimension(6*(npts-1)) :: iadj
+        end subroutine intrpnn_n
+    end interface 
+end python module _toms623
