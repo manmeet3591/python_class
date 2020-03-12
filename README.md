@@ -38,4 +38,10 @@ Some of the tutorials to follow
 34. Radar data analysis https://data.world/datasets/radar https://arm-doe.github.io/pyart/ https://docs.wradlib.org/
 35. https://www.earthdatascience.org/courses/use-data-open-source-python/multispectral-remote-sensing/landsat-in-Python/
 36. Deep Learning on Satellite Imagery https://github.com/robmarkcole/satellite-image-deep-learning
-37. Google Earth Engine https://sites.google.com/view/eeindia-advanced-summit/summit-resources 
+37. Google Earth Engine https://sites.google.com/view/eeindia-advanced-summit/summit-resources
+
+Projects for the class
+
+https://docs.google.com/spreadsheets/d/1m2ZIJ_To8IbE18Teb70a7BVZg0o29sOM6rlgFkE2b3E/edit#gid=0
+
+https://docs.google.com/document/d/12h9bcIdBPJUFc_fJssJe8hVBzledq2Dtk5-9OpKHbfg/edit 
