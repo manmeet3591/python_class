@@ -41,6 +41,7 @@ Some of the tutorials to follow
 37. Google Earth Engine https://sites.google.com/view/eeindia-advanced-summit/summit-resources
 38. https://geohackweek.github.io/GEE-Python-API/
 39. https://github.com/google/earthengine-api/tree/master/python/examples/ipynb
+40. http://www.jerico-ri.eu/download/summer%20school%20-%20the%20netherlands/Genna%20Donchyts%20-%20GEE%20Training.pdf
 
 Projects for the class
 
