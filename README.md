@@ -39,6 +39,8 @@ Some of the tutorials to follow
 35. https://www.earthdatascience.org/courses/use-data-open-source-python/multispectral-remote-sensing/landsat-in-Python/
 36. Deep Learning on Satellite Imagery https://github.com/robmarkcole/satellite-image-deep-learning
 37. Google Earth Engine https://sites.google.com/view/eeindia-advanced-summit/summit-resources
+38. https://geohackweek.github.io/GEE-Python-API/
+
 
 Projects for the class
 
