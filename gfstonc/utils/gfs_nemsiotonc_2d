@@ -1,0 +1,71 @@
+#!/usr/bin/env python
+import time
+import numpy as np
+from netCDF4 import Dataset
+from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
+from ncepnemsio import ncepnemsio_2d
+
+# convert ncep gfs nemsio file to netcdf (with compression)
+
+parser = ArgumentParser(description='convert 2D NCEP GFS NEMSIO file to netCDF4 file (with compression)', formatter_class=ArgumentDefaultsHelpFormatter)
+parser.add_argument('-i','--input',help='input 2D NEMSIO file name',type=str,required=True)
+parser.add_argument('-o','--output',help='output netCDF4 file name',type=str,required=False)
+parser.add_argument('-v','--verbose',help='verbose',action='store_true',required=False)
+args = parser.parse_args()
+
+filename_nemsio = args.input
+verbose = args.verbose
+filename_nc = args.input + '.nc4' if args.output is None else args.output
+
+if verbose:
+    t1 = time.clock()
+
+try:
+    nemsiofile = ncepnemsio_2d(filename_nemsio)
+    grids = nemsiofile.griddata()
+except IOError:
+    raise RuntimeError('Unable to open %s' % filename_nemsio)
+
+nrecs,nlats,nlons = grids.shape
+
+if verbose:
+    t2 = time.clock()
+    print 'time to read data',t2-t1
+    print 'nrecs,nlats,nlons',nrecs,nlats,nlons
+
+ncfile = Dataset(filename_nc,'w',format='NETCDF4_CLASSIC')
+ncfile.analysis_date=int(nemsiofile.idate)
+ncfile.forecast_hour=nemsiofile.fhour
+ncfile.createDimension('latitude',nlats)
+ncfile.createDimension('longitude',nlons)
+lats = ncfile.createVariable('latitude',np.float32,'latitude')
+lats.desc = 'latitude in degrees'
+lats.units = 'degrees_north'
+lats[:] = nemsiofile.lats
+lons = ncfile.createVariable('longitude',np.float32,'longitude')
+lons.desc = 'longitude in degrees'
+lons.units = 'degrees_east'
+lons[:] = nemsiofile.lons
+vars = []
+varnames = []
+for nrec in range(nrecs):
+    varname = nemsiofile.recnames[nrec]+'_'+nemsiofile.reclevtypes[nrec].replace (" ", "_")
+    varname = varname.replace(".","")
+# CSD - updated to make variable name consistent with model soil layer number
+#    ncount = 1
+#    varname_orig = varname
+#    while varname in varnames: 
+    if (nemsiofile.reclevtypes[nrec]=='soil layer'): 
+        varname = "%s_%s" % (varname,nemsiofile.reclevs[nrec])
+#        ncount += 1
+    varnames.append(varname)
+    if verbose:
+        print('%s %s min/max %s %s' % (nrec,varname,grids[nrec].min(), grids[nrec].max()))
+    vars.append( ncfile.createVariable(varname,np.float32,('latitude','longitude',),zlib=True) )
+    vars[nrec][:] = grids[nrec]
+    ncfile.sync()
+ncfile.close()
+if verbose:
+    t3 = time.clock()
+    print 'time to write netcdf file',t3-t2
+    print 'total time',t3-t1

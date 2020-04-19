@@ -1,0 +1,127 @@
+#!/usr/bin/env python
+import time
+import numpy as np
+from netCDF4 import Dataset
+from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
+from ncepnemsio import ncepnemsio_3d
+
+# convert ncep gfs nemsio file to netcdf (with compression)
+
+parser = ArgumentParser(description='convert 3D NCEP GFS NEMSIO file to netCDF4 file (with compression)', formatter_class=ArgumentDefaultsHelpFormatter)
+parser.add_argument('-i','--input',help='input 3D NEMSIO file name',type=str,required=True)
+parser.add_argument('-o','--output',help='output netCDF4 file name',type=str,required=False)
+parser.add_argument('-v','--verbose',help='verbose',action='store_true',required=False)
+args = parser.parse_args()
+
+filename_nemsio = args.input
+verbose = args.verbose
+filename_nc = args.input + '.nc4' if args.output is None else args.output
+
+if verbose:
+    t1 = time.clock()
+
+try:
+    nemsiofile = ncepnemsio_3d(filename_nemsio)
+except IOError:
+    raise RuntimeError('Unable to open %s' % filename_nemsio)
+
+ug,vg,tempg,zsg,psg,qg,ozg,cwmrg,dpk,prs = nemsiofile.griddata()
+nlevs,nlats,nlons = ug.shape
+
+if verbose:
+    t2 = time.clock()
+    print 'time to read data',t2-t1
+    print 'nlevs,nlats,nlons',nlevs,nlats,nlons
+    print 'max spfh,o3mr,cwmr',qg.max(),ozg.max(),cwmrg.max()
+    print 'pres min/max',prs.min(), prs.max()
+
+ak = nemsiofile.vcoord[0]
+bk = nemsiofile.vcoord[1]
+
+ncfile = Dataset(filename_nc,'w',format='NETCDF4_CLASSIC')
+ncfile.analysis_date=int(nemsiofile.idate)
+ncfile.forecast_hour=nemsiofile.fhour
+ncfile.createDimension('latitude',nlats)
+ncfile.createDimension('longitude',nlons)
+ncfile.createDimension('level',nlevs)
+ncfile.createDimension('levelplusone',nlevs+1)
+lats = ncfile.createVariable('latitude',np.float32,'latitude')
+lats.desc = 'latitude in degrees'
+lats.units = 'degrees_north'
+lats[:] = nemsiofile.lats
+lons = ncfile.createVariable('longitude',np.float32,'longitude')
+lons.desc = 'longitude in degrees'
+lons.units = 'degrees_east'
+lons[:] = nemsiofile.lons
+levs = ncfile.createVariable('level',np.int32,'level')
+levs.desc = 'integer hybrid level number'
+levs.units = 'unitless'
+levs[:] = np.arange(1,nlevs+1)
+a_k = ncfile.createVariable('ak',np.float32,'levelplusone')
+a_k[:] = ak
+a_k.desc = 'a_k in hybrid coordinate definition'
+a_k.units = 'Pa'
+b_k = ncfile.createVariable('bk',np.float32,'levelplusone')
+b_k[:] = bk
+b_k.desc = 'b_k in hybrid coordinate definition'
+b_k.units = 'unitless'
+ps = ncfile.createVariable('ps',np.float32,('latitude','longitude',),zlib=True,\
+    least_significant_digit=2)
+if verbose:
+    print 'ps min/max',psg.min(), psg.max()
+ps.units = 'Pa'
+ps.desc = 'surface pressure'
+ps[:] = psg
+zs = ncfile.createVariable('zs',np.float32,('latitude','longitude',),zlib=True,\
+    least_significant_digit=2)
+if verbose:
+    print 'zs min/max',zsg.min(), zsg.max()
+ps.desc = 'surface orography'
+ps.units = 'm'
+zs[:] = zsg
+dp = ncfile.createVariable('dpres',np.float32,('level','latitude','longitude',),zlib=True,\
+    least_significant_digit=2,chunksizes=(1,nlats,nlons))
+dp.desc = 'pressure thickness of layer'
+dp.units = 'Pa'
+dp[:] = dpk
+pl = ncfile.createVariable('pres',np.float32,('level','latitude','longitude',),zlib=True,\
+    least_significant_digit=2,chunksizes=(1,nlats,nlons))
+pl.desc = 'layer pressure'
+pl.units = 'Pa'
+pl[:] = prs
+u = ncfile.createVariable('ugrd',np.float32,('level','latitude','longitude',),zlib=True,\
+    least_significant_digit=2,chunksizes=(1,nlats,nlons))
+u.desc = 'zonal wind'
+u.units = 'meters per second'
+u[:] = ug
+v = ncfile.createVariable('vgrd',np.float32,('level','latitude','longitude',),zlib=True,\
+    least_significant_digit=2,chunksizes=(1,nlats,nlons))
+v.desc = 'meridional wind'
+v.units = 'meters per second'
+v[:] = vg
+tv = ncfile.createVariable('virtemp',np.float32,('level','latitude','longitude',),zlib=True,\
+    least_significant_digit=2,chunksizes=(1,nlats,nlons))
+tv.desc = 'virtual temperature'
+tv.units = 'degrees K'
+tv[:] = tempg
+q = ncfile.createVariable('spfh',np.float32,('level','latitude','longitude',),zlib=True,\
+    least_significant_digit=6,chunksizes=(1,nlats,nlons))
+q.units = 'kg per kg'
+q.desc = 'specific humidity'
+q[:] = qg
+oz = ncfile.createVariable('o3mr',np.float32,('level','latitude','longitude',),zlib=True,\
+    least_significant_digit=8,chunksizes=(1,nlats,nlons))
+oz.desc = 'ozone mass mixing ratio'
+oz.units = 'kg per kg'
+oz[:] = ozg
+cwmr = ncfile.createVariable('cwmr',np.float32,('level','latitude','longitude',),zlib=True,\
+    least_significant_digit=6,chunksizes=(1,nlats,nlons))
+cwmr.desc = 'total cloud condensate mixing ratio'
+cwmr.units = 'kg per kg'
+cwmr[:] = cwmrg
+ncfile.close()
+
+if verbose:
+    t4 = time.clock()
+    print 'time to write netcdf file',t4-t2
+    print 'total time',t4-t1

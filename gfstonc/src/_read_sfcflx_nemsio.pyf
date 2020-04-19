@@ -1,0 +1,50 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module _read_sfcflx_nemsio ! in 
+    interface  ! in :_read_sfcflx_nemsio.pyf
+        subroutine read_nemsio_header(filename,nlons,nlats,nrecs,idate,nfhour) ! in :_read_sfcflx_nemsio.pyf:read_sfcflx_nemsio.f90
+            use nemsio_module, only: nemsio_getfilehead,nemsio_open,nemsio_close,nemsio_realkind,nemsio_getheadvar,nemsio_gfile,nemsio_readrecv,nemsio_init
+            use kinds, only: r_kind
+            character*500 intent(in) :: filename
+            integer intent(out) :: nlons
+            integer intent(out) :: nlats
+            integer intent(out) :: nrecs
+            integer dimension(7),intent(out) :: idate
+            integer intent(out) :: nfhour
+        end subroutine read_nemsio_header
+        subroutine read_nemsio_latlons(filename,nlons,nlats,lats,lons) ! in :_read_sfcflx_nemsio.pyf:read_sfcflx_nemsio.f90
+            use nemsio_module, only: nemsio_getfilehead,nemsio_open,nemsio_close,nemsio_realkind,nemsio_getheadvar,nemsio_gfile,nemsio_readrecv,nemsio_init
+            use kinds, only: r_kind
+            character*500 intent(in) :: filename
+            integer intent(in) :: nlons
+            integer intent(in) :: nlats
+            real(kind=nemsio_realkind) dimension(nlats),intent(out),depend(nlats) :: lats
+            real(kind=nemsio_realkind) dimension(nlons),intent(out),depend(nlons) :: lons
+        end subroutine read_nemsio_latlons
+        subroutine read_nemsio_varnames(filename,nrecs,irecnames,ireclevtypes, ireclevs) ! in :_read_sfcflx_nemsio.pyf:read_sfcflx_nemsio.f90
+            use nemsio_module, only: nemsio_getfilehead,nemsio_open,nemsio_close,nemsio_realkind,nemsio_getheadvar,nemsio_gfile,nemsio_readrecv,nemsio_init
+            use kinds, only: r_kind
+            character*500 intent(in) :: filename
+            integer intent(in) :: nrecs
+            integer dimension(nrecs,32),intent(out) :: irecnames
+            integer dimension(nrecs,32),intent(out) :: ireclevtypes
+            integer dimension(nrecs),intent(out) :: ireclevs
+        end subroutine read_nemsio_varnames
+        subroutine read_nemsio_2dgriddata(filename,nlons,nlats,nrecs,irecnames,ireclevtypes,reclevs,grids) ! in :_read_sfcflx_nemsio.pyf:read_sfcflx_nemsio.f90
+            use nemsio_module, only: nemsio_open,nemsio_close,nemsio_realkind,nemsio_getheadvar,nemsio_gfile,nemsio_readrecv,nemsio_init
+            use kinds, only: r_kind
+            character*500 intent(in) :: filename
+            integer intent(in) :: nlons
+            integer intent(in) :: nlats
+            integer intent(in) :: nrecs
+            integer dimension(nrecs,32),intent(in) :: irecnames
+            integer dimension(nrecs,32),intent(in) :: ireclevtypes
+            integer dimension(nrecs), intent(in) :: reclevs
+            real(kind=r_kind) dimension(nlons,nlats,nrecs),intent(out),depend(nlons,nlats,nrecs) :: grids
+        end subroutine read_nemsio_2dgriddata
+    end interface 
+end python module _read_sfcflx_nemsio
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/
