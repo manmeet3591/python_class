@@ -1,0 +1,22 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module _write_sfc ! in 
+    interface  ! in :_write_sfc
+        subroutine write_griddata(filename,nlons,nlats,lsoil,idate,fhour,grids2d,grids3d) ! in :_write_sfc:write_sfc.f90
+            use kinds, only: r_kind
+            use sfcio_module, only: sfcio_swdata,sfcio_sclose,sfcio_srohdc,sfcio_aldata,sfcio_swopen,sfcio_head,sfcio_axdata,sfcio_swhead,sfcio_swohdc,sfcio_data
+            character*(*) intent(in) :: filename
+            integer, optional,intent(in),check(shape(grids2d,0)==nlons),depend(grids2d) :: nlons=shape(grids2d,0)
+            integer, optional,intent(in),check(shape(grids2d,1)==nlats),depend(grids2d) :: nlats=shape(grids2d,1)
+            integer, optional,intent(in),check(shape(grids3d,2)==lsoil),depend(grids3d) :: lsoil=shape(grids3d,2)
+            integer dimension(4),intent(in) :: idate
+            real intent(in) :: fhour
+            real(kind=r_kind) dimension(nlons,nlats,32),intent(in) :: grids2d
+            real(kind=r_kind) dimension(nlons,nlats,lsoil,3),intent(in),depend(nlons,nlats) :: grids3d
+        end subroutine write_griddata
+    end interface 
+end python module _write_sfc
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/

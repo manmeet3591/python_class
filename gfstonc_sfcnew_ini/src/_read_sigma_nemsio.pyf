@@ -1,0 +1,56 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module _read_sigma_nemsio ! in 
+    interface  ! in :_read_sigma_nemsio.pyf
+        subroutine read_nemsio_header(filename,nlons,nlats,nlevs,idate,nfhour) ! in :_read_sigma_nemsio.pyf:read_sigma_nemsio.f90
+            use nemsio_module, only: nemsio_getfilehead,nemsio_open,nemsio_close,nemsio_realkind,nemsio_getheadvar,nemsio_gfile,nemsio_readrecv,nemsio_init
+            use kinds, only: r_kind
+            character*500 intent(in) :: filename
+            integer intent(out) :: nlons
+            integer intent(out) :: nlats
+            integer intent(out) :: nlevs
+            integer dimension(7),intent(out) :: idate
+            integer intent(out) :: nfhour
+        end subroutine read_nemsio_header
+        subroutine read_nemsio_coords(filename,nlons,nlats,nlevs,vcoord,lats,lons) ! in :_read_sigma_nemsio.pyf:read_sigma_nemsio.f90
+            use nemsio_module, only: nemsio_getfilehead,nemsio_open,nemsio_close,nemsio_realkind,nemsio_getheadvar,nemsio_gfile,nemsio_readrecv,nemsio_init
+            use kinds, only: r_kind
+            character*500 intent(in) :: filename
+            integer intent(in) :: nlons
+            integer intent(in) :: nlats
+            integer intent(in) :: nlevs
+            real(kind=nemsio_realkind) dimension(nlevs + 1,3,2),intent(out),depend(nlevs) :: vcoord
+            real(kind=nemsio_realkind) dimension(nlats),intent(out),depend(nlats) :: lats
+            real(kind=nemsio_realkind) dimension(nlons),intent(out),depend(nlons) :: lons
+        end subroutine read_nemsio_coords
+        subroutine read_nemsio_griddata(filename,nlons,nlats,nlevs,ug,vg,tempg,zsg,psg,qg,ozg,cwmrg,dpresg,presg) ! in :_read_sigma_nemsio.pyf:read_sigma_nemsio.f90
+            use nemsio_module, only: nemsio_open,nemsio_close,nemsio_realkind,nemsio_getheadvar,nemsio_gfile,nemsio_readrecv,nemsio_init
+            use kinds, only: r_kind
+            character*500 intent(in) :: filename
+            integer intent(in) :: nlons
+            integer intent(in) :: nlats
+            integer intent(in) :: nlevs
+            real(kind=r_kind) dimension(nlons,nlats,nlevs),intent(out),depend(nlons,nlats,nlevs) :: ug
+            real(kind=r_kind) dimension(nlons,nlats,nlevs),intent(out),depend(nlons,nlats,nlevs) :: vg
+            real(kind=r_kind) dimension(nlons,nlats,nlevs),intent(out),depend(nlons,nlats,nlevs) :: tempg
+            real(kind=r_kind) dimension(nlons,nlats),intent(out),depend(nlons,nlats) :: zsg
+            real(kind=r_kind) dimension(nlons,nlats),intent(out),depend(nlons,nlats) :: psg
+            real(kind=r_kind) dimension(nlons,nlats,nlevs),intent(out),depend(nlons,nlats,nlevs) :: qg
+            real(kind=r_kind) dimension(nlons,nlats,nlevs),intent(out),depend(nlons,nlats,nlevs) :: ozg
+            real(kind=r_kind) dimension(nlons,nlats,nlevs),intent(out),depend(nlons,nlats,nlevs) :: cwmrg
+            real(kind=r_kind) dimension(nlons,nlats,nlevs),intent(out),depend(nlons,nlats,nlevs) :: dpresg
+            real(kind=r_kind) dimension(nlons,nlats,nlevs),intent(out),depend(nlons,nlats,nlevs) :: presg
+        end subroutine read_nemsio_griddata
+        subroutine onedtotwod(data1,data2,nlons,nlats) ! in :_read_sigma_nemsio.pyf:read_sigma_nemsio.f90
+            use nemsio_module, only: nemsio_realkind
+            real(kind=nemsio_realkind) dimension(nlons*nlats),intent(in),depend(nlons,nlats) :: data1
+            real(kind=nemsio_realkind) dimension(nlons,nlats),intent(out),depend(nlons,nlats) :: data2
+            integer intent(in) :: nlons
+            integer intent(in) :: nlats
+        end subroutine onedtotwod
+    end interface 
+end python module _read_sigma_nemsio
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/

@@ -1,0 +1,65 @@
+#!/usr/bin/env python
+import time
+import numpy as np
+from netCDF4 import Dataset
+from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
+from ncepsfc import ncepsfc
+
+# convert ncep gfs surface file to netcdf
+
+parser = ArgumentParser(description='convert NCEP GFS surface file to netCDF4 file (with compression)', formatter_class=ArgumentDefaultsHelpFormatter)
+parser.add_argument('-i','--input',help='input surface file name',type=str,required=True)
+parser.add_argument('-o','--output',help='output netCDF4 file name',type=str,required=False)
+parser.add_argument('-v','--verbose',help='verbose',action='store_true',required=False)
+args = parser.parse_args()
+
+filename_sfcanl = args.input
+verbose = args.verbose
+filename_nc = args.input + '.nc4' if args.output is None else args.output
+
+if verbose:
+    t1 = time.clock()
+
+sfcfile = ncepsfc(filename_sfcanl)
+grids2d,grids2d_desc,grids2d_name,grids3d,grids3d_desc,grids3d_name = sfcfile.griddata()
+nlats = sfcfile.nlats; nlons = sfcfile.nlons; lsoil = sfcfile.lsoil
+
+if verbose:
+    t2 = time.clock()
+    print 'time to read data',t2-t1
+    print 'lsoil,nlats,nlons',lsoil,nlats,nlons
+
+ncfile = Dataset(filename_nc,'w',format='NETCDF4_CLASSIC')
+ncfile.analysis_date=int(sfcfile.idate)
+ncfile.forecast_hour=sfcfile.fhour
+ncfile.createDimension('latitude',nlats)
+ncfile.createDimension('longitude',nlons)
+ncfile.createDimension('layer',lsoil)
+lats = ncfile.createVariable('latitude',np.float32,'latitude')
+lats.units = 'degrees_north'
+lats.desc = 'latitude in degrees'
+lats[:] = sfcfile.lats
+lons = ncfile.createVariable('longitude',np.float32,'longitude')
+lons.units = 'degrees_east'
+lons.desc = 'longitude in degrees'
+lons[:] = sfcfile.lons
+levs = ncfile.createVariable('layer',np.int32,'layer')
+levs.units = 'integer'
+levs.desc = 'integer soil layer number'
+levs[:] = np.arange(1,lsoil+1)
+
+for ngrid in range(grids2d.shape[0]):
+    var = ncfile.createVariable(grids2d_name[ngrid],np.float32,('latitude','longitude',),zlib=True)
+    var.desc = grids2d_desc[ngrid]
+    var[:] = grids2d[ngrid]
+for ngrid in range(grids3d.shape[0]):
+    var = ncfile.createVariable(grids3d_name[ngrid],np.float32,('layer','latitude','longitude',),zlib=True)
+    var.desc = grids3d_desc[ngrid]
+    var[:] = grids3d[ngrid]
+
+ncfile.close()
+
+if verbose:
+    t4 = time.clock()
+    print 'time to write netcdf file',t4-t2
+    print 'total time',t4-t1
