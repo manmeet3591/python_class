@@ -44,6 +44,7 @@ Some of the tutorials to follow
 40. http://www.jerico-ri.eu/download/summer%20school%20-%20the%20netherlands/Genna%20Donchyts%20-%20GEE%20Training.pdf
 41. https://www.earthdatascience.org/tutorials/intro-google-earth-engine-python-api/
 42. Installing Google Earth Engine and requesting access https://github.com/google/earthengine-api/issues/27
+43. https://github.com/giswqs/earthengine-py-notebooks
 
 Projects for the class
 
