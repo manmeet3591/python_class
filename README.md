@@ -45,6 +45,7 @@ Some of the tutorials to follow
 41. https://www.earthdatascience.org/tutorials/intro-google-earth-engine-python-api/
 42. Installing Google Earth Engine and requesting access https://github.com/google/earthengine-api/issues/27
 43. https://github.com/giswqs/earthengine-py-notebooks
+44. Google Earth Engine image to numpy https://mygeoblog.com/2019/08/21/google-earth-engine-to-numpy/
 
 Projects for the class
 
