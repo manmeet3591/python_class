@@ -4,14 +4,14 @@
 python module _read_sigma_spec ! in 
     interface  ! in :_read_sigma_spec
         subroutine get_vcoord(filename,nlevs,nvcoord,vcoord) ! in :_read_sigma_spec:read_sigma_spec.f90
-            use sigio_module, only: sigio_sropen,sigio_data,sigio_head,sigio_srohdc,sigio_sclose,sigio_srdata,sigio_axdata,sigio_swohdc,sigio_srhead,sigio_aldata
+            use sigio_module, only: sigio_sclose,sigio_swohdc,sigio_head,sigio_srhead,sigio_srohdc,sigio_aldata,sigio_data,sigio_sropen,sigio_srdata,sigio_axdata
             character*500 intent(in) :: filename
             integer intent(in) :: nlevs
             integer intent(in) :: nvcoord
             real dimension(nlevs + 1,nvcoord),intent(out),depend(nlevs,nvcoord) :: vcoord
         end subroutine get_vcoord
         subroutine read_header(filename,nlons,nlats,nlevs,ntrunc,nvcoord,idate,fhour) ! in :_read_sigma_spec:read_sigma_spec.f90
-            use sigio_module, only: sigio_sropen,sigio_data,sigio_head,sigio_srohdc,sigio_sclose,sigio_srdata,sigio_axdata,sigio_swohdc,sigio_srhead,sigio_aldata
+            use sigio_module, only: sigio_sclose,sigio_swohdc,sigio_head,sigio_srhead,sigio_srohdc,sigio_aldata,sigio_data,sigio_sropen,sigio_srdata,sigio_axdata
             character*500 intent(in) :: filename
             integer intent(out) :: nlons
             integer intent(out) :: nlats
@@ -22,8 +22,8 @@ python module _read_sigma_spec ! in
             real intent(out) :: fhour
         end subroutine read_header
         subroutine read_specdata(filename,ntrunc,nlevs,vrtspec,divspec,virtempspec,topospec,lnpsspec,spfhumspec,ozspec,cwmrspec) ! in :_read_sigma_spec:read_sigma_spec.f90
+            use sigio_module, only: sigio_sclose,sigio_swohdc,sigio_head,sigio_srhead,sigio_srohdc,sigio_aldata,sigio_data,sigio_sropen,sigio_srdata,sigio_axdata
             use kinds, only: r_kind
-            use sigio_module, only: sigio_sropen,sigio_data,sigio_head,sigio_srohdc,sigio_sclose,sigio_srdata,sigio_axdata,sigio_swohdc,sigio_srhead,sigio_aldata
             character*500 intent(in) :: filename
             integer intent(in) :: ntrunc
             integer intent(in) :: nlevs
@@ -37,9 +37,9 @@ python module _read_sigma_spec ! in
             complex(kind=r_kind) dimension((ntrunc+1)*(ntrunc+2)/2,nlevs),intent(out),depend(ntrunc,nlevs) :: cwmrspec
         end subroutine read_specdata
         subroutine read_griddata(filename,nlons,nlats,nlevs,ug,vg,tempg,zsg,psg,qg,ozg,cwmrg) ! in :_read_sigma_spec:read_sigma_spec.f90
+            use shtns, only: getuv,grdtospec,spectogrd,shtns_init,nlm
+            use sigio_module, only: sigio_sclose,sigio_swohdc,sigio_head,sigio_srhead,sigio_srohdc,sigio_aldata,sigio_data,sigio_sropen,sigio_srdata,sigio_axdata
             use kinds, only: r_kind
-            use sigio_module, only: sigio_sropen,sigio_data,sigio_head,sigio_srohdc,sigio_sclose,sigio_srdata,sigio_axdata,sigio_swohdc,sigio_srhead,sigio_aldata
-            use shtns, only: getuv,grdtospec,nlm,shtns_init,spectogrd
             character*500 intent(in) :: filename
             integer intent(in) :: nlons
             integer intent(in) :: nlats
@@ -54,7 +54,7 @@ python module _read_sigma_spec ! in
             real(kind=r_kind) dimension(nlons,nlats,nlevs),intent(out),depend(nlons,nlats,nlevs) :: cwmrg
         end subroutine read_griddata
         subroutine copyspecin(rspecdata,cspecdata,ndimspec,norm) ! in :_read_sigma_spec:read_sigma_spec.f90
-            use kinds, only: r_single,r_kind
+            use kinds, only: r_kind,r_single
             real(kind=r_single) dimension(2 * ndimspec),intent(in) :: rspecdata
             complex(kind=r_kind) dimension(ndimspec),intent(out),depend(ndimspec) :: cspecdata
             integer, optional,intent(in),check((len(rspecdata))/(2)>=ndimspec),depend(rspecdata) :: ndimspec=(len(rspecdata))/(2)

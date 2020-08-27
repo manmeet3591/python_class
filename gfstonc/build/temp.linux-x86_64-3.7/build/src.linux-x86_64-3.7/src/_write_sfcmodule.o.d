@@ -1,5 +1,5 @@
-build/temp.linux-x86_64-3.7/build/src.linux-x86_64-3.7/src/_read_sigma_specmodule.o: \
- build/src.linux-x86_64-3.7/src/_read_sigma_specmodule.c \
+build/temp.linux-x86_64-3.7/build/src.linux-x86_64-3.7/src/_write_sfcmodule.o: \
+ build/src.linux-x86_64-3.7/src/_write_sfcmodule.c \
  /home/manmeet/anaconda3/include/python3.7m/Python.h \
  /home/manmeet/anaconda3/include/python3.7m/patchlevel.h \
  /home/manmeet/anaconda3/include/python3.7m/pyconfig.h \
