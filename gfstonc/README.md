@@ -25,3 +25,7 @@ home directory).
 `utils/gfs_nemsiotonc_2d` converts gfs 2d nemsio files to netcdf.
 
 Watch where setup.py installs the utility scripts, you will need to add that location to your `$PATH`.
+
+makeinfo package is mandatory, which can be installed on ubuntu by the following command
+sudo apt-get install texinfo
+
