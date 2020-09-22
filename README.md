@@ -46,6 +46,7 @@ Some of the tutorials to follow
 42. Installing Google Earth Engine and requesting access https://github.com/google/earthengine-api/issues/27
 43. https://github.com/giswqs/earthengine-py-notebooks
 44. Google Earth Engine image to numpy https://mygeoblog.com/2019/08/21/google-earth-engine-to-numpy/
+45. Stippling to show statistical significance https://github.com/bradyrx/esmtools/issues/13
 
 Projects for the class
 
