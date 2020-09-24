@@ -48,8 +48,7 @@ bench-fftw-bench.o: fftw-bench.c /usr/include/stdc-predef.h \
  /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h /usr/include/alloca.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
- /usr/include/x86_64-linux-gnu/bits/stdlib.h ../api/fftw3.h \
- /usr/lib/gcc/x86_64-linux-gnu/5/include/omp.h
+ /usr/include/x86_64-linux-gnu/bits/stdlib.h ../api/fftw3.h
 
 /usr/include/stdc-predef.h:
 
@@ -180,5 +179,3 @@ bench-fftw-bench.o: fftw-bench.c /usr/include/stdc-predef.h \
 /usr/include/x86_64-linux-gnu/bits/stdlib.h:
 
 ../api/fftw3.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/5/include/omp.h:

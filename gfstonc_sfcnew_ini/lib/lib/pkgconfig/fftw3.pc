@@ -1,4 +1,4 @@
-prefix=/home/manmeet/Documents/gfstonc/lib
+prefix=/home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include

@@ -1,4 +1,7 @@
 #!/bin/bash
+export FFTW3_LIBDIR=/home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/lib
+
+export SHTNS_LIBDIR=/home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/lib                                                                                                    
 cd src
 
 gfortran -O3 -march=native -O3 -fPIC -c kinds.f90

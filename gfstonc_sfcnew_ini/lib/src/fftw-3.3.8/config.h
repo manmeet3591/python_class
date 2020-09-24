@@ -92,7 +92,7 @@
 /* #undef HAVE_ARMV8_PMCCNTR_EL0 */
 
 /* Define to enable AVX optimizations. */
-#define HAVE_AVX 1
+/* #undef HAVE_AVX */
 
 /* Define to enable AVX2 optimizations. */
 /* #undef HAVE_AVX2 */
@@ -226,7 +226,7 @@
 /* #undef HAVE_NEON */
 
 /* Define if OpenMP is enabled */
-#define HAVE_OPENMP 1
+/* #undef HAVE_OPENMP */
 
 /* Define to 1 if you have the `posix_memalign' function. */
 #define HAVE_POSIX_MEMALIGN 1

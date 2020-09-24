@@ -159,11 +159,11 @@ libfftw3_omp_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
 	$(libfftw3_omp_la_CFLAGS) $(CFLAGS) \
 	$(libfftw3_omp_la_LDFLAGS) $(LDFLAGS) -o $@
+##am_libfftw3_omp_la_rpath =  \
+##	-rpath \
+##	$(libdir)
 #am_libfftw3_omp_la_rpath =  \
-#	-rpath \
-#	$(libdir)
-am_libfftw3_omp_la_rpath =  \
-	-rpath $(libdir)
+#	-rpath $(libdir)
 libfftw3_threads_la_DEPENDENCIES =  \
 	../libfftw3.la
 am_libfftw3_threads_la_OBJECTS =  \
@@ -231,21 +231,21 @@ am__can_run_installinfo = \
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/missing aclocal-1.15
+ACLOCAL = ${SHELL} /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8/missing aclocal-1.15
 ALLOCA = 
 ALTIVEC_CFLAGS = 
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
 AS = as
-AUTOCONF = ${SHELL} /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/missing autoconf
-AUTOHEADER = ${SHELL} /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/missing autoheader
-AUTOMAKE = ${SHELL} /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/missing automake-1.15
+AUTOCONF = ${SHELL} /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8/missing autoconf
+AUTOHEADER = ${SHELL} /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8/missing autoheader
+AUTOMAKE = ${SHELL} /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8/missing automake-1.15
 AVX2_CFLAGS = 
 AVX512_CFLAGS = 
 AVX_128_FMA_CFLAGS = 
-AVX_CFLAGS = -mavx
-AWK = gawk
+AVX_CFLAGS = 
+AWK = mawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -O3 -fomit-frame-pointer -mtune=native -malign-double -fstrict-aliasing -fno-schedule-insns
@@ -268,7 +268,7 @@ EXEEXT =
 F77 = f77
 FFLAGS = -g -O2
 FGREP = /bin/grep -F
-FLIBS =  -L/opt/intel/compilers_and_libraries_2020.0.166/linux/mpi/intel64/libfabric/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/5 -L/usr/lib/gcc/x86_64-linux-gnu/5/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/5/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/opt/intel/clck/2019.6/lib/intel64 -L/opt/intel/compilers_and_libraries_2020.0.166/linux/mpi/intel64/libfabric/lib -L/opt/intel/compilers_and_libraries_2020.0.166/linux/ipp/lib/intel64 -L/opt/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin -L/opt/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin -L/opt/intel/compilers_and_libraries_2020.0.166/linux/tbb/lib/intel64/gcc4.8 -L/opt/intel/compilers_and_libraries_2020.0.166/linux/daal/lib/intel64_lin -L/opt/intel/compilers_and_libraries_2020.0.166/linux/daal/../tbb/lib/intel64_lin/gcc4.8 -L/usr/lib/gcc/x86_64-linux-gnu/5/../../.. -lgfortran -lm -lquadmath
+FLIBS =  -L/opt/intel/compilers_and_libraries_2020.0.166/linux/mpi/intel64/libfabric/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/5 -L/usr/lib/gcc/x86_64-linux-gnu/5/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/5/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/opt/intel/compilers_and_libraries_2020.0.166/linux/mpi/intel64/libfabric/lib -L/opt/intel/compilers_and_libraries_2020.0.166/linux/ipp/lib/intel64 -L/opt/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin -L/opt/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin -L/opt/intel/compilers_and_libraries_2020.0.166/linux/tbb/lib/intel64/gcc4.8 -L/opt/intel/compilers_and_libraries_2020.0.166/linux/daal/lib/intel64_lin -L/opt/intel/compilers_and_libraries_2020.0.166/linux/daal/../tbb/lib/intel64_lin/gcc4.8 -L/usr/lib/gcc/x86_64-linux-gnu/5/../../.. -lgfortran -lm -lquadmath
 GREP = /bin/grep
 INDENT = 
 INSTALL = /usr/bin/install -c
@@ -288,7 +288,7 @@ LN_S = ln -s
 LTLIBOBJS = 
 LT_SYS_LIBRARY_PATH = 
 MAINT = #
-MAKEINFO = ${SHELL} /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/missing makeinfo
+MAKEINFO = ${SHELL} /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8/missing makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /bin/mkdir -p
 MPICC = 
@@ -300,7 +300,7 @@ NMEDIT =
 OBJDUMP = objdump
 OBJEXT = o
 OCAMLBUILD = 
-OPENMP_CFLAGS = -fopenmp
+OPENMP_CFLAGS = 
 OTOOL = 
 OTOOL64 = 
 PACKAGE = fftw
@@ -328,10 +328,10 @@ STRIP = strip
 THREADLIBS = 
 VERSION = 3.3.8
 VSX_CFLAGS = 
-abs_builddir = /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/threads
-abs_srcdir = /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/threads
-abs_top_builddir = /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8
-abs_top_srcdir = /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8
+abs_builddir = /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8/threads
+abs_srcdir = /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8/threads
+abs_top_builddir = /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8
+abs_top_srcdir = /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_DUMPBIN = 
@@ -362,7 +362,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/install-sh
+install_sh = ${SHELL} /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -371,7 +371,7 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /home/manmeet/Documents/gfstonc/lib
+prefix = /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib
 program_transform_name = s,x,x,
 psdir = ${docdir}
 runstatedir = ${localstatedir}/run
@@ -385,8 +385,8 @@ top_builddir = ..
 top_srcdir = ..
 AM_CPPFLAGS = -I $(top_srcdir)
 AM_CFLAGS = $(STACK_ALIGN_CFLAGS)
-#FFTWOMPLIB = 
-FFTWOMPLIB = libfftw3_omp.la
+FFTWOMPLIB = 
+#FFTWOMPLIB = libfftw3_omp.la
 ##noinst_LTLIBRARIES = libfftw3_threads.la
 #lib_LTLIBRARIES = libfftw3_threads.la $(FFTWOMPLIB)
 lib_LTLIBRARIES = $(FFTWOMPLIB)

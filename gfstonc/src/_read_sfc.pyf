@@ -4,7 +4,7 @@
 python module _read_sfc ! in 
     interface  ! in :_read_sfc
         subroutine read_header(filename,nlons,nlats,lsoil,idate,fhour) ! in :_read_sfc:read_sfc.f90
-            use sfcio_module, only: sfcio_sclose,sfcio_head,sfcio_srhead,sfcio_srohdc,sfcio_aldata,sfcio_data,sfcio_sropen,sfcio_srdata,sfcio_axdata
+            use sfcio_module, only: sfcio_data,sfcio_srohdc,sfcio_srhead,sfcio_axdata,sfcio_aldata,sfcio_sclose,sfcio_sropen,sfcio_srdata,sfcio_head
             character*500 intent(in) :: filename
             integer intent(out) :: nlons
             integer intent(out) :: nlats
@@ -13,8 +13,8 @@ python module _read_sfc ! in
             real intent(out) :: fhour
         end subroutine read_header
         subroutine read_griddata(filename,nlons,nlats,lsoil,grids2d,grids2d_desc,grids2d_name,grids3d,grids3d_desc,grids3d_name) ! in :_read_sfc:read_sfc.f90
-            use sfcio_module, only: sfcio_sclose,sfcio_swohdc,sfcio_head,sfcio_srhead,sfcio_srohdc,sfcio_aldata,sfcio_data,sfcio_sropen,sfcio_srdata,sfcio_axdata
             use kinds, only: r_kind
+            use sfcio_module, only: sfcio_data,sfcio_srohdc,sfcio_srhead,sfcio_axdata,sfcio_aldata,sfcio_sclose,sfcio_sropen,sfcio_srdata,sfcio_swohdc,sfcio_head
             character*500 intent(in) :: filename
             integer intent(in) :: nlons
             integer intent(in) :: nlats

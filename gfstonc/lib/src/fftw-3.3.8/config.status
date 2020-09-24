@@ -437,11 +437,11 @@ Copyright (C) 2012 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8'
+ac_pwd='/home/manmeet/Documents/python_class/gfstonc/lib/src/fftw-3.3.8'
 srcdir='.'
 INSTALL='/usr/bin/install -c'
 MKDIR_P='/bin/mkdir -p'
-AWK='gawk'
+AWK='mawk'
 test -n "$AWK" || AWK=awk
 # The default lists apply if the user does not specify any file.
 ac_need_defaults=:
@@ -679,8 +679,8 @@ postuninstall_cmds=''
 finish_cmds='PATH="\$PATH:/sbin" ldconfig -n $libdir'
 finish_eval=''
 hardcode_into_libs='yes'
-sys_lib_search_path_spec='/opt/intel/compilers_and_libraries_2020.0.166/linux/mpi/intel64/libfabric/lib /usr/lib/gcc/x86_64-linux-gnu/5 /usr/lib/x86_64-linux-gnu /usr/lib /lib/x86_64-linux-gnu /lib /opt/intel/clck/2019.6/lib/intel64 /opt/intel/compilers_and_libraries_2020.0.166/linux/ipp/lib/intel64 /opt/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin /opt/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin /opt/intel/compilers_and_libraries_2020.0.166/linux/tbb/lib/intel64/gcc4.8 /opt/intel/compilers_and_libraries_2020.0.166/linux/daal/lib/intel64_lin /opt/intel/compilers_and_libraries_2020.0.166/linux/tbb/lib/intel64_lin/gcc4.8 '
-configure_time_dlsearch_path='/lib /usr/lib /usr/local/cuda-10.1/targets/x86_64-linux/lib /usr/local/cuda-9.0/targets/x86_64-linux/lib /usr/lib/x86_64-linux-gnu/libfakeroot /lib/i386-linux-gnu /usr/lib/i386-linux-gnu /lib/i686-linux-gnu /usr/lib/i686-linux-gnu /usr/local/lib /usr/local/ssl/lib /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu /usr/lib/nvidia-418 /usr/lib32/nvidia-418 /usr/lib/nvidia-418 /usr/lib32/nvidia-418 /lib32 /usr/lib32 /libx32 /usr/libx32 '
+sys_lib_search_path_spec='/opt/intel/compilers_and_libraries_2020.0.166/linux/mpi/intel64/libfabric/lib /usr/lib/gcc/x86_64-linux-gnu/5 /usr/lib/x86_64-linux-gnu /usr/lib /lib/x86_64-linux-gnu /lib /opt/intel/compilers_and_libraries_2020.0.166/linux/ipp/lib/intel64 /opt/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin /opt/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin /opt/intel/compilers_and_libraries_2020.0.166/linux/tbb/lib/intel64/gcc4.8 /opt/intel/compilers_and_libraries_2020.0.166/linux/daal/lib/intel64_lin /opt/intel/compilers_and_libraries_2020.0.166/linux/tbb/lib/intel64_lin/gcc4.8 '
+configure_time_dlsearch_path='/lib /usr/lib /usr/local/cuda-9.0/targets/x86_64-linux/lib /usr/lib/x86_64-linux-gnu/libfakeroot /lib/i386-linux-gnu /usr/lib/i386-linux-gnu /lib/i686-linux-gnu /usr/lib/i686-linux-gnu /usr/local/lib /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu /usr/lib/nvidia-418 /usr/lib32/nvidia-418 /usr/lib/nvidia-418 /usr/lib32/nvidia-418 /lib32 /usr/lib32 '
 configure_time_lt_sys_library_path=''
 hardcode_action='immediate'
 enable_dlopen='unknown'
@@ -935,11 +935,11 @@ S["acx_pthread_config"]=""
 S["OPENMP_CFLAGS"]="-fopenmp"
 S["FLIBS"]=" -L/opt/intel/compilers_and_libraries_2020.0.166/linux/mpi/intel64/libfabric/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/5 -L/usr/lib/gcc/x86_64-linu"\
 "x-gnu/5/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/5/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gn"\
-"u -L/usr/lib/../lib -L/opt/intel/clck/2019.6/lib/intel64 -L/opt/intel/compilers_and_libraries_2020.0.166/linux/mpi/intel64/libfabric/lib -L/opt/inte"\
-"l/compilers_and_libraries_2020.0.166/linux/ipp/lib/intel64 -L/opt/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin -L/opt/int"\
-"el/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin -L/opt/intel/compilers_and_libraries_2020.0.166/linux/tbb/lib/intel64/gcc4.8 -L/opt/"\
-"intel/compilers_and_libraries_2020.0.166/linux/daal/lib/intel64_lin -L/opt/intel/compilers_and_libraries_2020.0.166/linux/daal/../tbb/lib/intel64_li"\
-"n/gcc4.8 -L/usr/lib/gcc/x86_64-linux-gnu/5/../../.. -lgfortran -lm -lquadmath"
+"u -L/usr/lib/../lib -L/opt/intel/compilers_and_libraries_2020.0.166/linux/mpi/intel64/libfabric/lib -L/opt/intel/compilers_and_libraries_2020.0.166/"\
+"linux/ipp/lib/intel64 -L/opt/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin -L/opt/intel/compilers_and_libraries_2020.0.166"\
+"/linux/mkl/lib/intel64_lin -L/opt/intel/compilers_and_libraries_2020.0.166/linux/tbb/lib/intel64/gcc4.8 -L/opt/intel/compilers_and_libraries_2020.0."\
+"166/linux/daal/lib/intel64_lin -L/opt/intel/compilers_and_libraries_2020.0.166/linux/daal/../tbb/lib/intel64_lin/gcc4.8 -L/usr/lib/gcc/x86_64-linux-"\
+"gnu/5/../../.. -lgfortran -lm -lquadmath"
 S["ac_ct_F77"]="f77"
 S["FFLAGS"]="-g -O2"
 S["F77"]="f77"
@@ -1061,17 +1061,17 @@ S["am__tar"]="$${TAR-tar} chof - \"$$tardir\""
 S["AMTAR"]="$${TAR-tar}"
 S["am__leading_dot"]="."
 S["SET_MAKE"]=""
-S["AWK"]="gawk"
+S["AWK"]="mawk"
 S["mkdir_p"]="$(MKDIR_P)"
 S["MKDIR_P"]="/bin/mkdir -p"
 S["INSTALL_STRIP_PROGRAM"]="$(install_sh) -c -s"
 S["STRIP"]="strip"
-S["install_sh"]="${SHELL} /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/install-sh"
-S["MAKEINFO"]="${SHELL} /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/missing makeinfo"
-S["AUTOHEADER"]="${SHELL} /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/missing autoheader"
-S["AUTOMAKE"]="${SHELL} /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/missing automake-1.15"
-S["AUTOCONF"]="${SHELL} /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/missing autoconf"
-S["ACLOCAL"]="${SHELL} /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/missing aclocal-1.15"
+S["install_sh"]="${SHELL} /home/manmeet/Documents/python_class/gfstonc/lib/src/fftw-3.3.8/install-sh"
+S["MAKEINFO"]="${SHELL} /home/manmeet/Documents/python_class/gfstonc/lib/src/fftw-3.3.8/missing makeinfo"
+S["AUTOHEADER"]="${SHELL} /home/manmeet/Documents/python_class/gfstonc/lib/src/fftw-3.3.8/missing autoheader"
+S["AUTOMAKE"]="${SHELL} /home/manmeet/Documents/python_class/gfstonc/lib/src/fftw-3.3.8/missing automake-1.15"
+S["AUTOCONF"]="${SHELL} /home/manmeet/Documents/python_class/gfstonc/lib/src/fftw-3.3.8/missing autoconf"
+S["ACLOCAL"]="${SHELL} /home/manmeet/Documents/python_class/gfstonc/lib/src/fftw-3.3.8/missing aclocal-1.15"
 S["VERSION"]="3.3.8"
 S["PACKAGE"]="fftw"
 S["CYGPATH_W"]="echo"

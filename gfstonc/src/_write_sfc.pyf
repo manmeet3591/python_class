@@ -4,7 +4,7 @@
 python module _write_sfc ! in 
     interface  ! in :_write_sfc
         subroutine write_griddata(filename,nlons,nlats,lsoil,idate,fhour,grids2d,grids3d) ! in :_write_sfc:write_sfc.f90
-            use sfcio_module, only: sfcio_sclose,sfcio_swohdc,sfcio_head,sfcio_swhead,sfcio_srohdc,sfcio_aldata,sfcio_data,sfcio_swopen,sfcio_swdata,sfcio_axdata
+            use sfcio_module, only: sfcio_srohdc,sfcio_data,sfcio_swopen,sfcio_sclose,sfcio_axdata,sfcio_head,sfcio_aldata,sfcio_swhead,sfcio_swdata,sfcio_swohdc
             use kinds, only: r_kind
             character*(*) intent(in) :: filename
             integer, optional,intent(in),check(shape(grids2d,0)==nlons),depend(grids2d) :: nlons=shape(grids2d,0)

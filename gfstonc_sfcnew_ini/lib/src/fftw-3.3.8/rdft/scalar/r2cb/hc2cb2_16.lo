@@ -5,7 +5,7 @@
 # It is necessary for linking the library.
 
 # Name of the PIC object.
-pic_object='.libs/hc2cb2_16.o'
+pic_object=none
 
 # Name of the non-PIC object
 non_pic_object='hc2cb2_16.o'

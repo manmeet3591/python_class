@@ -1,8 +1,8 @@
 ## path prefix for make install (installs to $(PREFIX)/lib and $(PREFIX)/include)
-PREFIX=/home/manmeet/Documents/gfstonc/lib
+PREFIX=/home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib
 SED=/bin/sed
 CC=gcc -march=native
-CFLAGS=-O2 -I/home/manmeet/Documents/gfstonc/lib/include -L/home/manmeet/Documents/gfstonc/lib/lib -ffast-math -fomit-frame-pointer -std=gnu99 -fopenmp -fPIC 
+CFLAGS=-O2 -I/home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/include -L/home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/lib -ffast-math -fomit-frame-pointer -std=gnu99 -fopenmp -fPIC 
 LIBS=-lfftw3_omp -lfftw3 -lrt -lm 
 PYTHON=python
 

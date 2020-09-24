@@ -5,10 +5,10 @@
 # It is necessary for linking the library.
 
 # The name that we can dlopen(3).
-dlname='libfftw3.so.3'
+dlname=''
 
 # Names of this library.
-library_names='libfftw3.so.3.5.8 libfftw3.so.3 libfftw3.so'
+library_names=''
 
 # The name of the static archive.
 old_library='libfftw3.a'
@@ -38,4 +38,4 @@ dlopen=''
 dlpreopen=''
 
 # Directory that this library needs to be installed in:
-libdir='/home/manmeet/Documents/gfstonc/lib/lib'
+libdir='/home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/lib'

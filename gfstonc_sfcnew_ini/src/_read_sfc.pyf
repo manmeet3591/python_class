@@ -19,9 +19,9 @@ python module _read_sfc ! in
             integer intent(in) :: nlons
             integer intent(in) :: nlats
             integer intent(in) :: lsoil
-            real(kind=r_kind) dimension(nlons,nlats,32),intent(out),depend(nlons,nlats) :: grids2d
-            integer dimension(32,72),intent(out) :: grids2d_desc
-            integer dimension(32,8),intent(out) :: grids2d_name
+            real(kind=r_kind) dimension(nlons,nlats,35),intent(out),depend(nlons,nlats) :: grids2d
+            integer dimension(35,72),intent(out) :: grids2d_desc
+            integer dimension(35,8),intent(out) :: grids2d_name
             real(kind=r_kind) dimension(nlons,nlats,lsoil,3),intent(out),depend(nlons,nlats,lsoil) :: grids3d
             integer dimension(3,72),intent(out) :: grids3d_desc
             integer dimension(3,72),intent(out) :: grids3d_name

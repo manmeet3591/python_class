@@ -1,4 +1,4 @@
-#!/home/manmeet/anaconda3/envs/gfs27/bin/python
+#!/home/manmeet/anaconda3/envs/regrid/bin/python
 import time
 import numpy as np
 from netCDF4 import Dataset

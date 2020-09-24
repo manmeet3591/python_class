@@ -186,21 +186,21 @@ ETAGS = etags
 CTAGS = ctags
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/depcomp README
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/missing aclocal-1.15
+ACLOCAL = ${SHELL} /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8/missing aclocal-1.15
 ALLOCA = 
 ALTIVEC_CFLAGS = 
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
 AS = as
-AUTOCONF = ${SHELL} /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/missing autoconf
-AUTOHEADER = ${SHELL} /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/missing autoheader
-AUTOMAKE = ${SHELL} /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/missing automake-1.15
+AUTOCONF = ${SHELL} /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8/missing autoconf
+AUTOHEADER = ${SHELL} /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8/missing autoheader
+AUTOMAKE = ${SHELL} /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8/missing automake-1.15
 AVX2_CFLAGS = 
 AVX512_CFLAGS = 
 AVX_128_FMA_CFLAGS = 
-AVX_CFLAGS = -mavx
-AWK = gawk
+AVX_CFLAGS = 
+AWK = mawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -O3 -fomit-frame-pointer -mtune=native -malign-double -fstrict-aliasing -fno-schedule-insns
@@ -223,7 +223,7 @@ EXEEXT =
 F77 = f77
 FFLAGS = -g -O2
 FGREP = /bin/grep -F
-FLIBS =  -L/opt/intel/compilers_and_libraries_2020.0.166/linux/mpi/intel64/libfabric/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/5 -L/usr/lib/gcc/x86_64-linux-gnu/5/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/5/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/opt/intel/clck/2019.6/lib/intel64 -L/opt/intel/compilers_and_libraries_2020.0.166/linux/mpi/intel64/libfabric/lib -L/opt/intel/compilers_and_libraries_2020.0.166/linux/ipp/lib/intel64 -L/opt/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin -L/opt/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin -L/opt/intel/compilers_and_libraries_2020.0.166/linux/tbb/lib/intel64/gcc4.8 -L/opt/intel/compilers_and_libraries_2020.0.166/linux/daal/lib/intel64_lin -L/opt/intel/compilers_and_libraries_2020.0.166/linux/daal/../tbb/lib/intel64_lin/gcc4.8 -L/usr/lib/gcc/x86_64-linux-gnu/5/../../.. -lgfortran -lm -lquadmath
+FLIBS =  -L/opt/intel/compilers_and_libraries_2020.0.166/linux/mpi/intel64/libfabric/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/5 -L/usr/lib/gcc/x86_64-linux-gnu/5/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/5/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/opt/intel/compilers_and_libraries_2020.0.166/linux/mpi/intel64/libfabric/lib -L/opt/intel/compilers_and_libraries_2020.0.166/linux/ipp/lib/intel64 -L/opt/intel/compilers_and_libraries_2020.0.166/linux/compiler/lib/intel64_lin -L/opt/intel/compilers_and_libraries_2020.0.166/linux/mkl/lib/intel64_lin -L/opt/intel/compilers_and_libraries_2020.0.166/linux/tbb/lib/intel64/gcc4.8 -L/opt/intel/compilers_and_libraries_2020.0.166/linux/daal/lib/intel64_lin -L/opt/intel/compilers_and_libraries_2020.0.166/linux/daal/../tbb/lib/intel64_lin/gcc4.8 -L/usr/lib/gcc/x86_64-linux-gnu/5/../../.. -lgfortran -lm -lquadmath
 GREP = /bin/grep
 INDENT = 
 INSTALL = /usr/bin/install -c
@@ -243,7 +243,7 @@ LN_S = ln -s
 LTLIBOBJS = 
 LT_SYS_LIBRARY_PATH = 
 MAINT = #
-MAKEINFO = ${SHELL} /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/missing makeinfo
+MAKEINFO = ${SHELL} /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8/missing makeinfo
 MANIFEST_TOOL = :
 MKDIR_P = /bin/mkdir -p
 MPICC = 
@@ -255,7 +255,7 @@ NMEDIT =
 OBJDUMP = objdump
 OBJEXT = o
 OCAMLBUILD = 
-OPENMP_CFLAGS = -fopenmp
+OPENMP_CFLAGS = 
 OTOOL = 
 OTOOL64 = 
 PACKAGE = fftw
@@ -283,10 +283,10 @@ STRIP = strip
 THREADLIBS = 
 VERSION = 3.3.8
 VSX_CFLAGS = 
-abs_builddir = /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/tests
-abs_srcdir = /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/tests
-abs_top_builddir = /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8
-abs_top_srcdir = /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8
+abs_builddir = /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8/tests
+abs_srcdir = /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8/tests
+abs_top_builddir = /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8
+abs_top_srcdir = /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_DUMPBIN = 
@@ -317,7 +317,7 @@ host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/manmeet/Documents/python_class_v1/gfstonc/lib/src/fftw-3.3.8/install-sh
+install_sh = ${SHELL} /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib/src/fftw-3.3.8/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -326,7 +326,7 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /home/manmeet/Documents/gfstonc/lib
+prefix = /home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib
 program_transform_name = s,x,x,
 psdir = ${docdir}
 runstatedir = ${localstatedir}/run
@@ -340,10 +340,10 @@ top_builddir = ..
 top_srcdir = ..
 AM_CPPFLAGS = -I $(top_srcdir)
 EXTRA_DIST = check.pl README
-bench_CFLAGS = $(OPENMP_CFLAGS)
+#bench_CFLAGS = $(OPENMP_CFLAGS)
 #bench_CFLAGS = $(PTHREAD_CFLAGS)
 #LIBFFTWTHREADS = $(top_builddir)/threads/libfftw3_threads.la
-LIBFFTWTHREADS = $(top_builddir)/threads/libfftw3_omp.la
+#LIBFFTWTHREADS = $(top_builddir)/threads/libfftw3_omp.la
 bench_SOURCES = bench.c hook.c fftw-bench.c fftw-bench.h
 bench_LDADD = $(LIBFFTWTHREADS)				\
 $(top_builddir)/libfftw3.la		\
@@ -687,22 +687,22 @@ check-local: bench$(EXEEXT)
 	@echo "--------------------------------------------------------------"
 	@echo "         FFTW transforms passed basic tests!"
 	@echo "--------------------------------------------------------------"
-	perl -w $(srcdir)/check.pl $(CHECK_PL_OPTS) -r -c=30 -v --nthreads=2 `pwd`/bench$(EXEEXT)
-	@echo "--------------------------------------------------------------"
-	@echo "         FFTW threaded transforms passed basic tests!"
-	@echo "--------------------------------------------------------------"
+#	perl -w $(srcdir)/check.pl $(CHECK_PL_OPTS) -r -c=30 -v --nthreads=2 `pwd`/bench$(EXEEXT)
+#	@echo "--------------------------------------------------------------"
+#	@echo "         FFTW threaded transforms passed basic tests!"
+#	@echo "--------------------------------------------------------------"
 
 bigcheck: bench$(EXEEXT)
 	perl -w $(srcdir)/check.pl $(CHECK_PL_OPTS) -a -v `pwd`/bench$(EXEEXT)
 	@echo "--------------------------------------------------------------"
 	@echo "         FFTW transforms passed big tests!"
 	@echo "--------------------------------------------------------------"
-	perl -w $(srcdir)/check.pl $(CHECK_PL_OPTS) -a -v --nthreads=2 `pwd`/bench$(EXEEXT)
-	perl -w $(srcdir)/check.pl $(CHECK_PL_OPTS) -a -v --nthreads=3 `pwd`/bench$(EXEEXT)
-	perl -w $(srcdir)/check.pl $(CHECK_PL_OPTS) -a -v --nthreads=10 `pwd`/bench$(EXEEXT)
-	@echo "--------------------------------------------------------------"
-	@echo "         FFTW threaded transforms passed big tests!"
-	@echo "--------------------------------------------------------------"
+#	perl -w $(srcdir)/check.pl $(CHECK_PL_OPTS) -a -v --nthreads=2 `pwd`/bench$(EXEEXT)
+#	perl -w $(srcdir)/check.pl $(CHECK_PL_OPTS) -a -v --nthreads=3 `pwd`/bench$(EXEEXT)
+#	perl -w $(srcdir)/check.pl $(CHECK_PL_OPTS) -a -v --nthreads=10 `pwd`/bench$(EXEEXT)
+#	@echo "--------------------------------------------------------------"
+#	@echo "         FFTW threaded transforms passed big tests!"
+#	@echo "--------------------------------------------------------------"
 
 smallcheck: bench$(EXEEXT)
 	perl -w $(srcdir)/check.pl -r -c=1 -v `pwd`/bench$(EXEEXT)
@@ -710,23 +710,23 @@ smallcheck: bench$(EXEEXT)
 	@echo "--------------------------------------------------------------"
 	@echo "         FFTW transforms passed a few tests!"
 	@echo "--------------------------------------------------------------"
-	perl -w $(srcdir)/check.pl -r --estimate -c=2 -v --nthreads=2 `pwd`/bench$(EXEEXT)
-	@echo "--------------------------------------------------------------"
-	@echo "         FFTW threaded transforms passed a few tests!"
-	@echo "--------------------------------------------------------------"
+#	perl -w $(srcdir)/check.pl -r --estimate -c=2 -v --nthreads=2 `pwd`/bench$(EXEEXT)
+#	@echo "--------------------------------------------------------------"
+#	@echo "         FFTW threaded transforms passed a few tests!"
+#	@echo "--------------------------------------------------------------"
 
 paranoid-check: bench$(EXEEXT)
-	perl -w $(srcdir)/check.pl -a --patient --nthreads=10 --paranoid `pwd`/bench$(EXEEXT)
-	perl -w $(srcdir)/check.pl -a --patient --nthreads=7 --paranoid `pwd`/bench$(EXEEXT)
-	perl -w $(srcdir)/check.pl -a --patient --nthreads=3 --paranoid `pwd`/bench$(EXEEXT)
-	perl -w $(srcdir)/check.pl -a --patient --nthreads=2 --paranoid `pwd`/bench$(EXEEXT)
+#	perl -w $(srcdir)/check.pl -a --patient --nthreads=10 --paranoid `pwd`/bench$(EXEEXT)
+#	perl -w $(srcdir)/check.pl -a --patient --nthreads=7 --paranoid `pwd`/bench$(EXEEXT)
+#	perl -w $(srcdir)/check.pl -a --patient --nthreads=3 --paranoid `pwd`/bench$(EXEEXT)
+#	perl -w $(srcdir)/check.pl -a --patient --nthreads=2 --paranoid `pwd`/bench$(EXEEXT)
 	perl -w $(srcdir)/check.pl -a --patient --paranoid `pwd`/bench$(EXEEXT)
 
 exhaustive-check: bench$(EXEEXT)
-	perl -w $(srcdir)/check.pl -a --exhaustive --nthreads=10 --paranoid `pwd`/bench$(EXEEXT)
-	perl -w $(srcdir)/check.pl -a --exhaustive --nthreads=7 --paranoid `pwd`/bench$(EXEEXT)
-	perl -w $(srcdir)/check.pl -a --exhaustive --nthreads=3 --paranoid `pwd`/bench$(EXEEXT)
-	perl -w $(srcdir)/check.pl -a --exhaustive --nthreads=2 --paranoid `pwd`/bench$(EXEEXT)
+#	perl -w $(srcdir)/check.pl -a --exhaustive --nthreads=10 --paranoid `pwd`/bench$(EXEEXT)
+#	perl -w $(srcdir)/check.pl -a --exhaustive --nthreads=7 --paranoid `pwd`/bench$(EXEEXT)
+#	perl -w $(srcdir)/check.pl -a --exhaustive --nthreads=3 --paranoid `pwd`/bench$(EXEEXT)
+#	perl -w $(srcdir)/check.pl -a --exhaustive --nthreads=2 --paranoid `pwd`/bench$(EXEEXT)
 	perl -w $(srcdir)/check.pl -a --exhaustive --paranoid `pwd`/bench$(EXEEXT)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

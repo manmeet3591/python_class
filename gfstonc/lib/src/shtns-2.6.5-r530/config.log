@@ -27,25 +27,18 @@ uname -v = #83~16.04.1-Ubuntu SMP Wed Dec 18 04:56:23 UTC 2019
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
 
-PATH: /home/manmeet/anaconda3/envs/gfs27/bin
-PATH: /home/manmeet/anaconda3/bin
-PATH: /opt/intel/intelpython3/bin
-PATH: /opt/intel/intelpython3/condabin
-PATH: /opt/intel/advisor_2020.0.0.604394/bin64
-PATH: /opt/intel/vtune_profiler_2020.0.0.605129/bin64
-PATH: /opt/intel/inspector_2020.0.0.603904/bin64
-PATH: /opt/intel/itac/2020.0.015/intel64/bin
-PATH: /opt/intel/itac/2020.0.015/intel64/bin
-PATH: /opt/intel/clck/2019.6/bin/intel64
+PATH: /home/manmeet/anaconda3/envs/regrid/bin
+PATH: /home/manmeet/bin
+PATH: /home/manmeet/.local/bin
 PATH: /opt/intel/compilers_and_libraries_2020.0.166/linux/bin/intel64
 PATH: /opt/intel/compilers_and_libraries_2020.0.166/linux/bin
 PATH: /opt/intel/compilers_and_libraries_2020.0.166/linux/mpi/intel64/libfabric/bin
 PATH: /opt/intel/compilers_and_libraries_2020.0.166/linux/mpi/intel64/bin
 PATH: /opt/intel/debugger_2020/gdb/intel64/bin
+PATH: /usr/local/esmf/bin/binO3/Linux.gfortran.64.mpiuni.default
 PATH: /home/manmeet/google-cloud-sdk/bin
+PATH: /home/manmeet/Documents/reik/pyunicorn/pyunicorn/timeseries
 PATH: /home/manmeet/anaconda3/bin
-PATH: /home/manmeet/bin
-PATH: /home/manmeet/.local/bin
 PATH: /usr/local/sbin
 PATH: /usr/local/bin
 PATH: /usr/sbin
@@ -54,11 +47,8 @@ PATH: /sbin
 PATH: /bin
 PATH: /usr/games
 PATH: /usr/local/games
-PATH: /usr/local/ssl/bin
 PATH: /snap/bin
-PATH: /usr/local/cuda-10.1/bin
-PATH: /opt/intel/compilers_and_libraries/linux/bin/intel64
-PATH: /opt/intel/parallel_studio_xe_2020.0.088/bin
+PATH: /usr/local/cuda/bin
 
 
 ## ----------- ##
@@ -66,7 +56,6 @@ PATH: /opt/intel/parallel_studio_xe_2020.0.088/bin
 ## ----------- ##
 
 configure:2322: checking for gcc
-configure:2338: found /usr/bin/gcc
 configure:2349: result: gcc
 configure:2578: checking for C compiler version
 configure:2587: gcc --version >&5
@@ -856,7 +845,7 @@ configure: failed program was:
 configure:4487: result: no
 configure:4501: checking for gethrtime
 configure:4501: gcc -march=native -o conftest -O2 -I/home/manmeet/Documents/gfstonc/lib/include -L/home/manmeet/Documents/gfstonc/lib/lib -ffast-math -fomit-frame-pointer -std=gnu99 -fopenmp -fPIC   conftest.c -lfftw3_omp -lfftw3 -lrt -lm  >&5
-/tmp/ccdROXcU.o: In function `main':
+/tmp/ccuWKgez.o: In function `main':
 conftest.c:(.text.startup+0x7): undefined reference to `gethrtime'
 collect2: error: ld returned 1 exit status
 configure:4501: $? = 1
@@ -937,7 +926,7 @@ configure: failed program was:
 configure:4501: result: no
 configure:4501: checking for read_real_time
 configure:4501: gcc -march=native -o conftest -O2 -I/home/manmeet/Documents/gfstonc/lib/include -L/home/manmeet/Documents/gfstonc/lib/lib -ffast-math -fomit-frame-pointer -std=gnu99 -fopenmp -fPIC   conftest.c -lfftw3_omp -lfftw3 -lrt -lm  >&5
-/tmp/ccNH4BnW.o: In function `main':
+/tmp/ccQ5qzjE.o: In function `main':
 conftest.c:(.text.startup+0x7): undefined reference to `read_real_time'
 collect2: error: ld returned 1 exit status
 configure:4501: $? = 1
@@ -1018,7 +1007,7 @@ configure: failed program was:
 configure:4501: result: no
 configure:4501: checking for time_base_to_time
 configure:4501: gcc -march=native -o conftest -O2 -I/home/manmeet/Documents/gfstonc/lib/include -L/home/manmeet/Documents/gfstonc/lib/lib -ffast-math -fomit-frame-pointer -std=gnu99 -fopenmp -fPIC   conftest.c -lfftw3_omp -lfftw3 -lrt -lm  >&5
-/tmp/ccnjiW31.o: In function `main':
+/tmp/ccjcexlK.o: In function `main':
 conftest.c:(.text.startup+0x7): undefined reference to `time_base_to_time'
 collect2: error: ld returned 1 exit status
 configure:4501: $? = 1
@@ -1103,7 +1092,7 @@ configure:4501: $? = 0
 configure:4501: result: yes
 configure:4501: checking for mach_absolute_time
 configure:4501: gcc -march=native -o conftest -O2 -I/home/manmeet/Documents/gfstonc/lib/include -L/home/manmeet/Documents/gfstonc/lib/lib -ffast-math -fomit-frame-pointer -std=gnu99 -fopenmp -fPIC   conftest.c -lfftw3_omp -lfftw3 -lrt -lm  >&5
-/tmp/cca4vgI1.o: In function `main':
+/tmp/ccjfObHU.o: In function `main':
 conftest.c:(.text.startup+0x7): undefined reference to `mach_absolute_time'
 collect2: error: ld returned 1 exit status
 configure:4501: $? = 1
@@ -1189,7 +1178,7 @@ conftest.c: In function 'main':
 conftest.c:43:1: warning: implicit declaration of function '_rtc' [-Wimplicit-function-declaration]
  _rtc()
  ^
-/tmp/ccK8leV2.o: In function `main':
+/tmp/cc6QBKrZ.o: In function `main':
 conftest.c:(.text.startup+0x7): undefined reference to `_rtc'
 collect2: error: ld returned 1 exit status
 configure:4527: $? = 1
@@ -1269,8 +1258,8 @@ config.status:998: sht_config.h is unchanged
 
 ac_cv_c_compiler_gnu=yes
 ac_cv_c_inline=inline
-ac_cv_env_CC_set=
-ac_cv_env_CC_value=
+ac_cv_env_CC_set=set
+ac_cv_env_CC_value=gcc
 ac_cv_env_CFLAGS_set=
 ac_cv_env_CFLAGS_value=
 ac_cv_env_CPPFLAGS_set=
@@ -1383,14 +1372,14 @@ libname='libshtns_omp.a'
 localedir='${datarootdir}/locale'
 localstatedir='${prefix}/var'
 mandir='${datarootdir}/man'
-numpy_inc='/home/manmeet/anaconda3/envs/gfs27/lib/python2.7/site-packages/numpy/core/include'
+numpy_inc='/home/manmeet/anaconda3/envs/regrid/lib/python2.7/site-packages/numpy/core/include'
 objs='sht_fly.o sht_omp.o sht_mem.o sht_dct.o'
 oldincludedir='/usr/include'
 pdfdir='${docdir}'
 prefix='/home/manmeet/Documents/gfstonc/lib'
 program_transform_name='s,x,x,'
 psdir='${docdir}'
-python_inc='/home/manmeet/anaconda3/envs/gfs27/include/python2.7'
+python_inc='/home/manmeet/anaconda3/envs/regrid/include/python2.7'
 sbindir='${exec_prefix}/sbin'
 sharedstatedir='${prefix}/com'
 shtcc_flags='-O3'

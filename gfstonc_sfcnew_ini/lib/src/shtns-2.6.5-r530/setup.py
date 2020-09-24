@@ -6,7 +6,7 @@ from numpy import get_include
 numpy_inc = get_include()		#  NumPy include path.
 objs = "sht_init.o sht_fly.o sht_omp.o sht_mem.o sht_dct.o"
 shtns_o = objs.split()			# transform to list of objects
-libdir = "/home/manmeet/Documents/gfstonc/lib"
+libdir = "/home/manmeet/Documents/python_class/gfstonc_sfcnew_ini/lib"
 if len(libdir) == 0:
 	libdir = []
 else:

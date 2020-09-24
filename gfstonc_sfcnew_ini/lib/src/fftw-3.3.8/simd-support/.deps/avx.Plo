@@ -32,8 +32,7 @@ avx.lo: avx.c /usr/include/stdc-predef.h ../kernel/ifftw.h ../config.h \
  /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
  /usr/lib/gcc/x86_64-linux-gnu/5/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h /usr/include/inttypes.h \
- /usr/include/x86_64-linux-gnu/sys/time.h /usr/include/xlocale.h \
- amd64-cpuid.h
+ /usr/include/x86_64-linux-gnu/sys/time.h /usr/include/xlocale.h
 
 /usr/include/stdc-predef.h:
 
@@ -124,5 +123,3 @@ avx.lo: avx.c /usr/include/stdc-predef.h ../kernel/ifftw.h ../config.h \
 /usr/include/x86_64-linux-gnu/sys/time.h:
 
 /usr/include/xlocale.h:
-
-amd64-cpuid.h:
