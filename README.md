@@ -57,3 +57,5 @@ https://docs.google.com/document/d/12h9bcIdBPJUFc_fJssJe8hVBzledq2Dtk5-9OpKHbfg/
 Troubleshooting
 
 1. Continue in outer loop using multi-loops https://stackoverflow.com/questions/14829640/how-to-continue-in-nested-loops-in-python
+
+2. Numbering the subplots https://matplotlib.org/3.1.1/gallery/axes_grid1/simple_anchored_artists.html
