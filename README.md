@@ -47,6 +47,7 @@ Some of the tutorials to follow
 43. https://github.com/giswqs/earthengine-py-notebooks
 44. Google Earth Engine image to numpy https://mygeoblog.com/2019/08/21/google-earth-engine-to-numpy/
 45. Stippling to show statistical significance https://github.com/bradyrx/esmtools/issues/13
+46. Resampling from swath to grid https://github.com/TerraFusion/pytaf
 
 Projects for the class
 
