@@ -62,3 +62,5 @@ Troubleshooting
 2. Numbering the subplots https://matplotlib.org/3.1.1/gallery/axes_grid1/simple_anchored_artists.html
 
 3. Fortran compilation may sometimes be solved by running the command ulimit -s unlimited
+
+4. There are visualization problems in cartopy if the lon is from 0 to 360 and not from -180 to 180
