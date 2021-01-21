@@ -48,6 +48,7 @@ Some of the tutorials to follow
 44. Google Earth Engine image to numpy https://mygeoblog.com/2019/08/21/google-earth-engine-to-numpy/
 45. Stippling to show statistical significance https://github.com/bradyrx/esmtools/issues/13
 46. Resampling from swath to grid https://github.com/TerraFusion/pytaf
+47. Making a docker container for data science https://towardsdatascience.com/docker-for-data-scientists-5732501f0ba4
 
 Projects for the class
 
