@@ -66,3 +66,5 @@ Troubleshooting
 4. There are visualization problems in cartopy if the lon is from 0 to 360 and not from -180 to 180
 
 5. Run docker as a non-root user https://docs.docker.com/engine/install/linux-postinstall/
+
+6. In the first instance of an image sometimes docker hub may deny you to push the image https://stackoverflow.com/questions/41984399/denied-requested-access-to-the-resource-is-denied-docker
