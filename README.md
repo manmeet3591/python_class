@@ -64,3 +64,5 @@ Troubleshooting
 3. Fortran compilation may sometimes be solved by running the command ulimit -s unlimited
 
 4. There are visualization problems in cartopy if the lon is from 0 to 360 and not from -180 to 180
+
+5. Run docker as a non-root user https://docs.docker.com/engine/install/linux-postinstall/
