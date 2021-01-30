@@ -49,6 +49,17 @@ Some of the tutorials to follow
 45. Stippling to show statistical significance https://github.com/bradyrx/esmtools/issues/13
 46. Resampling from swath to grid https://github.com/TerraFusion/pytaf
 47. Making a docker container for data science https://towardsdatascience.com/docker-for-data-scientists-5732501f0ba4
+48. Docker commands:
+
+Run interactively: docker run -it  manmeet3591/dl:iitm:latest
+
+Install the necessary libraries
+
+Open a new terminal and do docker images to see the id and run the following command
+
+$ docker tag id_ manmeet3591/dl_iitm:v2
+
+$ docker push manmeet3591/dl_iitm:v2
 
 Projects for the class
 
