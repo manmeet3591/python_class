@@ -67,6 +67,8 @@ https://docs.google.com/spreadsheets/d/1m2ZIJ_To8IbE18Teb70a7BVZg0o29sOM6rlgFkE2
 
 https://docs.google.com/document/d/12h9bcIdBPJUFc_fJssJe8hVBzledq2Dtk5-9OpKHbfg/edit 
 
+49. Homogenous regions India shape files: https://github.com/Cassimsannan/Shapefiles
+
 Troubleshooting
 
 1. Continue in outer loop using multi-loops https://stackoverflow.com/questions/14829640/how-to-continue-in-nested-loops-in-python
