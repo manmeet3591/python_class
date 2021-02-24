@@ -84,3 +84,17 @@ Troubleshooting
 6. In the first instance of an image sometimes docker hub may deny you to push the image https://stackoverflow.com/questions/41984399/denied-requested-access-to-the-resource-is-denied-docker
 
 7. Numpy to xarray : foo = xr.DataArray(data, coords=[times, locs], dims=["time", "space"])
+
+  data = ds_merra2_jjas.DUSCATAU.sel(time='2002').values[0,:,:]
+  lats_ = ds_merra2_jjas.DUSCATAU.sel(time='2002').lat.values
+  lons_ = ds_merra2_jjas.DUSCATAU.sel(time='2002').lon.values
+  ds_merra2_jjas_new = xr.DataArray(data, coords=[lats_, lons_], dims=["lat", "lon"])
+
+8. Using matplotlib to make map plots
+  plt.contourf(ds_merra2_jjas.DUSCATAU.sel(time='2002').lon.values,\
+                 ds_merra2_jjas.DUSCATAU.sel(time='2002').lat.values ,\
+                ds_merra2_jjas.DUSCATAU.sel(time='2002').values[0,:,:],\
+                cmap='bwr')
+plt.colorbar()
+
+9. Sometimes xarray plot might show blank, the way to resolve that is select the area and that should work.
