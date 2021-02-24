@@ -82,3 +82,5 @@ Troubleshooting
 5. Run docker as a non-root user https://docs.docker.com/engine/install/linux-postinstall/
 
 6. In the first instance of an image sometimes docker hub may deny you to push the image https://stackoverflow.com/questions/41984399/denied-requested-access-to-the-resource-is-denied-docker
+
+7. Numpy to xarray : foo = xr.DataArray(data, coords=[times, locs], dims=["time", "space"])
