@@ -69,6 +69,8 @@ https://docs.google.com/document/d/12h9bcIdBPJUFc_fJssJe8hVBzledq2Dtk5-9OpKHbfg/
 
 49. Homogenous regions India shape files: https://github.com/Cassimsannan/Shapefiles
 
+50. Download CMIP6 data: https://github.com/TaufiqHassan/acccmip6
+
 Troubleshooting
 
 1. Continue in outer loop using multi-loops https://stackoverflow.com/questions/14829640/how-to-continue-in-nested-loops-in-python
