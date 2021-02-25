@@ -71,6 +71,12 @@ https://docs.google.com/document/d/12h9bcIdBPJUFc_fJssJe8hVBzledq2Dtk5-9OpKHbfg/
 
 50. Download CMIP6 data: https://github.com/TaufiqHassan/acccmip6
 
+51. Download MSWEP data from Google drive: 
+
+Setup rclone: https://www.youtube.com/watch?v=vPs9K_VC-lg
+
+$ rclone sync -v --exclude 3hourly/ --drive-shared-with-me GoogleDrive:/MSWEP_V280 /lus/dal/cccr_rnd/manmeet/AI_IITM/WeatherBench/data/dataserv.ub.tum.de/mswep/.
+
 Troubleshooting
 
 1. Continue in outer loop using multi-loops https://stackoverflow.com/questions/14829640/how-to-continue-in-nested-loops-in-python
