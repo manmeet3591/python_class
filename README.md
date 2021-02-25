@@ -98,3 +98,7 @@ Troubleshooting
 plt.colorbar()
 
 9. Sometimes xarray plot might show blank, the way to resolve that is select the area and that should work.
+
+10. Pattern correlation formula: https://www.mdpi.com/2073-4441/10/1/28 may use weights as well for the pattern correlation 
+
+For the weights, the following can be followed: https://stackoverflow.com/questions/58881607/calculating-the-cosine-of-latitude-as-weights-for-gridded-data
