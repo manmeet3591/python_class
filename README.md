@@ -75,6 +75,13 @@ https://docs.google.com/document/d/12h9bcIdBPJUFc_fJssJe8hVBzledq2Dtk5-9OpKHbfg/
 
 Setup rclone: https://www.youtube.com/watch?v=vPs9K_VC-lg
 
+52. Run jupyter notebook from docker container 
+
+docker run --rm -it --entrypoint bash -p 8890:8890 manmeet3591/drl
+
+jupyter-notebook --ip 0.0.0.0 -p 8890 --no-browser --allow-root &
+
+
 $ rclone sync -v --exclude 3hourly/ --drive-shared-with-me GoogleDrive:/MSWEP_V280 /lus/dal/cccr_rnd/manmeet/AI_IITM/WeatherBench/data/dataserv.ub.tum.de/mswep/.
 
 Troubleshooting
