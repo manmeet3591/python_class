@@ -118,5 +118,7 @@ plt.colorbar()
 
 For the weights, the following can be followed: https://stackoverflow.com/questions/58881607/calculating-the-cosine-of-latitude-as-weights-for-gridded-data
 
-11. When installing packages otherwise difficult to install like ESMF we can set the compiler environment variables such as CC and FC to force conda to install using that particular compiler. This saves a lot of time and effort. https://stackoverflow.com/questions/59284298/conda-install-c-anaconda-gcc-linux-64-not-being-used
+11. When installing packages otherwise difficult to install like ESMF we can set the compiler environment variables such as CC and FC to force conda to install using that particular compiler. This saves a lot of time and effort. https://stackoverflow.com/questions/59284298/conda-install-c-anaconda-gcc-linux-64-not-being-used  Many build tools such as make and CMake search by default for a compiler named simply gcc, so we set environment variables to point these tools to the correct compiler.
+
+
 
