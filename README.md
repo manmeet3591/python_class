@@ -117,3 +117,6 @@ plt.colorbar()
 10. Pattern correlation formula: https://www.mdpi.com/2073-4441/10/1/28 may use weights as well for the pattern correlation 
 
 For the weights, the following can be followed: https://stackoverflow.com/questions/58881607/calculating-the-cosine-of-latitude-as-weights-for-gridded-data
+
+11. When installing packages otherwise difficult to install like ESMF we can set the compiler environment variables such as CC and FC to force conda to install using that particular compiler. This saves a lot of time and effort. https://stackoverflow.com/questions/59284298/conda-install-c-anaconda-gcc-linux-64-not-being-used
+
