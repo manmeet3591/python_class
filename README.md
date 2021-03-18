@@ -80,7 +80,7 @@ Setup rclone: https://www.youtube.com/watch?v=vPs9K_VC-lg
 docker run --rm -it --entrypoint bash -p 8891:8891 manmeet3591/tensortrade
 
 Inside the container 
-jupyter-notebook --ip 0.0.0.0 -p 8891 --no-browser --allow-root &
+jupyter-notebook --ip 0.0.0.0 --port=8891 --no-browser --allow-root &
 
 In the browser 
 http://localhost:8891/
