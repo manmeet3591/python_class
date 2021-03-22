@@ -87,6 +87,10 @@ http://localhost:8891/
 
 $ rclone sync -v --exclude 3hourly/ --drive-shared-with-me GoogleDrive:/MSWEP_V280 /lus/dal/cccr_rnd/manmeet/AI_IITM/WeatherBench/data/dataserv.ub.tum.de/mswep/.
 
+53. Create any number of subplots matplotlib
+
+$ fig,ax = plt.subplots(ncols=2,nrows=4, figsize=(11.69,8.27), subplot_kw={'projection': ccrs.PlateCarree()})
+
 Troubleshooting
 
 1. Continue in outer loop using multi-loops https://stackoverflow.com/questions/14829640/how-to-continue-in-nested-loops-in-python
