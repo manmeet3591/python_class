@@ -22,4 +22,5 @@ def compute_tci(sm, lh):
                             input_core_dims=[['time'], ['time']],# reduce along 'plev'
                             )
     tci = slopes*sm_std
+    return tci
 #mrsos_control[0].std(dim='time').plot()
