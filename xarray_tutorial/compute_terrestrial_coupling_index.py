@@ -15,7 +15,7 @@ def linear_trend(x, y):
     return xr.DataArray(pf[0])
 
 def compute_tci(sm, lh):
-    sm_std = sm.std(dim='time').plot()
+    sm_std = sm.std(dim='time')
     slopes = xr.apply_ufunc(linear_trend,
                             sm, lh,
                             vectorize=True,
