@@ -91,6 +91,8 @@ $ rclone sync -v --exclude 3hourly/ --drive-shared-with-me GoogleDrive:/MSWEP_V2
 
 $ fig,ax = plt.subplots(ncols=2,nrows=4, figsize=(11.69,8.27), subplot_kw={'projection': ccrs.PlateCarree()})
 
+54. Google Earth Engine timelapse gif generator: https://9611d0317f71.ngrok.io/voila/render/timelapse.ipynb
+
 Troubleshooting
 
 1. Continue in outer loop using multi-loops https://stackoverflow.com/questions/14829640/how-to-continue-in-nested-loops-in-python
