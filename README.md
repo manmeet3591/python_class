@@ -93,6 +93,10 @@ $ fig,ax = plt.subplots(ncols=2,nrows=4, figsize=(11.69,8.27), subplot_kw={'proj
 
 54. Google Earth Engine timelapse gif generator: https://9611d0317f71.ngrok.io/voila/render/timelapse.ipynb
 
+55. Handling expver dimension in a netcdf file downloaded as ERA5 data 
+
+ ds.reduce(np.nansum, 'expver') Solution from marco venturini https://confluence.ecmwf.int/pages/viewpage.action?pageId=173385064
+
 Troubleshooting
 
 1. Continue in outer loop using multi-loops https://stackoverflow.com/questions/14829640/how-to-continue-in-nested-loops-in-python
