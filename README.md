@@ -96,6 +96,8 @@ $ fig,ax = plt.subplots(ncols=2,nrows=4, figsize=(11.69,8.27), subplot_kw={'proj
 55. Handling expver dimension in a netcdf file downloaded as ERA5 data 
 
  ds.reduce(np.nansum, 'expver') Solution from marco venturini https://confluence.ecmwf.int/pages/viewpage.action?pageId=173385064
+ 
+ 56. GeoTIFF to netcdf and exporting data from Google Earth Engine https://medium.com/@wenzhao.li1989/nco-translate-geotiff-files-exported-from-gee-to-a-netcdf-file-with-correct-time-dimension-ce97a8f3043f
 
 Troubleshooting
 
