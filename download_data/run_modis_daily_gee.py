@@ -10,9 +10,10 @@ def daterange(start_date, end_date):
   for n in range(int((end_date - start_date).days)):
     yield start_date + timedelta(n)
 
-start_date = date(2000, 2, 24)
+start_date = date(2003, 1, 1)
 #end_date = date(2020, 12, 31)
-end_date = date(2000, 12, 31)
+#end_date = date(2000, 12, 31)
+end_date = date(2004, 1, 1)
 for single_date in daterange(start_date, end_date):
   print(single_date.strftime("%Y-%m-%d"), (single_date + timedelta(days=1)).strftime("%Y-%m-%d"))
   dates = single_date.strftime("%Y-%m-%d")
