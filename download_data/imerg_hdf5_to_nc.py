@@ -30,7 +30,8 @@ theLons = f['Grid/lon'][:]
 #theTime = f['Grid/time'][:]
 #date_time_str = file_[26:30]+'-'+file_[30:32]+'-'+file_[32:34]+' '+file_[36:38]+'-'+file_[38:40]
 #date_time_obj = datetime.strptime(date_time_str, '%Y-%m-%d %H-%M')
-date_time_str = file_[26:30]+'-'+file_[30:32]+'-'+file_[32:34]+' '+file_[36:38]+':'+file_[38:40]
+s_i = 21
+date_time_str = file_[s_i:s_i+4]+'-'+file_[s_i+4:s_i+6]+'-'+file_[s_i+6:s_i+8]+' '+file_[s_i+10:s_i+12]+':'+file_[s_i+12:s_i+14]
 theTime =pd.Timestamp(date_time_str)
 precip[precip==-9999.9]=np.nan
 print(theTime)
@@ -43,8 +44,4 @@ ds = xr.Dataset({
             },
     )
 #print(ds)
-ds.to_netcdf(file_[:-4]+'.nc')
-#print(theLats, theLons, theTime, precip)
-#print(theLats.shape, theLons.shape, theTime.shape, precip.shape)
-#print(file_[26:34],file_[36:40] )
-#print(date_time_obj)
+ds.to_netcdf(file_[:-5]+'.nc')
