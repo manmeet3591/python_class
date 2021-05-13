@@ -148,6 +148,8 @@ For the weights, the following can be followed: https://stackoverflow.com/questi
     pip install Mako
     
     pip install PyRQA
+    
+    Even after all this, unable to run pyrqa smoothly. However, this activity ensured that the environment to run pyrqa was perfect. So then clone the github repository and inside the main github repository pyrqa, there is a folder pyrqa. Copy that to your desired location, rename it lets say PYRQA. And use the library as PYRQA.
 
 
 
