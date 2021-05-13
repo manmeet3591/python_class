@@ -137,5 +137,15 @@ For the weights, the following can be followed: https://stackoverflow.com/questi
 
 12. When using the isin function with sel we can at present use it only once in a call. Need to instantiate a new variable for doing it twice.
 
+13. Installing PyRQA (Runs only with python 2.7) https://github.com/szhan/pyrqa
+
+    conda install https://anaconda.org/conda-forge/pytools/2017.2/download/linux-64/pytools-2017.2-py27_0.tar.bz2
+    conda install https://anaconda.org/conda-forge/pyopencl/2018.1.1/download/linux-64/pyopencl-2018.1.1-py27_1.tar.bz2
+    conda install -c conda-forge pocl
+    pip install Mako
+    pip install PyRQA
+
+
+
 
 
