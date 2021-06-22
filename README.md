@@ -99,6 +99,8 @@ $ fig,ax = plt.subplots(ncols=2,nrows=4, figsize=(11.69,8.27), subplot_kw={'proj
  
  56. GeoTIFF to netcdf and exporting data from Google Earth Engine https://medium.com/@wenzhao.li1989/nco-translate-geotiff-files-exported-from-gee-to-a-netcdf-file-with-correct-time-dimension-ce97a8f3043f
 
+57. Make pipeline to avoid test data leaking into train https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html
+
 Troubleshooting
 
 1. Continue in outer loop using multi-loops https://stackoverflow.com/questions/14829640/how-to-continue-in-nested-loops-in-python
