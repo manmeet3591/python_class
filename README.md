@@ -101,6 +101,8 @@ $ fig,ax = plt.subplots(ncols=2,nrows=4, figsize=(11.69,8.27), subplot_kw={'proj
 
 57. Make pipeline to avoid test data leaking into train https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html
 
+58. Potential evapotranspiration (PET) from netcdf file https://climate-indices.readthedocs.io/en/latest/#
+
 Troubleshooting
 
 1. Continue in outer loop using multi-loops https://stackoverflow.com/questions/14829640/how-to-continue-in-nested-loops-in-python
