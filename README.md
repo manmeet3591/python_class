@@ -105,6 +105,8 @@ $ fig,ax = plt.subplots(ncols=2,nrows=4, figsize=(11.69,8.27), subplot_kw={'proj
 
 59. t-distributed Stochastic Neighbourhood Embedding (tSNE) versus PCA https://stats.stackexchange.com/questions/238538/are-there-cases-where-pca-is-more-suitable-than-t-sne
 
+60. Stationarity of time series: https://towardsdatascience.com/stationarity-in-time-series-analysis-90c94f27322
+
 Troubleshooting
 
 1. Continue in outer loop using multi-loops https://stackoverflow.com/questions/14829640/how-to-continue-in-nested-loops-in-python
