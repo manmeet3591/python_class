@@ -117,6 +117,12 @@ function ClickConnect(){
 }
 setInterval(ClickConnect,60000)
 
+63. Solving NVIDIA driver installation issues https://stackoverflow.com/questions/42984743/nvidia-smi-has-failed-because-it-couldnt-communicate-with-the-nvidia-driver/51113428#51113428
+
+64. Installing NVIDIA drivers https://www.itzgeek.com/post/how-to-install-nvidia-drivers-on-ubuntu-20-04-ubuntu-18-04.html
+
+65. Install cuda https://www.tensorflow.org/install/gpu
+
 
 Troubleshooting
 
