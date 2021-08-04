@@ -133,7 +133,7 @@ export PATH=/usr/local/cuda-11.0/bin:$PATH
 
 sudo ln -s /usr/local/cuda-11.0/targets/x86_64-linux/lib/libcusolver.so.10 /usr/local/cuda-11.0/targets/x86_64-linux/lib/libcusolver.so.11 # https://stackoverflow.com/questions/63199164/how-to-install-libcusolver-so-11
 
-
+echo <password> | sudo -S ln -s /usr/local/cuda-11.0/targets/x86_64-linux/lib/libcusolver.so.10 /usr/local/cuda-11.0/targets/x86_64-linux/lib/libcusolver.so.11
 
 Troubleshooting
 
