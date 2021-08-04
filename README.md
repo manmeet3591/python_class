@@ -126,8 +126,12 @@ setInterval(ClickConnect,60000)
 66. bashrc commands for cuda
 
 export CUDA_HOME=/usr/local/cuda-11.0
+
 export LD_LIBRARY_PATH=/usr/local/cuda-11.0/lib64:/usr/local/cuda-11.0/lib:$LD_LIBRARY_PATH
+
 export PATH=/usr/local/cuda-11.0/bin:$PATH
+
+sudo ln -s /usr/local/cuda-11.0/targets/x86_64-linux/lib/libcusolver.so.10 /usr/local/cuda-11.0/targets/x86_64-linux/lib/libcusolver.so.11 # https://stackoverflow.com/questions/63199164/how-to-install-libcusolver-so-11
 
 
 
