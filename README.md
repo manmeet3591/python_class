@@ -123,6 +123,13 @@ setInterval(ClickConnect,60000)
 
 65. Install cuda https://www.tensorflow.org/install/gpu
 
+66. bashrc commands for cuda
+
+export CUDA_HOME=/usr/local/cuda-11.0
+export LD_LIBRARY_PATH=/usr/local/cuda-11.0/lib64:/usr/local/cuda-11.0/lib:$LD_LIBRARY_PATH
+export PATH=/usr/local/cuda-11.0/bin:$PATH
+
+
 
 Troubleshooting
 
