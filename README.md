@@ -137,6 +137,8 @@ echo <password> | sudo -S ln -s /usr/local/cuda-11.0/targets/x86_64-linux/lib/li
 
 67. Test time augmentation https://towardsdatascience.com/test-time-augmentation-tta-and-how-to-perform-it-with-keras-4ac19b67fb4d
  
+68. Geometric Deep Learning https://geometricdeeplearning.com/lectures/
+ 
 Troubleshooting
 
 1. Continue in outer loop using multi-loops https://stackoverflow.com/questions/14829640/how-to-continue-in-nested-loops-in-python
