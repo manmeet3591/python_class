@@ -141,6 +141,36 @@ echo <password> | sudo -S ln -s /usr/local/cuda-11.0/targets/x86_64-linux/lib/li
  
 69. DeepSphere Spherical convolutions using Graph convolutions https://github.com/deepsphere/deepsphere-pytorch
  
+70. Interactively logging into Pratyush GPU
+
+$ qsub -I -l select=1:ncpus=1:naccelerators=1:accelerator_model="Tesla_P100-PCIE-12GB" -q gpu
+
+$ source activate py36
+
+$ module load cudatoolkit
+
+$ aprun -n 1 jupyter-notebook --no-browser --ip=0.0.0.0 --port=8890 >> NOTEBOOK_LOGFILE1 2>&1
+
+$ tail -f NOTEBOOK_LOGFILE1
+
+$ Ctrl+C
+
+$ ssh -N -f -L localhost:8888:node:8890 cccr_rnd@nid00019 (Here nid should be the one as seen from NOTEBOOK_LOGFILE1)
+
+$ source activate py36
+
+$ module load cudatoolkit
+
+$ firefox&
+
+To check if a port is being used
+
+$ netstat -antp ! grep -i port_id
+
+The above statement will only work in the interactive login node.
+
+Now start the notebook by noting the link from NOTEBOOK_LOGFILE1
+ 
 Troubleshooting
 
 1. Continue in outer loop using multi-loops https://stackoverflow.com/questions/14829640/how-to-continue-in-nested-loops-in-python
