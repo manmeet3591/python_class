@@ -5,3 +5,17 @@
 2. Color models: https://www.wigglepixel.nl/en/blog/what-are-color-models/
 
 3. Scale invariant feature transform (SIFT): https://www.analyticsvidhya.com/blog/2019/10/detailed-guide-powerful-sift-technique-image-matching-python/
+
+4. Selective search for object detection: https://sahiltinky94.medium.com/selective-search-for-object-recognitions-eca15dc9c47c
+
+5. Spatial Pyramid Pooling in Deep Convolutional Networks for Visual Recognition: https://arxiv.org/pdf/1406.4729.pdf
+
+6. R-CNN, Fast R-CNN, Faster R-CNN, YOLO — Object Detection Algorithms: https://towardsdatascience.com/r-cnn-fast-r-cnn-faster-r-cnn-yolo-object-detection-algorithms-36d53571365e
+
+7. Region of Interest (RoI) pooling: https://towardsdatascience.com/region-of-interest-pooling-f7c637f409af
+
+8. YOLO, YOLOv2, YOLOv3: https://amrokamal-47691.medium.com/yolo-yolov2-and-yolov3-all-you-want-to-know-7e3e92dc4899
+
+9. Faster RCNN: https://arxiv.org/pdf/1506.01497.pdf
+
+10. 
