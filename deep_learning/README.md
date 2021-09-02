@@ -18,4 +18,4 @@
 
 9. Faster RCNN: https://arxiv.org/pdf/1506.01497.pdf
 
-10. 
+10. Mask R-CNN: https://arxiv.org/pdf/1703.06870.pdf
