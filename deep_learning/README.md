@@ -19,3 +19,5 @@
 9. Faster RCNN: https://arxiv.org/pdf/1506.01497.pdf
 
 10. Mask R-CNN: https://arxiv.org/pdf/1703.06870.pdf
+
+11. Anchor boxes: https://towardsdatascience.com/anchor-boxes-the-key-to-quality-object-detection-ddf9d612d4f9
