@@ -97,7 +97,7 @@ $ fig,ax = plt.subplots(ncols=2,nrows=4, figsize=(11.69,8.27), subplot_kw={'proj
 
  ds.reduce(np.nansum, 'expver') Solution from marco venturini https://confluence.ecmwf.int/pages/viewpage.action?pageId=173385064
  
- 56. GeoTIFF to netcdf and exporting data from Google Earth Engine https://medium.com/@wenzhao.li1989/nco-translate-geotiff-files-exported-from-gee-to-a-netcdf-file-with-correct-time-dimension-ce97a8f3043f
+56. GeoTIFF to netcdf and exporting data from Google Earth Engine https://medium.com/@wenzhao.li1989/nco-translate-geotiff-files-exported-from-gee-to-a-netcdf-file-with-correct-time-dimension-ce97a8f3043f
 
 57. Make pipeline to avoid test data leaking into train https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html
 
@@ -170,6 +170,8 @@ $ netstat -antp ! grep -i port_id
 The above statement will only work in the interactive login node.
 
 Now start the notebook by noting the link from NOTEBOOK_LOGFILE1
+ 
+71. Markdown tool https://dillinger.io/
  
 Troubleshooting
 
