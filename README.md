@@ -173,7 +173,7 @@ Now start the notebook by noting the link from NOTEBOOK_LOGFILE1
  
 71. Markdown tool https://dillinger.io/
  
-72. LRP for explainable AI (XAI): https://github.com/albermax/innvestigate
+72. LRP for explainable AI (XAI): https://github.com/albermax/innvestigate Application paper: https://arxiv.org/abs/2103.10005
  
 Troubleshooting
 
