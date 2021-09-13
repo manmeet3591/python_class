@@ -173,6 +173,8 @@ Now start the notebook by noting the link from NOTEBOOK_LOGFILE1
  
 71. Markdown tool https://dillinger.io/
  
+72. LRP for explainable AI (XAI): https://github.com/albermax/innvestigate
+ 
 Troubleshooting
 
 1. Continue in outer loop using multi-loops https://stackoverflow.com/questions/14829640/how-to-continue-in-nested-loops-in-python
