@@ -175,6 +175,8 @@ Now start the notebook by noting the link from NOTEBOOK_LOGFILE1
  
 72. LRP for explainable AI (XAI): https://github.com/albermax/innvestigate Application paper: https://arxiv.org/abs/2103.10005
  
+73. Lower tropospheric stability (LTS = θ700hPa − θ1000hPa; Kelvin), which is defined as the difference in potential temperature (θ) between the 700-hPa level and the surface
+ 
 Troubleshooting
 
 1. Continue in outer loop using multi-loops https://stackoverflow.com/questions/14829640/how-to-continue-in-nested-loops-in-python
