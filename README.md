@@ -232,6 +232,8 @@ For the weights, the following can be followed: https://stackoverflow.com/questi
 14. Logging to a remote server without password https://www.thegeekstuff.com/2008/11/3-steps-to-perform-ssh-login-without-password-using-ssh-keygen-ssh-copy-id/
  
 15. Create xarray dataset from dataarrays
+ 
+16. Use tmux to run a process in the background: https://medium.com/@praveendhawan/tmux-run-commands-in-the-background-bad007810318
 
 
 
