@@ -39,7 +39,7 @@ for i_lat in range(lats.shape[0]):
     ndwi[0, i_lat, j_lon] = ee.Number(data).getInfo()
     data = collection_ndvi.reduceRegion(ee.Reducer.mean(),p,25000).get("NDVI")# 0.5 degree = 50km =50000
     ndvi[0, i_lat, j_lon] = ee.Number(data).getInfo()
-    print(lats[i_lat], lons[j_lon], ndvi[i_lat, j_lon])
+    print(lats[i_lat], lons[j_lon], ndvi[0,i_lat, j_lon])
 
 times = pd.date_range(dates, periods=1)
 ds = xr.DataArray(evi, coords=[times, lats, lons], dims=["time", "lat", "lon"])
