@@ -177,6 +177,8 @@ Now start the notebook by noting the link from NOTEBOOK_LOGFILE1
  
 73. Lower tropospheric stability (LTS = θ700hPa − θ1000hPa; Kelvin), which is defined as the difference in potential temperature (θ) between the 700-hPa level and the surface
  
+74. Shallow copy and deep copy in python https://stackoverflow.com/questions/41125834/trying-to-do-a-shallow-copy-on-list-in-python
+ 
 Troubleshooting
 
 1. Continue in outer loop using multi-loops https://stackoverflow.com/questions/14829640/how-to-continue-in-nested-loops-in-python
