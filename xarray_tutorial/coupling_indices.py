@@ -44,6 +44,7 @@ def entropy(y):
 
         for k, v in condPxy.items():
             res+= (v*Py[ey]*(log2(Px[k]) - log2(v*Py[ey])))
+    return res
             
 def mutual_information(x,y):
     return entropy(y) - conditional_entropy(x,y)
