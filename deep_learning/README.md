@@ -21,3 +21,5 @@
 10. Mask R-CNN: https://arxiv.org/pdf/1703.06870.pdf
 
 11. Anchor boxes: https://towardsdatascience.com/anchor-boxes-the-key-to-quality-object-detection-ddf9d612d4f9
+
+12. https://developers.arcgis.com/python/sample-notebooks/tabular-data-supervised-learning-using-automl/
