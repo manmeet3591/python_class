@@ -23,3 +23,5 @@
 11. Anchor boxes: https://towardsdatascience.com/anchor-boxes-the-key-to-quality-object-detection-ddf9d612d4f9
 
 12. https://developers.arcgis.com/python/sample-notebooks/tabular-data-supervised-learning-using-automl/
+
+13. https://www.fast.ai/2019/05/03/decrappify/
