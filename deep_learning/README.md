@@ -25,3 +25,5 @@
 12. Road extraction using ArcGIS API https://developers.arcgis.com/python/sample-notebooks/tabular-data-supervised-learning-using-automl/
 
 13. Awesome advice on how to train GANs https://www.fast.ai/2019/05/03/decrappify/
+
+14. AutoML: https://github.com/windmaple/awesome-AutoML
