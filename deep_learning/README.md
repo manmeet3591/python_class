@@ -27,3 +27,5 @@
 13. Awesome advice on how to train GANs https://www.fast.ai/2019/05/03/decrappify/
 
 14. AutoML: https://github.com/windmaple/awesome-AutoML
+
+15. AutoDL: https://github.com/D-X-Y/Awesome-AutoDL
