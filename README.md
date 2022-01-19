@@ -236,6 +236,8 @@ For the weights, the following can be followed: https://stackoverflow.com/questi
 15. Create xarray dataset from dataarrays
  
 16. Use tmux to run a process in the background: https://medium.com/@praveendhawan/tmux-run-commands-in-the-background-bad007810318
+ 
+ 17. Indentation error when transferring from jupyter notebook to python script https://stackoverflow.com/questions/1024435/how-to-fix-python-indentation
 
 
 
