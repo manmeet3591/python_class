@@ -8,3 +8,4 @@ Exit: \q
 
 Change password: \password
 
+List databases: \l
