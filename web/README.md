@@ -6,3 +6,5 @@ List users: \du
 
 Exit: \q
 
+Change password: \password
+
