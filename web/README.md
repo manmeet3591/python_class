@@ -1,3 +1,8 @@
 # Database
 
-sudo -u postgres psql postgres
+Start postrgresql: sudo -u postgres psql postgres
+
+List users: \du
+
+Exit: \q
+
