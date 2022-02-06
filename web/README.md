@@ -21,3 +21,5 @@ Django CRUD application: https://medium.com/swlh/django-crud-application-postgre
 Django CRUD application 2: https://medium.com/@john.bagiliko/django-crud-web-application-77ef05af1f00
 
 Curly braces with percent html: https://stackoverflow.com/questions/14887579/what-dose-the-curly-brace-and-percent-sign-mean-in-html
+
+Django template language: https://docs.djangoproject.com/en/4.0/ref/templates/language/
