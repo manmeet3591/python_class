@@ -1,0 +1,16 @@
+def model_sealevel(input_shape):
+
+    input1 = tf.keras.Input(shape=input_shape, name='meteorological_input')
+    location_input = tf.keras.Input(shape=(2,), name='location_input')
+    x = tf.keras.layers.Conv2D(32, kernel_size=(3, 3), activation="relu")(input1)
+    x = tf.keras.layers.MaxPooling2D(pool_size=(2, 2))(x)
+    x = tf.keras.layers.Conv2D(64, kernel_size=(3, 3), activation="relu")(x)
+    x = tf.keras.layers.MaxPooling2D(pool_size=(2, 2))(x)
+    x = tf.keras.layers.Flatten()(x)
+    x = tf.keras.layers.Dense(4096)(x)
+    location  = tf.keras.layers.Dense(16, activation='relu')( location_input )
+    x = tf.keras.layers.Concatenate()([x, location])
+    x = tf.keras.layers.Dense(512)(x)
+    output = tf.keras.layers.Dense(1)(x)
+    return tf.keras.Model(inputs=[input1, location_input], outputs=output)
+model = model_sealevel(input_shape)
