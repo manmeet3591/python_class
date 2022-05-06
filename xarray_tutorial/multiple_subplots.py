@@ -52,3 +52,12 @@ for i_fig in range(2):
 
 fig.patch.set_linewidth(10)
 fig.patch.set_edgecolor('cornflowerblue')
+
+left_  = 0.125  # the left side of the subplots of the figure
+right_ = 0.9    # the right side of the subplots of the figure
+bottom_ = 0.1   # the bottom of the subplots of the figure
+top_ = 0.9      # the top of the subplots of the figure
+wspace_ = 0.5   # the amount of width reserved for blank space between subplots
+hspace_ = 0.1   # the amount of height reserved for white space between subplots
+
+plt.subplots_adjust(left=left_, bottom=bottom_, right=right_, top=top_, wspace=wspace_, hspace=hspace_)
