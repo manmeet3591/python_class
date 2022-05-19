@@ -183,6 +183,13 @@ Now start the notebook by noting the link from NOTEBOOK_LOGFILE1
  
 76. Copying to box using lftp mirror -R folder
  
+77. Transforming argparse python code to jupyter notebook: https://stackoverflow.com/questions/37534440/passing-command-line-arguments-to-argv-in-jupyter-ipython-notebook
+ 
+Simply add the following lines:
+ 
+import sys
+sys.argv = ['']
+ 
 Troubleshooting
 
 1. Continue in outer loop using multi-loops https://stackoverflow.com/questions/14829640/how-to-continue-in-nested-loops-in-python
