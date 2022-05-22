@@ -190,6 +190,14 @@ Simply add the following lines:
 import sys
 sys.argv = ['']
  
+78. Install pytorch with cuda
+ 
+https://stackoverflow.com/questions/58424974/anaconda-importerror-usr-lib64-libstdc-so-6-version-glibcxx-3-4-21-not-fo
+ 
+https://stackoverflow.com/questions/70340812/how-to-install-pytorch-with-cuda-support-with-pip-in-visual-studio
+ 
+
+ 
 Troubleshooting
 
 1. Continue in outer loop using multi-loops https://stackoverflow.com/questions/14829640/how-to-continue-in-nested-loops-in-python
