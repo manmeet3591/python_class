@@ -196,7 +196,12 @@ https://stackoverflow.com/questions/58424974/anaconda-importerror-usr-lib64-libs
  
 https://stackoverflow.com/questions/70340812/how-to-install-pytorch-with-cuda-support-with-pip-in-visual-studio
  
+79. Running docker containers on NVIDIA DGX A100 
 
+$ docker pull nvcr.io/nvidia/tensorflow:20.10-tf2-py3
+ 
+$ docker run --gpus all -it -v  /home/cccr_rnd:/apollo nvcr.io/nvidia/tensorflow:20.10-tf2-py3
+ 
  
 Troubleshooting
 
